@@ -169,13 +169,53 @@ def tinh_toan_xac_suat_thong_ke(lich_su_giai, so_ky):
     return {"ve_nhieu": top_7_ve, "chua_ve": top_7_gan}
 
 def lay_gia_vang_thuc_te_hom_nay():
-    # Mô phỏng giá vàng hoặc cào thực tế từ web (ở đây dùng mô phỏng cho nhanh)
-    return {
-        "sjc_mua": "81.65",
-        "sjc_ban": "83.65",
-        "nhan_mua": "78.40",
-        "nhan_ban": "79.70"
-    }
+    try:
+        headers = {"User-Agent": "Mozilla/5.0"}
+        r = requests.get("https://webgia.com/gia-vang/sjc/", headers=headers, timeout=10)
+        soup = BeautifulSoup(r.text, 'html.parser')
+        
+        # Mặc định dự phòng
+        sjc_mua = "81.50"
+        sjc_ban = "83.50"
+        nhan_mua = "79.00"
+        nhan_ban = "80.50"
+        
+        trs = soup.find_all('tr')
+        # Tìm SJC Hồ Chí Minh
+        for tr in trs:
+            if 'Hồ Chí Minh' in tr.text and 'SJC' in tr.text:
+                tds = tr.find_all('td')
+                if len(tds) >= 3:
+                    mua = tds[1].text.strip().replace(',', '').replace('.', '')
+                    ban = tds[2].text.strip().replace(',', '').replace('.', '')
+                    sjc_mua = f"{(float(mua) / 1000000):.2f}"
+                    sjc_ban = f"{(float(ban) / 1000000):.2f}"
+                break
+        
+        # Tìm Vàng nhẫn
+        for tr in trs:
+            if 'Nhẫn' in tr.text and '99' in tr.text:
+                tds = tr.find_all('td')
+                if len(tds) >= 3:
+                    mua = tds[1].text.strip().replace(',', '').replace('.', '')
+                    ban = tds[2].text.strip().replace(',', '').replace('.', '')
+                    nhan_mua = f"{(float(mua) / 1000000):.2f}"
+                    nhan_ban = f"{(float(ban) / 1000000):.2f}"
+                break
+                
+        return {
+            "sjc_mua": sjc_mua,
+            "sjc_ban": sjc_ban,
+            "nhan_mua": nhan_mua,
+            "nhan_ban": nhan_ban
+        }
+    except Exception as e:
+        return {
+            "sjc_mua": "81.50",
+            "sjc_ban": "83.50",
+            "nhan_mua": "79.00",
+            "nhan_ban": "80.50"
+        }
 
 def van_hanh_cap_nhat_he_thong():
     print("🤖 Robot Python đang cào dữ liệu thật từ XSKT...")
