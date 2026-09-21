@@ -517,15 +517,19 @@ function bamChonDai(linkIframe, codeDai, element) {
     document.querySelectorAll('.btn-dai').forEach(b => b.classList.remove('active'));
     if(element) element.classList.add('active');
     
-    document.getElementById('iframe-kqxs').src = linkIframe;
     daiHienTai = codeDai;
+    renderKetQuaNative(codeDai);
     
     document.getElementById("vung-chon-dai-goc").style.display = "none";
-    document.getElementById("vung-tabs-phu").style.display = "none";
-    document.getElementById("nut-quay-ve").style.display = "block";
+    let vungTabsPhu = document.getElementById("vung-tabs-phu");
+    if(vungTabsPhu) vungTabsPhu.style.display = "none";
+    let nutQuayVe = document.getElementById("nut-quay-ve");
+    if(nutQuayVe) nutQuayVe.style.display = "block";
     
     let tenDai = element ? element.innerText.split('\n')[0] : "Miền Bắc";
-    document.getElementById('tieu-de-thong-ke').innerText = `📊 XÁC SUẤT ĐÀI ${tenDai.toUpperCase()}`;
+    let tieuDeThongKe = document.getElementById('tieu-de-thong-ke');
+    if(tieuDeThongKe) tieuDeThongKe.innerText = `📊 XÁC SUẤT ĐÀI ${tenDai.toUpperCase()}`;
+    
     veBangThongKe();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
