@@ -162,6 +162,7 @@
         .btn-close-modal { width: 100%; margin-top: 15px; padding: 8px; background: #6c757d; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
 
         @keyframes blink { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
+        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
         @media (min-width: 600px) {
             .xo-so-container { max-width: 650px; padding: 15px; }
             .danh-sach-dai-scroll { grid-auto-columns: 19%; }
@@ -432,7 +433,7 @@ function getBallColorClass(so) {
 }
 
 // Hàm render bảng kết quả Native
-function renderKetQuaNative(codeDai) {
+function renderKetQuaNative(codeDai, highlightSo = null) {
     let khung = document.getElementById('khung-kqxs-native');
     
     // Nếu biến dbKetQua chưa có định nghĩa (chưa tải xong hoặc lỗi)
@@ -479,18 +480,20 @@ function renderKetQuaNative(codeDai) {
         if (keyToUse && ketQua[keyToUse]) {
             let rowClass = (keyToUse === "ĐB") ? "giai-db" : "";
             
-            // Xử lý tạo bóng 3D cho 2 số cuối
+            // Xử lý tạo bóng 3D cho 2 số cuối nếu có highlightSo
             let cacSoRaw = ketQua[keyToUse].split('-');
             let cacSoFormatted = cacSoRaw.map(s => {
                 s = s.trim();
-                if (s.length >= 2) {
-                    let phanDau = s.substring(0, s.length - 2);
+                if (highlightSo && s.length >= 2) {
                     let haiSoCuoi = s.substring(s.length - 2);
-                    let colorClass = getBallColorClass(haiSoCuoi);
-                    return `${phanDau}<span class="ball ${colorClass}">${haiSoCuoi}</span>`;
+                    if (haiSoCuoi === highlightSo) {
+                        let phanDau = s.substring(0, s.length - 2);
+                        let colorClass = getBallColorClass(haiSoCuoi);
+                        return `${phanDau}<span class="ball ${colorClass}">${haiSoCuoi}</span>`;
+                    }
                 }
                 return s;
-            }).join(' &nbsp; ');
+            }).join(' &nbsp;&nbsp;&nbsp; ');
             
             let tenHienThi = tenGiaiMap[keyToUse.replace(".","")] || keyToUse;
             html += `<tr class="${rowClass}"><td class="ten-giai">${tenHienThi}</td><td class="so-giai">${cacSoFormatted}</td></tr>`;
@@ -499,6 +502,13 @@ function renderKetQuaNative(codeDai) {
     
     html += '</table>';
     khung.innerHTML = html;
+}
+
+function highlightNumber(so) {
+    if (daiHienTai) {
+        renderKetQuaNative(daiHienTai, so);
+        document.getElementById('khung-kqxs-native').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
 }
 
 // Hàm xử lý bung menu trượt ngang thả xuống khi người dùng chạm tay vào thanh Tab ngang
@@ -547,17 +557,15 @@ function veBangThongKe() {
     let dataKy = dataDai[kyHienTai] || dataDai["30"] || dbXacSuat["mb"]["30"];
     let htmlVeNhieu = "";
     dataKy.ve_nhieu.forEach((item, index) => {
-        let bgColor = mauVeNhieu[index];
-        let textColor = (index <= 2) ? "#ffffff" : "#000000";
-        htmlVeNhieu += `<tr><td><b>${index + 1}</b></td><td><span class="so-may-man" style="background-color: ${bgColor}; color: ${textColor}">[${item.s}]</span></td><td><b>${item.l} kỳ</b></td></tr>`;
+        let colorClass = getBallColorClass(item.s);
+        htmlVeNhieu += `<tr><td><b>${index + 1}</b></td><td><span class="ball ${colorClass}" onclick="highlightNumber('${item.s}')" style="cursor:pointer;" title="Nhấn để dò số">${item.s}</span></td><td><b>${item.l} kỳ</b></td></tr>`;
     });
     document.getElementById('du-lieu-ve-nhieu').innerHTML = htmlVeNhieu;
 
     let htmlChuaVe = "";
     dataKy.chua_ve.forEach((item, index) => {
-        let bgColor = mauChuaVe[index];
-        let textColor = (index <= 3) ? "#ffffff" : "#000000";
-        htmlChuaVe += `<tr><td><b>${index + 1}</b></td><td><span class="so-may-man" style="background-color: ${bgColor}; color: ${textColor}">[${item.s}]</span></td><td><b>${item.l} kỳ</b></td></tr>`;
+        let colorClass = getBallColorClass(item.s);
+        htmlChuaVe += `<tr><td><b>${index + 1}</b></td><td><span class="ball ${colorClass}" onclick="highlightNumber('${item.s}')" style="cursor:pointer;" title="Nhấn để dò số">${item.s}</span></td><td><b>${item.l} kỳ</b></td></tr>`;
     });
     document.getElementById('du-lieu-chua-ve').innerHTML = htmlChuaVe;
 }
