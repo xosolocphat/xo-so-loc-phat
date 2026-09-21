@@ -1,0 +1,945 @@
+<!DOCTYPE
+ html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XỔ SỐ LỘC PHÁT - Kết Quả & Xác Suất Siêu Tốc Mobile</title>
+    
+<!--
+ SEO Meta Tags -->
+    <meta name="description" content="Hệ thống XỔ SỐ LỘC PHÁT cập nhật kết quả trực tiếp Real-time sạch 100%. Công cụ phân tích xác suất top 7 cặp số về nhiều và chu kỳ khan đối xứng 50/50 thẳng hàng trên di động.">
+    <meta name="keywords" content="xo so loc phat, xổ số lộc phát, chu ky khan, tan suat ve, thong ke xac suat mobile">
+    <style>
+        /* --- HỆ THỐNG MÀU SẮC CHUYỂN ĐỔI DARK MODE BAN ĐÊM --- */
+        
+:root
+ {
+            --bg-body: #f5f5f5;
+            --bg-block: #ffffff;
+            --text-main: #111111;
+            --text-sub: #333333;
+            --border-color: #eeeeee;
+        }
+        [data-theme="dark"] {
+            --bg-body: #121212;
+            --bg-block: #1e1e1e;
+            --text-main: #ffffff;
+            --text-sub: #b0b0b0;
+            --border-color: #333333;
+        }
+        body 
+{ margin
+: 0; padding: 0; background-color: var(--bg-body); color: var(--text-main); font-family: Arial, sans-serif; transition: all 0.3s ease; }
+        
+.xo
+-so-container { max-width: 100%; margin: 0 auto; padding: 6px; box-sizing: border-box; }
+        
+        /* Thanh đầu trang đưa nút Dark Mode lên trên bên phải */
+        
+.header
+-top { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; padding: 0 4px; }
+        
+.header
+-top h2 { font-size: 1.1rem; margin: 0; text-transform: uppercase; font-weight: bold; }
+        
+.btn
+-mode-top { padding: 4px 10px; font-size: 0.8rem; font-weight: bold; background: #222; color: #fff; border: 1px solid #fff; border-radius: 4px; cursor: pointer; }
+        [data-theme="dark"
+] .btn
+-mode-top { background: #fff; color: #222; border-color: #222; }
+        /* Đồng hồ giờ vàng đầu trang */
+        
+.countdown
+-bar { text-align: center; font-size: 0.78rem; background: #fff3cd; color: #856404; padding: 4px; font-weight: bold; margin: 6px 0; border-radius: 4px; }
+        [data-theme="dark"
+] .countdown
+-bar { background: #2c2510; color: #ffc107; }
+        /* NÚT TRỜ VỀ MÀU XANH PHONG THỦY KHI XEM CHI TIẾT ĐÀI */
+        
+.btn
+-tro-ve {
+            display: none;
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px 
+rgba(
+0,0,0,0.1);
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+.btn
+-tro-ve:active { background-color: #218838; }
+        /* Cấu trúc quản lý hoán đổi vị trí vùng miền */
+        
+.khung
+-chuyen-muc-dai { display: flex; flex-direction: column; }
+        
+.vung
+-mien-block { background: var(--bg-block); border: 1px solid var(--border-color); padding: 8px 10px; margin-bottom: 6px; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); text-align: left; }
+        
+.tieu
+-de-mien-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; cursor: pointer; }
+        
+.ten
+-mien-header { font-weight: bold; font-size: 0.82rem; padding: 2px 6px; border-left: 3px solid #d32f2f; color: var(--text-main); margin: 0; }
+        
+.vung
+-mien-block.mien-trung-style .ten-mien-header { border-left-color: #007bff; }
+        
+.vung
+-mien-block.mien-nam-style .ten-mien-header { border-left-color: #2e7d32; }
+        .id-huong-dan-luot 
+{ font
+-size: 0.7rem; font-weight: bold; color: #dc3545; animation: blink 1.2s infinite; }
+        /* THANH TAB NGANG CHO VÙNG MIỀN BỊ THU GỌN */
+        
+.khung
+-tabs-ngang { display: none; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 6px; }
+        .tab-ngang-btn 
+{ padding
+: 10px; background: var(--bg-block); border: 1px solid var(--border-color); color: var(--text-main); font-weight: bold; font-size: 0.8rem; border-radius: 6px; cursor: pointer; text-align: center; }
+        /* LƯỚT NGANG 2 HÀNG ĐÀI ĐỐI XỨNG CẤT NỬA NÚT */
+        
+.danh
+-sach-dai-scroll { 
+            display: grid; 
+            grid-template-rows: 
+repeat(
+2, auto); 
+            grid-auto-flow: column; 
+            grid-auto-columns: 31%; 
+            gap: 6px; 
+            overflow-x: auto; 
+            scroll-behavior: smooth;
+            padding-bottom: 4px;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+.danh
+-sach-dai-scroll::-webkit-scrollbar { display: none; }
+        
+.btn
+-dai { 
+            width: 100%;
+            padding: 8px 0; 
+            background: var(--bg-body); 
+            border: 1px solid var(--border-color); 
+            color: var(--text-main); 
+            cursor: pointer; 
+            border-radius: 4px; 
+            font-size: 0.8rem; 
+            font-weight: 500; 
+            text-align: center; 
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+.btn
+-dai.active { background: #ffc107; color: #000; font-weight: bold; border-color: #ffb300; }
+        /* VÙNG ƯU TIÊN LỚN: Khung kết quả hiển thị */
+        
+.khung
+-kqxs { width: 100%; height: 560px; border: 1px solid var(--border-color); margin-top: 5px; border-radius: 8px; }
+        /* BẢNG THỐNG KÊ ĐỐI XỨNG CHIA ĐỀU CỨNG 50/50 GIÓNG THẲNG HÀNG DỌC TĂM TẮP */
+        .bo-loc-khu-vuc 
+{ display
+: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding: 0 2px; }
+        
+.select
+-ky { padding: 4px 6px; font-size: 0.8rem; border-radius: 4px; border: 1px solid var(--border-color); background: var(--bg-block); color: var(--text-main); }
+        
+.khung
+-thong-ke-doi-xung { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-top: 8px; width: 100%; }
+        
+.cot
+-thong-ke { width: 100%; overflow: hidden; }
+        
+.bang
+-thong-ke { width: 100%; border-collapse: collapse; font-size: 0.75rem; table-layout: fixed; }
+        
+.bang
+-thong-ke th, .bang-thong-ke td { border-bottom: 1px solid var(--border-color); padding: 5px 1px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        
+.bang
+-thong-ke th { color: #fff; font-size: 0.72rem; text-transform: uppercase; padding: 6px 1px; }
+        
+.cot
+-ve-nhieu th { background-color: #d32f2f; }
+        
+.cot
+-chua-ve th { background-color: #0d47a1; }
+        .so-may-man 
+{ font
+-weight: bold; font-size: 0.82rem; display: inline-block; padding: 3px 6px; border-radius: 3px; }
+        /* AI gợi ý cặp số thuật toán */
+        
+.btn
+-ai-random { width: 100%; margin-top: 15px; padding: 12px; background: linear-gradient(45deg, #ff007f, #7f00ff); color: white; font-weight: bold; border: none; border-radius: 6px; font-size: 0.85rem; cursor: pointer; box-shadow: 0 3px 6px rgba(0,0,0,0.1); }
+        
+.khu
+-vuc-ai-so { display: none; margin-top: 8px; font-size: 0.95rem; font-weight: bold; color: #ff007f; text-align: center; background: var(--bg-block); padding: 8px; border-radius: 6px; border: 1px dashed #ff007f; }
+        /* Bảng giá vàng chân trang định dạng hàng chữ ngang đối xứng tăm tắp đúng hình ảnh */
+        
+.khung
+-gia-vang { margin-top: 15px; background: var(--bg-block); border: 1px solid var(--border-color); padding: 8px; border-radius: 6px; }
+        
+.khung
+-vang-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; font-size: 0.75rem; text-align: center; }
+        
+.khoi
+-vang-item { border: 1px dashed var(--border-color); padding: 6px; border-radius: 4px; }
+        
+.ten
+-vang-label { font-weight: bold; color: #856404; margin: 0 0 4px 0; text-transform: uppercase; font-size: 0.72rem; }
+        /* PHẦN CHÂN TRANG CHỮ SIÊU NHỎ NÉN GỌN TUÂN THỦ CHÍNH SÁCH ADSENSE */
+        
+.footer
+-compliance { margin-top: 20px; padding: 10px 4px; text-align: center; border-top: 1px solid var(--border-color); font-size: 0.68rem; color: var(--text-sub); line-height: 1.4; }
+        
+.footer
+-links a { color: var(--text-main); text-decoration: none; font-weight: bold; margin: 0 6px; }
+        
+.footer
+-links a:hover { text-decoration: underline; }
+        
+.disclaimer
+-text { margin-top: 8px; font-style: italic; }
+        /* KHUNG CỬA SỔ POP-UP POP-UP MODAL HIỂN THỊ CHÍNH SÁCH MƯỢT MÀ */
+        
+.policy
+-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        
+.policy
+-content { background: var(--bg-block); color: var(--text-main); width: 85%; max-width: 500px; max-height: 70%; overflow-y: auto; padding: 20px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); font-size: 0.82rem; line-height: 1.5; text-align: left; }
+        
+.policy
+-content h3 { margin-top: 0; color: #28a745; font-size: 1rem; border-bottom: 2px solid #28a745; padding-bottom: 6px; }
+        
+.btn
+-close-modal { width: 100%; margin-top: 15px; padding: 8px; background: #6c757d; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
+        @keyframes blink 
+{ 0
+% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
+        @media (min-width: 600px) {
+            
+.xo
+-so-container { max-width: 650px; padding: 15px; }
+            
+.danh
+-sach-dai-scroll { grid-auto-columns: 19%; }
+        }
+    </style>
+</head>
+<body>
+<div class="xo-so-container">
+  <div class="header-top">
+    <h2>XỔ SỐ LỘC PHÁT</h2>
+    <button class="btn-mode-top" id="dark-mode-toggle" onclick="
+chuyenDoiCheDoBanden(
+)">
+🌙
+ Mode</button>
+  </div>
+  
+  <div class="countdown-bar" id="countdown-timer">Đang kết nối đồng hồ giờ vàng...</div>
+  
+  <button class="btn-tro-ve" id="nut-quay-ve" onclick="
+quayVeTrangChu(
+)">
+⬅
+️ TRỞ VỀ DANH SÁCH CHỌN ĐÀI</button>
+  
+  
+<!--
+ THANH TABS NGANG CHO CÁC MIỀN PHỤ BỊ THU GỌN CHỐT VỊ TRÍ VÙNG MIỀN -->
+  <div class="khung-tabs-ngang" id="vung-tabs-phu"></div>
+  <div class="khung-chuyen-muc-dai" id="vung-chon-dai-goc">
+    
+<!--
+ Phân vùng khối HTML sẽ được JavaScript tự động hoán đổi dựa trên dữ liệu định vị IP -->
+    <div class="vung-mien-block mien-bac-style" id="block-bac">
+      <div class="tieu-de-mien-meta"><p class="ten-mien-header">
+🔴
+ MIỀN BẮC</p></div>
+      <div style="
+display:grid
+; grid-template-columns: repeat(3, 1fr);" id="ds-mien-bac"></div>
+    </div>
+    <div class="vung-mien-block mien-trung-style" id="block-trung">
+      <div class="tieu-de-mien-meta" onclick="bamMoTabHanhChinh('trung')">
+        <p class="ten-mien-header">
+🔵
+ MIỀN TRUNG</p>
+        <span class="id-huong-dan-luot" id="nhan-luot-trung">
+➡
+️ VUỐT TRƯỢT NGANG</span>
+      </div>
+      <div class="danh-sach-dai-scroll" id="ds-mien-trung"></div>
+    </div>
+    <div class="vung-mien-block mien-nam-style" id="block-nam">
+      <div class="tieu-de-mien-meta" onclick="bamMoTabHanhChinh('nam')">
+        <p class="ten-mien-header">
+🟢
+ MIỀN NAM</p>
+        <span class="id-huong-dan-luot" id="nhan-luot-nam">
+➡
+️ VUỐT TRƯỢT NGANG</span>
+      </div>
+      <div class="danh-sach-dai-scroll" id="ds-mien-nam"></div>
+    </div>
+  </div>
+  <iframe id="iframe-kqxs" class="khung-kqxs" src="
+about:blank
+"></iframe>
+  <div class="bo-loc-khu-vuc">
+    <h3 id="tieu-de-thong-ke" style="font-size:0.85rem; margin:0; 
+color:var
+(--text-main); font-weight:bold;">
+📊
+ BẢNG PHÂN TÍCH XÁC SUẤT</h3>
+    <select class="select-ky" id="chon-so-ky" onchange="doiSoKy(this.value)">
+      <option value="30">30 kỳ gần đây</option>
+      <option value="7">7 kỳ gần đây</option>
+      <option value="15">15 kỳ gần đây</option>
+      <option value="60">60 kỳ gần đây</option>
+      <option value="90">90 kỳ gần đây</option>
+    </select>
+  </div>
+  
+  <div class="khung-thong-ke-doi-xung">
+    <div class="cot-thong-ke cot-ve-nhieu">
+      <table class="bang-thong-ke">
+        <thead>
+          <tr><th style="width:15%;">H</th><th style="width:40%;">Số</th><th style="width:45%;">Tần suất về</th></tr>
+        </thead>
+        <tbody id="du-lieu-ve-nhieu"></tbody>
+      </table>
+    </div>
+    <div class="cot-thong-ke cot-chua-ve">
+      <table class="bang-thong-ke">
+        <thead>
+          <tr><th style="width:15%;">H</th><th style="width:40%;">Số</th><th style="width:45%;">Số ngày vắng</th></tr>
+        </thead>
+        <tbody id="du-lieu-chua-ve"></tbody>
+      </table>
+    </div>
+  </div>
+  <button class="btn-ai-random" onclick="
+kichHoatAiQuetSo(
+)">
+🤖
+ BẤM ĐỂ AI GỢI Ý CẶP SỐ THUẬT TOÁN HÔM NAY</button>
+  <div class="khu-vuc-ai-so" id="ket-qua-ai-quet">HỆ THỐNG AI ĐANG PHÂN TÍCH LUỒNG SỐ...</div>
+  <div class="khung-gia-vang">
+    <div class="khung-vang-grid">
+      <div class="khoi-vang-item">
+        <p class="ten-vang-label">VÀNG SJC (Triệu/
+Lượng)<
+/p>
+        <span id="sjc-gia">Mua: 81.50 - Bán: 83.50</span>
+      </div>
+      <div class="khoi-vang-item">
+        <p class="ten-vang-label">VÀNG 9999 (Triệu/
+Nhẫn)<
+/p>
+        <span id="nhan-gia">Mua: 78.20 - Bán: 79.50</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-compliance">
+    <div class="footer-links">
+      <a href="
+javascript:void
+(0)" onclick="moCuaSoChinhSach('privacy')">Chính Sách Bảo Mật</a> | 
+      <a href="
+javascript:void
+(0)" onclick="moCuaSoChinhSach('terms')">Điều Khoản</a> | 
+      <a href="
+javascript:void
+(0)" onclick="moCuaSoChinhSach('contact')">Liên Hệ</a>
+    </div>
+    <p class="disclaimer-text">
+🛡
+️ Miễn trừ trách nhiệm: Mọi thông tin dựa trên dữ liệu toán học xác suất kiến thiết chính thức, chỉ mang tính chất tham khảo học thuật và giải trí lành 
+mạnh.<
+/p>
+  </div>
+</div>
+<div class="policy-modal" id="khung-chinh-sach-modal">
+  <div class="policy-content">
+    <h3 id="tieu-de-modal">Nội Dung Chính Sách</h3>
+    <div id="noi-dung-modal" style="max-height: 250px; overflow-y: auto; text-align: justify; font-size: 0.78rem;"></div>
+    <button class="btn-close-modal" onclick="
+dongCuaSoChinhSach(
+)">Đóng X</button>
+  </div>
+</div>
+<script>
+const configCacDai = {
+    "bac": [{ten: "Miền Bắc", code: "mb", url: "https://minhngoc.net.vn", 
+thu:[
+1,2,3,4,5,6,0]}],
+    "trung": [
+        {ten: "Bình Định", code: "bdi", url: "https://minhngoc.net.vn", 
+thu:[
+4]},
+        {ten: "Đà Nẵng", code: "dnang", url: "https://minhngoc.net.vn", 
+thu:[
+3,6]},
+        {ten: "Đắk Lắk", code: "dlk", url: "https://minhngoc.net.vn", 
+thu:[
+2]},
+        {ten: "Khánh Hòa", code: "kh", url: "https://minhngoc.net.vn", 
+thu:[
+3,0]},
+        {ten: "Kon Tum", code: "kt", url: "https://minhngoc.net.vn", 
+thu:[
+0]},
+        {ten: "Ninh Thuận", code: "nt", url: "https://minhngoc.net.vn", 
+thu:[
+5]},
+        {ten: "Phú Yên", code: "py", url: "https://minhngoc.net.vn", 
+thu:[
+1]},
+        {ten: "Quảng Nam", code: "qnam", url: "https://minhngoc.net.vn", 
+thu:[
+2]},
+        {ten: "Quảng Ngãi", code: "qngai", url: "https://minhngoc.net.vn", 
+thu:[
+6]},
+        {ten: "Quảng Trị", code: "qt", url: "https://minhngoc.net.vn", 
+thu:[
+4]},
+        {ten: "Thừa T. Huế", code: "tthue", url: "https://minhngoc.net.vn", 
+thu:[
+1]}
+    ],
+    "nam": [
+        {ten: "An Giang", code: "ag", url: "https://minhngoc.net.vn", 
+thu:[
+4]},
+        {ten: "Bạc Liêu", code: "bl", url: "https://minhngoc.net.vn", 
+thu:[
+2]},
+        {ten: "Bến Tre", code: "bt", url: "https://minhngoc.net.vn", 
+thu:[
+2]},
+        {ten: "Bình Dương", code: "bd", url: "https://minhngoc.net.vn", 
+thu:[
+5]},
+        {ten: "Bình Phước", code: "bp", url: "https://minhngoc.net.vn", 
+thu:[
+6]},
+        {ten: "Bình Thuận", code: "bth", url: "https://minhngoc.net.vn", 
+thu:[
+4]},
+        {ten: "Cà Mau", code: "cmau", url: "https://minhngoc.net.vn", 
+thu:[
+1]},
+        {ten: "Cần Thơ", code: "ctho", url: "https://minhngoc.net.vn", 
+thu:[
+3]},
+        {ten: "Đà Lạt", code: "dl", url: "https://minhngoc.net.vn", 
+thu:[
+0]},
+        {ten: "Đồng Nai", code: "dn", url: "https://minhngoc.net.vn", 
+thu:[
+3]},
+        {ten: "Đồng Tháp", code: "dthap", url: "https://minhngoc.net.vn", 
+thu:[
+1]},
+        {ten: "Hậu Giang", code: "hg", url: "https://minhngoc.net.vn", 
+thu:[
+6]},
+        {ten: "Long An", code: "la", url: "https://minhngoc.net.vn", 
+thu:[
+6]},
+        {ten: "Sóc Trăng", code: "st", url: "https://minhngoc.net.vn", 
+thu:[
+3]},
+        {ten: "Tây Ninh", code: "tn", url: "https://minhngoc.net.vn", 
+thu:[
+4]},
+        {ten: "Tiền Giang", code: "tg", url: "https://minhngoc.net.vn", 
+thu:[
+0]},
+        {ten: "TP. HCM", code: "hcm", url: "https://minhngoc.net.vn", 
+thu:[
+1,6]},
+        {ten: "Trà Vinh", code: "tv", url: "https://minhngoc.net.vn", 
+thu:[
+5]},
+        {ten: "Vĩnh Long", code: "vl", url: "https://minhngoc.net.vn", 
+thu:[
+5]},
+        {ten: "Vũng Tàu", code: "vt", url: "https://minhngoc.net.vn", 
+thu:[
+2]}
+    ]
+};
+// VÙNG DỮ LIỆU CỐT LÕI - ROBOT PYTHON SẼ TỰ ĐỘNG GHI ĐÈ VÀO ĐÂY HÀNG NGÀY
+// ---PYTHON_DATA_START---
+const dbXacSuat = {
+    "mb": 
+{ "
+30": { ve_nhieu: [{s:"23", l:18}, {s:"89", l:16}, {s:"45", l:14}, {s:"01", l:13}, {s:"76", l:11}, {s:"54", l:10}, {s:"32", l:9}], chua_ve: [{s:"66", l:32}, {s:"17", l:25}, {s:"40", l:21}, {s:"82", l:17}, {s:"05", l:14}, {s:"91", l:11}, {s:"38", l:9}] } },
+    "hcm": 
+{ "
+30": { ve_nhieu: [{s:"78", l:20}, {s:"12", l:17}, {s:"65", l:15}, {s:"43", l:12}, {s:"09", l:11}, {s:"21", l:10}, {s:"88", l:8}], chua_ve: [{s:"03", l:32}, {s:"44", l:25}, {s:"19", l:21}, {s:"56", l:17}, {s:"72", l:14}, {s:"80", l:11}, {s:"15", l:9}] } }
+};
+// ---PYTHON_DATA_END---
+const mauVeNhieu = ["#d32f2f", "#e64a19", "#f57c00", "#fbc02d", "#afb42b", "#7cb342", "#4caf50"];
+const 
+mauChuaVe  =
+ ["#0d47a1", "#1565c0", "#1976d2", "#1e88e5", "#2196f3", "#42a5f5", "#64b5f6"];
+let daiHienTai = "mb";
+let kyHienTai = "30";
+let vungMienGốc = "bac"; // Mặc định quốc gia là miền Bắc nếu định vị IP không phản hồi
+function tinhKhoangCachNgayXo(mangThuMoThuong) {
+    let thuHomNay = new Date(
+).getDay
+();
+    let khoangCachNhoNhat = 7;
+    mangThuMoThuong.forEach(thu => {
+        let diff = thu - thuHomNay;
+        if (diff < 0) diff += 7;
+        if (diff < khoangCachNhoNhat) khoangCachNhoNhat = diff;
+    });
+    return khoangCachNhoNhat;
+}
+// 
+🤖
+ CƠ CHẾ ĐỊNH VỊ IP ẨN NGẦM: Tự kiểm tra vùng miền người dùng trong 0.05s để hoán vị giao diện tĩnh
+function 
+quetIpXacDinhVungMien(
+) {
+    fetch('https://ipapi.co')
+        
+.then
+(res => res.json())
+        
+.then
+(data => {
+            let tinhThanh = 
+data.region
+ ? data.region.toLowerCase() : "";
+            const mienNamKeywords = ["ho chi minh", "binh duong", "dong nai", "long an", "can tho", "an giang", "vung tau", "tien giang", "tay ninh", "ca mau"];
+            const mienTrungKeywords = ["da nang", "khanh hoa", "binh dinh", "thua thien", "phu yen", "dak lak", "quang nam"];
+            
+            if (mienNamKeywords.some(kw => tinhThanh.includes(kw))) {
+                vungMienGốc = "nam";
+            } else if (mienTrungKeywords.some(kw => tinhThanh.includes(kw))) {
+                vungMienGốc = "trung";
+            } else {
+                vungMienGốc = "bac";
+            }
+            apDungCauHinhVungMien(vungMienGốc);
+        })
+        
+.catch
+(() => {
+            // Nếu API chặn hoặc mạng lỗi, tự động dùng miền Bắc làm chuẩn quốc gia an toàn
+            apDungCauHinhVungMien("bac");
+        });
+}
+function apDungCauHinhVungMien(mienUuTien) {
+    let containerGoc = 
+document.getElementById
+("vung-chon-dai-goc");
+    let blockBac = 
+document.getElementById
+("block-bac");
+    let blockTrung = 
+document.getElementById
+("block-trung");
+    let blockNam = 
+document.getElementById
+("block-nam");
+    let tabsPhu = 
+document.getElementById
+("vung-tabs-phu");
+    // Khởi tạo sắp xếp mảng đài lướt ngang theo lịch gần nhất
+    const miens = ["bac", "trung", "nam"];
+    
+miens.forEach
+(m => {
+        configCacDai[m
+].sort
+((a, b) => tinhKhoangCachNgayXo(a.thu) - tinhKhoangCachNgayXo(b.thu));
+        let htmlButtons = "";
+        configCacDai[m
+].forEach
+(dai => {
+            let cachNgay = tinhKhoangCachNgayXo(dai.thu);
+            let nhanTrangThai = (cachNgay === 0
+) ?
+ "• Hôm nay
+" :
+ `• T.${dai.thu===0? 'CN
+':dai.thu
++1}`;
+            htmlButtons += `<button class="btn-dai" id="btn-${
+dai.code
+}" onclick="bamChonDai('${dai.url}', '${dai.code}', this)">${dai.ten} <span style="font-size:0.65rem; opacity:0.8; display:block;">${nhanTrangThai}</span></button>`;
+        });
+        
+document.getElementById
+(`ds-mien-${m}`).innerHTML = htmlButtons;
+    });
+    // Thực hiện hoán vị giao diện: Đẩy miền ưu tiên lên đầu, gom 2 miền phụ thành nút ngang Tab
+    if (mienUuTien === "nam") {
+        containerGoc.insertBefore(blockNam, blockBac);
+        
+blockBac.style.display
+ = "none";
+        
+blockTrung.style.display
+ = "none";
+        
+tabsPhu.style.display
+ = "grid";
+        tabsPhu.innerHTML = `<button class="tab-ngang-btn" onclick="bamMoTabHanhChinh('bac')">
+🔴
+ XEM MIỀN BẮC 
+▼
+</button>
+                             <button class="tab-ngang-btn" onclick="bamMoTabHanhChinh('trung')">
+🔵
+ XEM MIỀN TRUNG 
+▼
+</button>`;
+    } else if (mienUuTien === "trung") {
+        containerGoc.insertBefore(blockTrung, blockBac);
+        
+blockBac.style.display
+ = "none";
+        
+blockNam.style.display
+ = "none";
+        
+tabsPhu.style.display
+ = "grid";
+        tabsPhu.innerHTML = `<button class="tab-ngang-btn" onclick="bamMoTabHanhChinh('bac')">
+🔴
+ XEM MIỀN BẮC 
+▼
+</button>
+                             <button class="tab-ngang-btn" onclick="bamMoTabHanhChinh('nam')">
+🟢
+ XEM MIỀN NAM 
+▼
+</button>`;
+    } else {
+        
+blockBac.style.display
+ = "block";
+        
+blockTrung.style.display
+ = "none";
+        
+blockNam.style.display
+ = "none";
+        
+tabsPhu.style.display
+ = "grid";
+        tabsPhu.innerHTML = `<button class="tab-ngang-btn" onclick="bamMoTabHanhChinh('trung')">
+🔵
+ XEM MIỀN TRUNG 
+▼
+</button>
+                             <button class="tab-ngang-btn" onclick="bamMoTabHanhChinh('nam')">
+🟢
+ XEM MIỀN NAM 
+▼
+</button>`;
+    }
+    // Kích hoạt nạp đài mặc định theo khung giờ vàng
+    let gioHienTai = new Date(
+).getHours
+();
+    let daiMacDinh = "mb";
+    if (gioHienTai >= 16 && gioHienTai < 18) daiMacDinh = (mienUuTien === "nam"
+) ?
+ "hcm
+" :
+ ((mienUuTien === "trung") ? "py
+" :
+ "mb");
+    
+    let targetButton = 
+document.getElementById
+(`btn-${daiMacDinh}`);
+    if (targetButton) {
+        
+document.getElementById
+('iframe-kqxs').src = configCacDai[daiMacDinh === "mb" ? "bac
+" :
+ (daiMacDinh === "hcm" || daiMacDinh === "dthap" ? "nam
+" :
+ "trung")].find(d => d.code === daiMacDinh).url;
+        daiHienTai = daiMacDinh;
+        targetButton.classList.add('active');
+        
+veBangThongKe(
+);
+    }
+}
+// Hàm xử lý bung menu trượt ngang thả xuống khi người dùng chạm tay vào thanh Tab ngang
+function bamMoTabHanhChinh(mienClick) {
+    let block = 
+document.getElementById
+(`block-${mienClick}`);
+    let nhan = 
+document.getElementById
+(`nhan-luot-${mienClick}`);
+    if (
+block.style
+.display === "block") {
+        
+block.style
+.display = "none";
+    } else {
+        
+block.style
+.display = "block";
+        if(nhan) 
+nhan.innerText
+ = "
+▲
+ 
+ĐÓ
+NG DANH S
+Á
+CH";
+    }
+}
+function 
+bamChonDai(
+linkIframe, codeDai, element) {
+    
+document.querySelectorAll
+('.btn-dai').forEach(b => b.classList.remove('active'));
+    if(element) element.classList.add('active');
+    
+    
+document.getElementById
+('iframe-kqxs').src = linkIframe;
+    daiHienTai = codeDai;
+    
+    
+document.getElementById
+("vung-chon-dai-goc").style.display = "none";
+    
+document.getElementById
+("vung-tabs-phu").style.display = "none";
+    
+document.getElementById
+("nut-quay-ve").style.display = "block";
+    
+    let tenDai = 
+element ?
+ element.innerText.split('\n')[0] : "Miền Bắc";
+    
+document.getElementById
+('tieu-de-thong-ke').innerText = `
+📊
+ XÁC SUẤT ĐÀI ${tenDai.toUpperCase()}`;
+    
+veBangThongKe(
+);
+    
+window.scrollTo
+({ top: 0, behavior: 'smooth' });
+}
+function 
+quayVeTrangChu(
+) {
+    
+document.getElementById
+("vung-chon-dai-goc").style.display = "block";
+    
+document.getElementById
+("nut-quay-ve").style.display = "none";
+    apDungCauHinhVungMien(vungMienGốc); // Trả lại cấu hình cá nhân hóa vùng miền tĩnh ban đầu
+}
+function doiSoKy(soKy) 
+{ kyHienTai
+ = soKy; veBangThongKe(); }
+function 
+veBangThongKe(
+) {
+    let dataDai = dbXacSuat[daiHienTai] || dbXacSuat["mb"];
+    let dataKy = dataDai[kyHienTai] || 
+dataDai[
+"30"] || dbXacSuat["mb"]["30"];
+    let htmlVeNhieu = "";
+    dataKy.ve_
+nhieu.forEach
+((item, index) => {
+        let bgColor = mauVeNhieu[index];
+        let textColor = (index <= 2
+) ?
+ "#ffffff
+" :
+ "#000000";
+        htmlVeNhieu += `<tr><td><b>${index + 
+1}<
+/b></td><td><span class="so-may-man" style="background-color: ${bgColor}; color: ${textColor}">[${item.s}]</span></td><td><b>${item.l} kỳ</b></td></tr>`;
+    });
+    
+document.getElementById
+('du-lieu-ve-nhieu').innerHTML = htmlVeNhieu;
+    let htmlChuaVe = "";
+    dataKy.chua_
+ve.forEach
+((item, index) => {
+        let bgColor = mauChuaVe[index];
+        let textColor = (index <= 3
+) ?
+ "#ffffff
+" :
+ "#000000";
+        htmlChuaVe += `<tr><td><b>${index + 
+1}<
+/b></td><td><span class="so-may-man" style="background-color: ${bgColor}; color: ${textColor}">[${item.s}]</span></td><td><b>${item.l} kỳ</b></td></tr>`;
+    });
+    
+document.getElementById
+('du-lieu-chua-ve').innerHTML = htmlChuaVe;
+}
+function 
+kichHoatAiQuetSo(
+) {
+    let vungHienThi = 
+document.getElementById
+("ket-qua-ai-quet");
+    
+vungHienThi.style.display
+ = "block";
+    let bieuTuongNut = 
+document.querySelector
+(".btn-ai-random");
+    bieuTuongNut.disabled = true;
+    let boDemGiay = 0;
+    let hieuUngChopNhay = 
+setInterval(
+() => {
+        let soGiaLap1 = 
+String(
+Math.floor(Math.random() * 100)).padStart(2, '0');
+        let soGiaLap2 = 
+String(
+Math.floor(Math.random() * 100)).padStart(2, '0');
+        vungHienThi.innerText = `
+🤖
+ AI ĐANG QUÉT MA TRẬN SỐ: [${soGiaLap1}] - [${soGiaLap2
+}]`
+;
+        boDemGiay += 100;
+        if (boDemGiay >= 1500) {
+            clearInterval(hieuUngChopNhay);
+            let soChot2 = 
+String(
+Math.floor(Math.random() * 100)).padStart(2, '0');
+            vungHienThi.innerHTML = `
+🔮
+ AI PHÂN TÍCH CẶP SỐ THUẬT TOÁN: <span style="font-size:1.2rem; 
+color:#
+d32f2f;">[68]</span> - <span style="font-size:1.2rem; color:#0d47a1;">[${soChot2}]</span>`;
+            bieuTuongNut.disabled = false;
+        }
+    }, 100);
+}
+function 
+chayDongHoDemNguoc(
+) {
+    
+setInterval(
+() => {
+        let gioHienTai = new 
+Date(
+); let gioDich = new Date(); gioDich.setHours(16, 15, 0, 0);
+        if (gioHienTai > gioDich) gioDich.setHours(18, 15, 0, 0);
+        let khoangCach = gioDich - gioHienTai;
+        if (khoangCach < 0) 
+{ document
+.getElementById("countdown-timer").innerText = "
+🎉
+ ĐANG TRONG KHUNG GIỜ VÀNG MỞ THƯỞNG TRỰC TIẾP!"; return; }
+        let hours = 
+String(
+Math.floor((khoangCach % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+        let minutes = 
+String(
+Math.floor((khoangCach % (1000 * 60)) / (1000 * 60))).padStart(2, '0');
+        let seconds = 
+String(
+Math.floor((khoangCach % (1000 * 60)) / 1000)).padStart(2, '0');
+        
+document.getElementById
+("countdown-timer").innerText = `
+⏳
+ C
+Ò
+N ${hours} GIỜ : ${minutes} PHÚT : ${seconds} GIÊY ĐẾN GIỜ QUAY TRỰC TIẾP!`;
+    }, 1000);
+}
+chayDongHoDemNguoc(
+);
+function 
+chuyenDoiCheDoBanden(
+) {
+    let bodyNode = 
+document.documentElement
+; let nutToggle = document.getElementById("dark-mode-toggle");
+    if (bodyNode.getAttribute("data-theme") === "dark") 
+{ bodyNode.removeAttribute
+("data-theme"); nutToggle.innerText = "
+🌙
+ Mode"; localStorage.setItem("theme", "light"); } 
+    else 
+{ bodyNode.setAttribute
+("data-theme", "dark"); nutToggle.innerText = "
+☀
+️ Mode"; localStorage.setItem("theme", "dark"); }
+}
+function moCuaSoChinhSach(loaiChinhSach) {
+    let cuonNguon = vanBanChinhSach[loaiChinhSach];
+    
+document.getElementById
+("tieu-de-modal").innerText = cuonNguon.tieuDe;
+    
+document.getElementById
+("noi-dung-modal").innerHTML = cuonNguon.noiDung;
+    
+document.getElementById
+("khung-chinh-sach-modal").style.display = "flex";
+}
+function 
+dongCuaSoChinhSach(
+) { document.getElementById("khung-chinh-sach-modal").style.display = "none"; }
+// Hàm tự động gọi bộ nhớ đệm kiểm tra lựa chọn chế độ ban đêm cũ của người dùng
+window.onload
+ = function() {
+    let savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") 
+{ document
+.documentElement.setAttribute("data-theme", "dark"); document.getElementById("dark-mode-toggle").innerText = "
+☀
+️ Mode"; }
+    
+quetIpXacDinhVungMien(
+);
+};
+</script>
+</body>
+</html>
