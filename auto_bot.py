@@ -83,6 +83,10 @@ def crawl_xskt_today_full_results():
         except Exception as e:
             print(f"Lỗi khi cào {url}: {e}")
             
+    today_str = f"{datetime.date.today().day:02d}/{datetime.date.today().month:02d}/{datetime.date.today().year}"
+    for code, result in db.items():
+        result['ngay'] = today_str
+            
     return dict(db)
 
 def extract_2_digits(text):
@@ -103,6 +107,7 @@ def crawl_xskt_history(days=95):
     
     # Cấu trúc lưu trữ: db[code_dai][ngay] = [danh_sach_2_so_cuoi]
     db = defaultdict(lambda: defaultdict(list))
+    db_ket_qua = defaultdict(list)
     
     today = datetime.date.today()
     
@@ -143,12 +148,21 @@ def crawl_xskt_history(days=95):
                             if len(tds) < 2:
                                 continue
                             
+                            ten_giai = tds[0].get_text(" ", strip=True).replace("Giải ", "G").replace("Đặc biệt", "ĐB")
+                            if ten_giai == "GĐB": ten_giai = "ĐB"
+                            
                             # Cột 0 là tên giải, các cột tiếp theo là số trúng của các đài
                             for idx, td in enumerate(tds[1:]):
                                 if idx < len(dais_in_table) and dais_in_table[idx]:
                                     code = dais_in_table[idx]
                                     nums = extract_2_digits(td.get_text(" ", strip=True))
                                     db[code][date_str].extend(nums)
+                                    
+                                    if i < 30:
+                                        ngay_format = f"{d.day:02d}/{d.month:02d}/{d.year}"
+                                        if not db_ket_qua[code] or db_ket_qua[code][-1].get('ngay') != ngay_format:
+                                            db_ket_qua[code].append({'ngay': ngay_format})
+                                        db_ket_qua[code][-1][ten_giai] = td.get_text(" - ", strip=True)
             except Exception as e:
                 print(f"Lỗi khi cào {url}: {e}")
         
@@ -174,7 +188,7 @@ def crawl_xskt_history(days=95):
             
         final_db[code] = daily_lists
         
-    return final_db
+    return final_db, dict(db_ket_qua)
 
 def fallback_gia_lap(moc_ky=95):
     lich_su_ky = []
@@ -272,8 +286,19 @@ def van_hanh_cap_nhat_he_thong():
     db_ket_qua_tong_hop = {}
     
     # 1. Cào dữ liệu xác suất và kết quả hôm nay
-    lich_su_all_dai = crawl_xskt_history(95)
+    lich_su_all_dai, db_ket_qua_history = crawl_xskt_history(95)
     db_ket_qua_hom_nay = crawl_xskt_today_full_results()
+    
+    # Trộn kết quả hôm nay vào lịch sử 30 ngày
+    today_str = f"{datetime.date.today().day:02d}/{datetime.date.today().month:02d}/{datetime.date.today().year}"
+    for code, result in db_ket_qua_hom_nay.items():
+        if code not in db_ket_qua_history:
+            db_ket_qua_history[code] = [result]
+        else:
+            if len(db_ket_qua_history[code]) > 0 and db_ket_qua_history[code][0].get('ngay') == today_str:
+                db_ket_qua_history[code][0].update(result)
+            else:
+                db_ket_qua_history[code].insert(0, result)
     
     # 2. Xử lý thuật toán xác suất
     for dai, lich_su_dai in lich_su_all_dai.items():
@@ -283,7 +308,7 @@ def van_hanh_cap_nhat_he_thong():
             
     # Đóng gói ma trận thành chuỗi văn bản JSON
     json_string_xs = json.dumps(db_ket_qua_tong_hop, ensure_ascii=False, separators=(',', ':'))
-    json_string_kq = json.dumps(db_ket_qua_hom_nay, ensure_ascii=False, separators=(',', ':'))
+    json_string_kq = json.dumps(db_ket_qua_history, ensure_ascii=False, separators=(',', ':'))
     
     data_js_inject = f"const dbXacSuat = {json_string_xs};\nconst dbKetQua = {json_string_kq};"
     
