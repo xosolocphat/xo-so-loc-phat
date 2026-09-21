@@ -66,8 +66,7 @@ def crawl_xskt_today_full_results():
                     if mien != "xsmb":
                         for th in trs[0].find_all('th')[1:]:
                             code = normalize_name(th.get_text(" ", strip=True))
-                            if code:
-                                dais.append(code)
+                            dais.append(code or "")
                     
                     for tr in trs[1:]:
                         tds = tr.find_all('td')
@@ -222,21 +221,22 @@ def lay_gia_vang_thuc_te_hom_nay():
         soup = BeautifulSoup(r.text, 'html.parser')
         
         # Mặc định dự phòng
-        sjc_mua = "81.50"
-        sjc_ban = "83.50"
-        nhan_mua = "79.00"
+        sjc_mua = "82.00"
+        sjc_ban = "84.00"
+        nhan_mua = "79.20"
         nhan_ban = "80.50"
         
         trs = soup.find_all('tr')
         # Tìm SJC Hồ Chí Minh
         for tr in trs:
-            if 'Hồ Chí Minh' in tr.text and 'SJC' in tr.text:
+            if '1L, 10L' in tr.text and 'SJC' in tr.text:
                 tds = tr.find_all('td')
                 if len(tds) >= 3:
                     mua = tds[1].text.strip().replace(',', '').replace('.', '')
                     ban = tds[2].text.strip().replace(',', '').replace('.', '')
-                    sjc_mua = f"{(float(mua) / 1000000):.2f}"
-                    sjc_ban = f"{(float(ban) / 1000000):.2f}"
+                    if int(mua) > 50000000: # Chống webgia fake data (nếu trả về số quá nhỏ)
+                        sjc_mua = f"{(float(mua) / 1000000):.2f}"
+                        sjc_ban = f"{(float(ban) / 1000000):.2f}"
                 break
         
         # Tìm Vàng nhẫn
@@ -246,8 +246,9 @@ def lay_gia_vang_thuc_te_hom_nay():
                 if len(tds) >= 3:
                     mua = tds[1].text.strip().replace(',', '').replace('.', '')
                     ban = tds[2].text.strip().replace(',', '').replace('.', '')
-                    nhan_mua = f"{(float(mua) / 1000000):.2f}"
-                    nhan_ban = f"{(float(ban) / 1000000):.2f}"
+                    if int(mua) > 50000000: # Chống webgia fake data
+                        nhan_mua = f"{(float(mua) / 1000000):.2f}"
+                        nhan_ban = f"{(float(ban) / 1000000):.2f}"
                 break
                 
         return {
@@ -258,9 +259,9 @@ def lay_gia_vang_thuc_te_hom_nay():
         }
     except Exception as e:
         return {
-            "sjc_mua": "81.50",
-            "sjc_ban": "83.50",
-            "nhan_mua": "79.00",
+            "sjc_mua": "82.00",
+            "sjc_ban": "84.00",
+            "nhan_mua": "79.20",
             "nhan_ban": "80.50"
         }
 

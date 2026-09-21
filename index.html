@@ -27,6 +27,23 @@
         body { margin: 0; padding: 0; background-color: var(--bg-body); color: var(--text-main); font-family: Arial, sans-serif; transition: all 0.3s ease; }
         .xo-so-container { max-width: 100%; margin: 0 auto; padding: 6px; box-sizing: border-box; }
         
+        .so-lo, .ball {
+            display: inline-block; width: 34px; height: 34px; border-radius: 50%;
+            line-height: 34px; text-align: center; font-weight: bold; color: #000;
+            box-shadow: inset -3px -3px 6px rgba(0,0,0,0.4), inset 3px 3px 6px rgba(255,255,255,0.9), 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 1px 1px 1px rgba(255,255,255,0.4); margin: 0 3px; vertical-align: middle; font-size: 1.1rem;
+        }
+        .bg-red, .ball-red { background: radial-gradient(circle at 10px 10px, #ff9999, #d32f2f); color: #fff; }
+        .bg-orange, .ball-orange { background: radial-gradient(circle at 10px 10px, #ffcc99, #f57c00); }
+        .bg-green, .ball-green { background: radial-gradient(circle at 10px 10px, #aaffaa, #388e3c); }
+        .bg-blue, .ball-blue { background: radial-gradient(circle at 10px 10px, #99ccff, #1976d2); color: #fff; }
+        .ball-cyan { background: radial-gradient(circle at 10px 10px, #99ffff, #009999); color: #fff; }
+        .ball-yellow { background: radial-gradient(circle at 10px 10px, #ffff99, #cccc00); }
+        .ball-teal { background: radial-gradient(circle at 10px 10px, #99ffcc, #008080); color: #fff; }
+        .ball-purple { background: radial-gradient(circle at 10px 10px, #cc99ff, #660099); color: #fff; }
+        .ball-pink { background: radial-gradient(circle at 10px 10px, #ff99ff, #cc00cc); color: #fff; }
+        .ball-silver { background: radial-gradient(circle at 10px 10px, #ffffff, #999999); }
+
         /* Thanh đầu trang đưa nút Dark Mode lên trên bên phải */
         .header-top { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; padding: 0 4px; }
         .header-top h2 { font-size: 1.1rem; margin: 0; text-transform: uppercase; font-weight: bold; }
@@ -407,6 +424,13 @@ function apDungCauHinhVungMien(mienUuTien) {
     }
 }
 
+function getBallColorClass(so) {
+    let dau = so.charAt(0);
+    const colors = ['red', 'cyan', 'blue', 'orange', 'yellow', 'green', 'teal', 'purple', 'pink', 'silver'];
+    let c = parseInt(dau);
+    return 'ball-' + (isNaN(c) ? 'red' : colors[c]);
+}
+
 // Hàm render bảng kết quả Native
 function renderKetQuaNative(codeDai) {
     let khung = document.getElementById('khung-kqxs-native');
@@ -423,8 +447,29 @@ function renderKetQuaNative(codeDai) {
         return;
     }
     
-    let html = '<table class="bang-kqxs">';
-    let thuTuGiai = ["G8", "G7", "G6", "G5", "G4", "G3", "G2", "G1", "ĐB"];
+    // Tìm tên đài
+    let tenDaiText = codeDai.toUpperCase();
+    for(let k in configCacDai) {
+        let found = configCacDai[k].find(d => d.code === codeDai);
+        if (found) { tenDaiText = found.ten.toUpperCase(); break; }
+    }
+    
+    // Lấy ngày hiện tại
+    let today = new Date();
+    let dateStr = today.toLocaleDateString('vi-VN');
+    
+    let html = `
+    <div style="background: linear-gradient(to bottom, #cc0000, #990000); color: white; padding: 10px; text-align: left; font-weight: bold; border: 1px solid #990000; border-radius: 6px 6px 0 0; text-transform: uppercase; font-size: 1.1rem; display: flex; align-items: center;">
+        <span style="font-size: 1.4rem; margin-right: 8px;">✉</span> KẾT QUẢ XỔ SỐ ${tenDaiText} - ${dateStr}
+    </div>
+    <table class="bang-kqxs" style="border-top: none; margin-top: 0; border-radius: 0 0 6px 6px;">`;
+    
+    const tenGiaiMap = {
+        "ĐB": "Giải ĐB", "G1": "Giải nhất", "G2": "Giải nhì", "G3": "Giải ba",
+        "G4": "Giải tư", "G5": "Giải năm", "G6": "Giải sáu", "G7": "Giải bảy", "G8": "Giải tám"
+    };
+    
+    let thuTuGiai = ["ĐB", "G1", "G2", "G3", "G4", "G5", "G6", "G7", "G8"];
     
     thuTuGiai.forEach(tenGiai => {
         let keyToUse = ketQua[tenGiai] ? tenGiai : (ketQua["G." + tenGiai.replace("G","")] ? "G." + tenGiai.replace("G","") : null);
@@ -433,9 +478,22 @@ function renderKetQuaNative(codeDai) {
 
         if (keyToUse && ketQua[keyToUse]) {
             let rowClass = (keyToUse === "ĐB") ? "giai-db" : "";
-            // Đảm bảo các dãy số cách nhau bởi 1 khoảng trắng và gạch nối
-            let cacSo = ketQua[keyToUse].replace(/-/g, ' - ');
-            html += `<tr class="${rowClass}"><td class="ten-giai">${keyToUse}</td><td class="so-giai">${cacSo}</td></tr>`;
+            
+            // Xử lý tạo bóng 3D cho 2 số cuối
+            let cacSoRaw = ketQua[keyToUse].split('-');
+            let cacSoFormatted = cacSoRaw.map(s => {
+                s = s.trim();
+                if (s.length >= 2) {
+                    let phanDau = s.substring(0, s.length - 2);
+                    let haiSoCuoi = s.substring(s.length - 2);
+                    let colorClass = getBallColorClass(haiSoCuoi);
+                    return `${phanDau}<span class="ball ${colorClass}">${haiSoCuoi}</span>`;
+                }
+                return s;
+            }).join(' &nbsp; ');
+            
+            let tenHienThi = tenGiaiMap[keyToUse.replace(".","")] || keyToUse;
+            html += `<tr class="${rowClass}"><td class="ten-giai">${tenHienThi}</td><td class="so-giai">${cacSoFormatted}</td></tr>`;
         }
     });
     
