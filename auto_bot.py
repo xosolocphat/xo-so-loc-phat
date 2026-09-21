@@ -39,6 +39,53 @@ def normalize_name(name):
             return code
     return None
 
+def crawl_xskt_today_full_results():
+    """
+    Cào toàn bộ dãy số đầy đủ của các đài quay trong ngày hôm nay.
+    """
+    session = requests.Session()
+    session.headers.update({
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)"
+    })
+    
+    db = defaultdict(dict)
+    print("Bắt đầu cào dữ liệu dãy số hôm nay...")
+    
+    for mien in ["xsmb", "xsmt", "xsmn"]:
+        url = f"https://xskt.com.vn/{mien}"
+        try:
+            r = session.get(url, timeout=10)
+            if r.status_code != 200:
+                continue
+            soup = BeautifulSoup(r.text, 'html.parser')
+            
+            for table in soup.find_all('table'):
+                if 'id' in table.attrs and ('MB0' in table['id'] or 'MT0' in table['id'] or 'MN0' in table['id']):
+                    trs = table.find_all('tr')
+                    dais = ["mb"] if mien == "xsmb" else []
+                    if mien != "xsmb":
+                        for th in trs[0].find_all('th')[1:]:
+                            code = normalize_name(th.get_text(" ", strip=True))
+                            if code:
+                                dais.append(code)
+                    
+                    for tr in trs[1:]:
+                        tds = tr.find_all('td')
+                        if len(tds) < 2: continue
+                        # Đổi tên giải cho ngắn gọn, vd: "Giải Bảy" -> "G7", "Đặc biệt" -> "ĐB"
+                        ten_giai = tds[0].get_text(" ", strip=True).replace("Giải ", "G").replace("Đặc biệt", "ĐB")
+                        if ten_giai == "GĐB": ten_giai = "ĐB"
+                        
+                        for idx, td in enumerate(tds[1:]):
+                            if idx < len(dais) and dais[idx]:
+                                # Lấy các số trong ô, cách nhau bởi ' - '
+                                nums_str = td.get_text(" - ", strip=True)
+                                db[dais[idx]][ten_giai] = nums_str
+        except Exception as e:
+            print(f"Lỗi khi cào {url}: {e}")
+            
+    return dict(db)
+
 def extract_2_digits(text):
     import re
     # Tìm các cụm số
@@ -223,18 +270,21 @@ def van_hanh_cap_nhat_he_thong():
     cac_moc_ky = [7, 15, 30, 60, 90]
     db_ket_qua_tong_hop = {}
     
-    # 1. Cào dữ liệu
+    # 1. Cào dữ liệu xác suất và kết quả hôm nay
     lich_su_all_dai = crawl_xskt_history(95)
+    db_ket_qua_hom_nay = crawl_xskt_today_full_results()
     
-    # 2. Xử lý thuật toán
+    # 2. Xử lý thuật toán xác suất
     for dai, lich_su_dai in lich_su_all_dai.items():
         db_ket_qua_tong_hop[dai] = {}
         for ky in cac_moc_ky:
             db_ket_qua_tong_hop[dai][str(ky)] = tinh_toan_xac_suat_thong_ke(lich_su_dai, ky)
             
     # Đóng gói ma trận thành chuỗi văn bản JSON
-    json_string = json.dumps(db_ket_qua_tong_hop, ensure_ascii=False, separators=(',', ':'))
-    data_js_inject = f"const dbXacSuat = {json_string};"
+    json_string_xs = json.dumps(db_ket_qua_tong_hop, ensure_ascii=False, separators=(',', ':'))
+    json_string_kq = json.dumps(db_ket_qua_hom_nay, ensure_ascii=False, separators=(',', ':'))
+    
+    data_js_inject = f"const dbXacSuat = {json_string_xs};\nconst dbKetQua = {json_string_kq};"
     
     # Thu thập dữ liệu biên độ giá vàng thực tế
     vang = lay_gia_vang_thuc_te_hom_nay()
