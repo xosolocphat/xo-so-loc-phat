@@ -229,55 +229,52 @@ def tinh_toan_xac_suat_thong_ke(lich_su_giai, so_ky):
     return {"ve_nhieu": top_7_ve, "chua_ve": top_7_gan}
 
 def lay_gia_vang_thuc_te_hom_nay():
+    # Mặc định dự phòng
+    kq = {
+        "sjc_mua": "82.00",
+        "sjc_ban": "84.00",
+        "nhan_mua": "79.20",
+        "nhan_ban": "80.50",
+        "usd_mua": "24,530",
+        "usd_ban": "24,900"
+    }
+    
     try:
         headers = {"User-Agent": "Mozilla/5.0"}
-        r = requests.get("https://webgia.com/gia-vang/sjc/", headers=headers, timeout=10)
-        soup = BeautifulSoup(r.text, 'html.parser')
         
-        # Mặc định dự phòng
-        sjc_mua = "82.00"
-        sjc_ban = "84.00"
-        nhan_mua = "79.20"
-        nhan_ban = "80.50"
-        
-        trs = soup.find_all('tr')
-        # Tìm SJC Hồ Chí Minh
-        for tr in trs:
-            if '1L, 10L' in tr.text and 'SJC' in tr.text:
-                tds = tr.find_all('td')
-                if len(tds) >= 3:
-                    mua = tds[1].text.strip().replace(',', '').replace('.', '')
-                    ban = tds[2].text.strip().replace(',', '').replace('.', '')
-                    if int(mua) > 50000000: # Chống webgia fake data (nếu trả về số quá nhỏ)
-                        sjc_mua = f"{(float(mua) / 1000000):.2f}"
-                        sjc_ban = f"{(float(ban) / 1000000):.2f}"
-                break
-        
-        # Tìm Vàng nhẫn
-        for tr in trs:
-            if 'Nhẫn' in tr.text and '99' in tr.text:
-                tds = tr.find_all('td')
-                if len(tds) >= 3:
-                    mua = tds[1].text.strip().replace(',', '').replace('.', '')
-                    ban = tds[2].text.strip().replace(',', '').replace('.', '')
-                    if int(mua) > 50000000: # Chống webgia fake data
-                        nhan_mua = f"{(float(mua) / 1000000):.2f}"
-                        nhan_ban = f"{(float(ban) / 1000000):.2f}"
-                break
-                
-        return {
-            "sjc_mua": sjc_mua,
-            "sjc_ban": sjc_ban,
-            "nhan_mua": nhan_mua,
-            "nhan_ban": nhan_ban
-        }
+        # 1. Lấy giá vàng từ vang.today
+        r_vang = requests.get("https://www.vang.today/api/prices", headers=headers, timeout=10)
+        if r_vang.status_code == 200:
+            data = r_vang.json()
+            if "prices" in data:
+                prices = data["prices"]
+                if "VNGSJC" in prices:
+                    sjc = prices["VNGSJC"]
+                    kq["sjc_mua"] = f"{(sjc['buy'] / 1000000):.2f}"
+                    kq["sjc_ban"] = f"{(sjc['sell'] / 1000000):.2f}"
+                if "BT9999NTT" in prices:
+                    nhan = prices["BT9999NTT"]
+                    kq["nhan_mua"] = f"{(nhan['buy'] / 1000000):.2f}"
+                    kq["nhan_ban"] = f"{(nhan['sell'] / 1000000):.2f}"
+                    
+        # 2. Lấy tỷ giá USD từ Vietcombank
+        r_usd = requests.get("https://portal.vietcombank.com.vn/Usercontrols/TVPortal.TyGia/pXML.aspx", headers=headers, timeout=10)
+        if r_usd.status_code == 200:
+            import xml.etree.ElementTree as ET
+            root = ET.fromstring(r_usd.text)
+            for exrate in root.findall('Exrate'):
+                if exrate.get('CurrencyCode') == 'USD':
+                    usd_buy = exrate.get('Buy')
+                    usd_sell = exrate.get('Sell')
+                    if usd_buy and usd_sell:
+                        kq["usd_mua"] = usd_buy.split('.')[0]
+                        kq["usd_ban"] = usd_sell.split('.')[0]
+                    break
     except Exception as e:
-        return {
-            "sjc_mua": "82.00",
-            "sjc_ban": "84.00",
-            "nhan_mua": "79.20",
-            "nhan_ban": "80.50"
-        }
+        print("Lỗi khi lấy giá vàng/USD:", e)
+        pass
+        
+    return kq
 
 def van_hanh_cap_nhat_he_thong():
     print("🤖 Robot Python đang cào dữ liệu thật từ XSKT...")
@@ -334,10 +331,11 @@ def van_hanh_cap_nhat_he_thong():
                 content[end_idx:]
             )
             
-            # Cập nhật giá vàng
+            # Cập nhật giá vàng và USD
             import re
             new_content = re.sub(r'id="sjc-gia">Mua: [0-9.]+ - Bán: [0-9.]+', f'id="sjc-gia">Mua: {vang["sjc_mua"]} - Bán: {vang["sjc_ban"]}', new_content)
             new_content = re.sub(r'id="nhan-gia">Mua: [0-9.]+ - Bán: [0-9.]+', f'id="nhan-gia">Mua: {vang["nhan_mua"]} - Bán: {vang["nhan_ban"]}', new_content)
+            new_content = re.sub(r'id="usd-gia">Mua vào: [\d,]+đ - Bán ra: [\d,]+đ', f'id="usd-gia">Mua vào: {vang.get("usd_mua", "24,530")}đ - Bán ra: {vang.get("usd_ban", "24,900")}đ', new_content)
             
             with open(file_path, "w", encoding="utf-8") as file:
                 file.write(new_content)

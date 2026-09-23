@@ -1,0 +1,21 @@
+# Bỏ qua các file thư mục hệ thống của Python
+__pycache__/
+*.pyc
+
+# Bỏ qua các file log và debug
+*.log
+*_log.txt
+*_log2.txt
+debug.json
+output.txt
+gold_output.txt
+gold_output_new.txt
+
+# Bỏ qua các file nháp và extract do AI tạo ra trong quá trình sửa lỗi
+excel_output.csv
+gold_usd_info.txt
+xs_extracted/
+test_gold.py
+
+# Bỏ qua CSDL (tuỳ chọn - nếu bạn muốn người khác tải về có sẵn data thì có thể xoá dòng này)
+# *.sqlite3
