@@ -344,21 +344,20 @@ function tinhKhoangCachNgayXo(mangThuMoThuong) {
 
 // 🤖 CƠ CHẾ ĐỊNH VỊ IP ẨN NGẦM: Tự kiểm tra vùng miền người dùng trong 0.05s để hoán vị giao diện tĩnh
 function quetIpXacDinhVungMien() {
-    fetch('https://ipapi.co')
+    fetch('https://get.geojs.io/v1/ip/geo.json')
         .then(res => res.json())
         .then(data => {
-            let tinhThanh = data.region ? data.region.toLowerCase() : "";
-            const mienNamKeywords = ["ho chi minh", "binh duong", "dong nai", "long an", "can tho", "an giang", "vung tau", "tien giang", "tay ninh", "ca mau"];
-            const mienTrungKeywords = ["da nang", "khanh hoa", "binh dinh", "thua thien", "phu yen", "dak lak", "quang nam"];
+            let tinhThanh = (data.region || data.city || "").toLowerCase();
+            const mienNamKeywords = ["ho chi minh", "binh duong", "dong nai", "long an", "can tho", "an giang", "vung tau", "tien giang", "tay ninh", "ca mau", "ben tre", "vinh long", "tra vinh", "hau giang", "kien giang", "soc trang", "bac lieu", "dong thap", "binh phuoc", "binh thuan", "ninh thuan"];
+            const mienTrungKeywords = ["da nang", "khanh hoa", "binh dinh", "thua thien", "hue", "phu yen", "dak lak", "quang nam", "quang ngai", "quang tri", "quang binh", "kon tum", "gia lai", "dak nong", "lam dong", "ha tinh", "nghe an", "thanh hoa"];
             
+            let vungMienGoc = "bac"; // Mặc định
             if (mienNamKeywords.some(kw => tinhThanh.includes(kw))) {
-                vungMienGốc = "nam";
+                vungMienGoc = "nam";
             } else if (mienTrungKeywords.some(kw => tinhThanh.includes(kw))) {
-                vungMienGốc = "trung";
-            } else {
-                vungMienGốc = "bac";
+                vungMienGoc = "trung";
             }
-            apDungCauHinhVungMien(vungMienGốc);
+            apDungCauHinhVungMien(vungMienGoc);
         })
         .catch(() => {
             // Nếu API chặn hoặc mạng lỗi, tự động dùng miền Bắc làm chuẩn quốc gia an toàn
