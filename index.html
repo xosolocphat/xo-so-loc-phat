@@ -402,7 +402,63 @@ function bamChonNgay(ngay) {
     renderKetQuaTheoNgayMien(ngayHienTai, mienHienTai);
 }
 
+
+function apDungCauHinhVungMien(mienUuTien) {
+    let containerGoc = document.getElementById("vung-chon-dai-goc");
+    let blockBac = document.getElementById("block-bac");
+    let blockTrung = document.getElementById("block-trung");
+    let blockNam = document.getElementById("block-nam");
+    let tabsPhu = document.getElementById("vung-tabs-phu");
+
+    document.querySelectorAll('.btn-dai').forEach(b => b.classList.remove('active'));
+
+    ["bac", "trung", "nam"].forEach(m => {
+        document.getElementById(`ds-mien-${m}`).innerHTML = "";
+    });
+
+    ["bac", "trung", "nam"].forEach(m => {
+        let htmlButtons = "";
+        let danhSachDaiTheoMien = configCacDai[m] || [];
+        danhSachDaiTheoMien.forEach(dai => {
+            let cachNgay = tinhKhoangCachNgayXo(dai.thu);
+            let nhanTrangThai = (cachNgay === 0) ? "🔴 Hôm nay" : `⏳ T.${dai.thu===0? 'CN':dai.thu+1}`;
+            htmlButtons += `<button class="btn-dai" id="btn-${dai.code}" onclick="bamChonDai('${dai.url}', '${dai.code}', this)">${dai.ten} <span style="font-size:0.65rem; opacity:0.8; display:block;">${nhanTrangThai}</span></button>`;
+        });
+        document.getElementById(`ds-mien-${m}`).innerHTML = htmlButtons;
+    });
+
+    if (mienUuTien === "nam") {
+        containerGoc.insertBefore(blockNam, blockBac);
+        blockBac.style.display = "none";
+        blockTrung.style.display = "none";
+        tabsPhu.style.display = "grid";
+        tabsPhu.innerHTML = `<button class="tab-ngang-btn" onclick="bamMoTabHanhChinh('bac')">👉 XEM MIỀN BẮC 👈</button>
+                             <button class="tab-ngang-btn" onclick="bamMoTabHanhChinh('trung')">👉 XEM MIỀN TRUNG 👈</button>`;
+    } else if (mienUuTien === "trung") {
+        containerGoc.insertBefore(blockTrung, blockBac);
+        blockBac.style.display = "none";
+        blockNam.style.display = "none";
+        tabsPhu.style.display = "grid";
+        tabsPhu.innerHTML = `<button class="tab-ngang-btn" onclick="bamMoTabHanhChinh('bac')">👉 XEM MIỀN BẮC 👈</button>
+                             <button class="tab-ngang-btn" onclick="bamMoTabHanhChinh('nam')">👉 XEM MIỀN NAM 👈</button>`;
+    } else {
+        blockBac.style.display = "block";
+        blockTrung.style.display = "none";
+        blockNam.style.display = "none";
+        tabsPhu.style.display = "grid";
+        tabsPhu.innerHTML = `<button class="tab-ngang-btn" onclick="bamMoTabHanhChinh('trung')">👉 XEM MIỀN TRUNG 👈</button>
+                             <button class="tab-ngang-btn" onclick="bamMoTabHanhChinh('nam')">👉 XEM MIỀN NAM 👈</button>`;
+    }
+
+    mienHienTai = mienUuTien;
+    renderThanhChonNgay();
+    if(ngayHienTai) {
+        renderKetQuaTheoNgayMien(ngayHienTai, mienHienTai);
+    }
+}
+
 let hienThiBangChungData = [];
+
 let currentHighlightSo = null;
 
 function renderKetQuaTheoNgayMien(ngay, mien) {
