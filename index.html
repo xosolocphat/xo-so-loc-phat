@@ -115,7 +115,7 @@
         }
         .btn-dai.active { background: #ffc107; color: #000; font-weight: bold; border-color: #ffb300; }
         /* VÙNG ƯU TIÊN LỚN: Khung kết quả hiển thị Native */
-        .khung-kqxs-native { width: 100%; min-height: 400px; margin-top: 8px; font-family: Arial, sans-serif; }
+        .khung-kqxs-native { width: 100%; min-height: 400px; margin-top: 8px; font-family: Arial, sans-serif; display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 10px; justify-content: flex-start; padding-bottom: 15px; }
         .bang-kqxs { width: 100%; border-collapse: collapse; border: 2px solid #cc0000; text-align: center; background: var(--bg-block); }
         [data-theme="dark"] .bang-kqxs { border-color: #ff3333; }
         .bang-kqxs th, .bang-kqxs td { border: 1px solid var(--border-color); padding: 10px 4px; font-weight: bold; }
@@ -206,6 +206,10 @@
       </div>
       <div class="danh-sach-dai-scroll" id="ds-mien-nam"></div>
     </div>
+  </div>
+  <!-- THANH CHỌN NGÀY -->
+  <div id="khung-chon-ngay" style="text-align: center; font-weight: bold; margin-top: 10px; font-size: 1.1rem; padding: 5px; border: 2px solid #0056b3; border-bottom: none; background-color: #fff; color: #333; display: none;">
+    KẾT QUẢ NGÀY: <span id="ds-ngay"></span>
   </div>
   <div id="khung-kqxs-native" class="khung-kqxs-native">
       <!-- Bảng kết quả xổ số sẽ được JavaScript vẽ tự động vào đây -->
@@ -364,81 +368,83 @@ function quetIpXacDinhVungMien() {
             apDungCauHinhVungMien("bac");
         });
 }
-function apDungCauHinhVungMien(mienUuTien) {
-    let containerGoc = document.getElementById("vung-chon-dai-goc");
-    let blockBac = document.getElementById("block-bac");
-    let blockTrung = document.getElementById("block-trung");
-    let blockNam = document.getElementById("block-nam");
-    let tabsPhu = document.getElementById("vung-tabs-phu");
+let vungMienGoc = "bac";
+let mienHienTai = "bac";
+let ngayHienTai = "";
+let cacNgayCoKetQua = [];
 
-    // Khởi tạo sắp xếp mảng đài lướt ngang theo lịch gần nhất
-    const miens = ["bac", "trung", "nam"];
-    miens.forEach(m => {
-        configCacDai[m].sort((a, b) => tinhKhoangCachNgayXo(a.thu) - tinhKhoangCachNgayXo(b.thu));
-        let htmlButtons = "";
-        configCacDai[m].forEach(dai => {
-            let cachNgay = tinhKhoangCachNgayXo(dai.thu);
-            let nhanTrangThai = (cachNgay === 0) ? "• Hôm nay" : `• T.${dai.thu===0? 'CN':dai.thu+1}`;
-            htmlButtons += `<button class="btn-dai" id="btn-${dai.code}" onclick="bamChonDai('${dai.url}', '${dai.code}', this)">${dai.ten} <span style="font-size:0.65rem; opacity:0.8; display:block;">${nhanTrangThai}</span></button>`;
-        });
-        document.getElementById(`ds-mien-${m}`).innerHTML = htmlButtons;
-    });
-
-    // Thực hiện hoán vị giao diện: Đẩy miền ưu tiên lên đầu, gom 2 miền phụ thành nút ngang Tab
-    if (mienUuTien === "nam") {
-        containerGoc.insertBefore(blockNam, blockBac);
-        blockBac.style.display = "none";
-        blockTrung.style.display = "none";
-        tabsPhu.style.display = "grid";
-        tabsPhu.innerHTML = `<button class="tab-ngang-btn" onclick="bamMoTabHanhChinh('bac')">🔴 XEM MIỀN BẮC ▼</button>
-                             <button class="tab-ngang-btn" onclick="bamMoTabHanhChinh('trung')">🔵 XEM MIỀN TRUNG ▼</button>`;
-    } else if (mienUuTien === "trung") {
-        containerGoc.insertBefore(blockTrung, blockBac);
-        blockBac.style.display = "none";
-        blockNam.style.display = "none";
-        tabsPhu.style.display = "grid";
-        tabsPhu.innerHTML = `<button class="tab-ngang-btn" onclick="bamMoTabHanhChinh('bac')">🔴 XEM MIỀN BẮC ▼</button>
-                             <button class="tab-ngang-btn" onclick="bamMoTabHanhChinh('nam')">🟢 XEM MIỀN NAM ▼</button>`;
-    } else {
-        blockBac.style.display = "block";
-        blockTrung.style.display = "none";
-        blockNam.style.display = "none";
-        tabsPhu.style.display = "grid";
-        tabsPhu.innerHTML = `<button class="tab-ngang-btn" onclick="bamMoTabHanhChinh('trung')">🔵 XEM MIỀN TRUNG ▼</button>
-                             <button class="tab-ngang-btn" onclick="bamMoTabHanhChinh('nam')">🟢 XEM MIỀN NAM ▼</button>`;
-    }
-
-    // Kích hoạt nạp đài mặc định theo vị trí và ngày hôm nay
-    let dsDaiUuTien = configCacDai[mienUuTien] || configCacDai["bac"];
-    let daiMacDinh = "mb"; // Mặc định chung
-    
-    // Nếu là miền Nam hoặc Trung, tìm đài có quay trong hôm nay
-    let thuHomNay = new Date().getDay();
-    let cacDaiHomNay = dsDaiUuTien.filter(d => d.thu.includes(thuHomNay));
-    if (cacDaiHomNay.length > 0) {
-        daiMacDinh = cacDaiHomNay[0].code; // Chọn đài đầu tiên làm đài chính
-    }
-    
-    let targetButton = document.getElementById(`btn-${daiMacDinh}`);
-    if (targetButton) {
-        daiHienTai = daiMacDinh;
-        targetButton.classList.add('active');
-        renderKetQuaNative(daiMacDinh);
-        veBangThongKe();
+function initThanhChonNgay() {
+    if (cacNgayCoKetQua.length === 0 && typeof dbKetQua !== 'undefined' && dbKetQua['mb']) {
+        cacNgayCoKetQua = dbKetQua['mb'].map(item => item.ngay).slice(0, 7);
+        ngayHienTai = cacNgayCoKetQua[0];
     }
 }
 
-function getBallColorClass(so) {
-    let dau = so.charAt(0);
-    const colors = ['red', 'cyan', 'blue', 'orange', 'yellow', 'green', 'teal', 'purple', 'pink', 'silver'];
-    let c = parseInt(dau);
-    return 'ball-' + (isNaN(c) ? 'red' : colors[c]);
+function renderThanhChonNgay() {
+    initThanhChonNgay();
+    let thanhNgay = document.getElementById('ds-ngay');
+    let khungChon = document.getElementById('khung-chon-ngay');
+    if (!thanhNgay || cacNgayCoKetQua.length === 0) return;
+    
+    khungChon.style.display = "block";
+    let html = '';
+    cacNgayCoKetQua.forEach(ngay => {
+        let ngayNgan = ngay.split('/')[0];
+        let color = (ngay === ngayHienTai) ? 'red' : 'black';
+        html += `<span style="color: ${color}; cursor: pointer; margin: 0 5px;" onclick="bamChonNgay('${ngay}')">${ngayNgan}</span>`;
+    });
+    khungChon.innerHTML = `KẾT QUẢ NGÀY: <span id="ds-ngay">${html}</span>`;
+}
+
+function bamChonNgay(ngay) {
+    ngayHienTai = ngay;
+    renderThanhChonNgay();
+    renderKetQuaTheoNgayMien(ngayHienTai, mienHienTai);
+}
+
+let hienThiBangChungData = [];
+let currentHighlightSo = null;
+
+function renderKetQuaTheoNgayMien(ngay, mien) {
+    let khung = document.getElementById('khung-kqxs-native');
+    if (typeof dbKetQua === 'undefined') {
+        khung.innerHTML = '<div class="msg-chua-co">Đang cập nhật hệ thống...</div>';
+        return;
+    }
+    
+    let dsDai = configCacDai[mien] || [];
+    let cacDaiCoKetQua = [];
+    dsDai.forEach(d => {
+        if (dbKetQua[d.code] && dbKetQua[d.code].some(kq => kq.ngay === ngay)) {
+            cacDaiCoKetQua.push(d);
+        }
+    });
+    
+    if (cacDaiCoKetQua.length === 0) {
+        khung.innerHTML = '<div class="msg-chua-co">Chưa có kết quả xổ số ngày này!</div>';
+        return;
+    }
+    
+    let dsTenDai = cacDaiCoKetQua.map(d => d.ten.toUpperCase()).join(' - ');
+    let tieuDeThongKe = document.getElementById('tieu-de-thong-ke');
+    if(tieuDeThongKe) tieuDeThongKe.innerText = `📊 XÁC SUẤT ĐÀI ${dsTenDai}`;
+    
+    daiHienTai = cacDaiCoKetQua[0].code;
+    veBangThongKe();
+    
+    let danhSachCot = cacDaiCoKetQua.map(d => {
+        let arrKetQua = dbKetQua[d.code];
+        let kq = arrKetQua ? arrKetQua.find(k => k.ngay === ngay) : null;
+        return { codeDai: d.code, ngay: ngay, ketQua: kq };
+    }).filter(cot => cot.ketQua !== null);
+    
+    hienThiBangChungData = danhSachCot;
+    currentHighlightSo = null;
+    renderBangChung(hienThiBangChungData, currentHighlightSo);
 }
 
 function renderKetQuaNative(codeDai, highlightSo = null) {
     let khung = document.getElementById('khung-kqxs-native');
-    
-    // Nếu biến dbKetQua chưa có định nghĩa (chưa tải xong hoặc lỗi)
     if (typeof dbKetQua === 'undefined') {
         khung.innerHTML = '<div class="msg-chua-co">Đang cập nhật hệ thống dữ liệu... Xin đợi một lát.</div>';
         return;
@@ -450,73 +456,150 @@ function renderKetQuaNative(codeDai, highlightSo = null) {
         return;
     }
     
-    // Tìm tên đài
-    let tenDaiText = codeDai.toUpperCase();
-    for(let k in configCacDai) {
-        let found = configCacDai[k].find(d => d.code === codeDai);
-        if (found) { tenDaiText = found.ten.toUpperCase(); break; }
-    }
-    
-    const tenGiaiMap = {
-        "ĐB": "Giải ĐB", "G1": "Giải nhất", "G2": "Giải nhì", "G3": "Giải ba",
-        "G4": "Giải tư", "G5": "Giải năm", "G6": "Giải sáu", "G7": "Giải bảy", "G8": "Giải tám"
-    };
-    let thuTuGiai = ["ĐB", "G1", "G2", "G3", "G4", "G5", "G6", "G7", "G8"];
-    
-    let fullHtml = "";
-    
-    arrKetQua.forEach((ketQua, index) => {
-        let dateStr = ketQua.ngay || "";
-        let marginTop = (index === 0) ? "0" : "15px";
-        let borderRadiusTop = (index === 0) ? "6px 6px 0 0" : "4px 4px 0 0"; // Khung cũ nhỏ lại xíu
-        
-        let html = `
-        <div style="background: linear-gradient(to bottom, #cc0000, #990000); color: white; padding: 10px; text-align: left; font-weight: bold; border: 1px solid #990000; border-radius: ${borderRadiusTop}; text-transform: uppercase; font-size: 1.1rem; display: flex; align-items: center; margin-top: ${marginTop};">
-            <span style="font-size: 1.4rem; margin-right: 8px;">✉</span> KẾT QUẢ XỔ SỐ ${tenDaiText} - ${dateStr}
-        </div>
-        <table class="bang-kqxs" style="border-top: none; margin-top: 0; border-radius: 0 0 6px 6px;">`;
-        
-        thuTuGiai.forEach(tenGiai => {
-            let keyToUse = ketQua[tenGiai] ? tenGiai : (ketQua["G." + tenGiai.replace("G","")] ? "G." + tenGiai.replace("G","") : null);
-            if (!keyToUse && ketQua[tenGiai.replace("G.","G")]) keyToUse = tenGiai.replace("G.","G");
-            if (!keyToUse && tenGiai === "ĐB" && ketQua["ĐB"]) keyToUse = "ĐB";
-    
-            if (keyToUse && ketQua[keyToUse]) {
-                let rowClass = (keyToUse === "ĐB") ? "giai-db" : "";
-                
-                // Xử lý tạo bóng 3D cho 2 số cuối nếu có highlightSo
-                let cacSoRaw = ketQua[keyToUse].split('-');
-                let cacSoFormatted = cacSoRaw.map(s => {
-                    s = s.trim();
-                    if (highlightSo && s.length >= 2) {
-                        let haiSoCuoi = s.substring(s.length - 2);
-                        if (haiSoCuoi === highlightSo) {
-                            let phanDau = s.substring(0, s.length - 2);
-                            let colorClass = getBallColorClass(haiSoCuoi);
-                            return `${phanDau}<span class="ball ${colorClass}">${haiSoCuoi}</span>`;
-                        }
-                    }
-                    return s;
-                }).join(' &nbsp;&nbsp;&nbsp; ');
-                
-                let tenHienThi = tenGiaiMap[keyToUse.replace(".","")] || keyToUse;
-                html += `<tr class="${rowClass}"><td class="ten-giai">${tenHienThi}</td><td class="so-giai">${cacSoFormatted}</td></tr>`;
-            }
-        });
-        
-        html += '</table>';
-        fullHtml += html;
+    let danhSachCot = arrKetQua.map(kq => {
+        return { codeDai: codeDai, ngay: kq.ngay || '', ketQua: kq };
     });
     
-    khung.innerHTML = fullHtml;
+    hienThiBangChungData = danhSachCot;
+    currentHighlightSo = highlightSo;
+    renderBangChung(hienThiBangChungData, currentHighlightSo);
+}
+
+function highlightNumberTable(so) {
+    currentHighlightSo = so;
+    renderBangChung(hienThiBangChungData, currentHighlightSo);
+    document.getElementById('khung-kqxs-native').scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 function highlightNumber(so) {
     if (daiHienTai) {
-        renderKetQuaNative(daiHienTai, so);
-        document.getElementById('khung-kqxs-native').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        highlightNumberTable(so);
     }
 }
+
+function renderBangChung(danhSachCot, highlightSo = null) {
+    let khung = document.getElementById('khung-kqxs-native');
+    
+    if (!danhSachCot || danhSachCot.length === 0) {
+        khung.innerHTML = '<div class="msg-chua-co">Chưa có kết quả!</div>';
+        khung.style.display = 'block';
+        return;
+    }
+
+    const tenGiaiMap = {
+        'ĐB': 'Giải Đặc Biệt', 'G1': 'Giải nhất', 'G2': 'Giải nhì', 'G3': 'Giải ba',
+        'G4': 'Giải tư', 'G5': 'Giải năm', 'G6': 'Giải sáu', 'G7': 'Giải bảy', 'G8': 'Giải tám'
+    };
+    let thuTuGiai = ['G8', 'G7', 'G6', 'G5', 'G4', 'G3', 'G2', 'G1', 'ĐB'];
+    
+    let theadHtml = '<tr><th style="width: 25%; max-width: 100px; border: 1px solid #ccc;"></th>';
+    danhSachCot.forEach(cot => {
+        let tenDaiText = cot.codeDai.toUpperCase();
+        for(let k in configCacDai) {
+            let found = configCacDai[k].find(d => d.code === cot.codeDai);
+            if (found) { tenDaiText = found.ten.toUpperCase(); break; }
+        }
+        theadHtml += `<th id="col-${cot.codeDai}-${cot.ngay.replace(/\//g, '')}" style="text-align: center; font-size: 1.1rem; color: #cc0000; border: 1px solid #ccc; padding: 10px; background: #fff;">${tenDaiText}<br><span style="font-size:0.8rem; color: #333;">${cot.ngay}</span></th>`;
+    });
+    theadHtml += '</tr>';
+
+    let tbodyHtml = '';
+    
+    thuTuGiai.forEach(tenGiai => {
+        let hasPrize = false;
+        danhSachCot.forEach(cot => {
+            let keyToUse = cot.ketQua[tenGiai] ? tenGiai : (cot.ketQua["G." + tenGiai.replace("G","")] ? "G." + tenGiai.replace("G","") : null);
+            if (!keyToUse && cot.ketQua[tenGiai.replace("G.","G")]) keyToUse = tenGiai.replace("G.","G");
+            if (!keyToUse && tenGiai === "ĐB" && cot.ketQua["ĐB"]) keyToUse = "ĐB";
+            
+            if (keyToUse && cot.ketQua[keyToUse]) hasPrize = true;
+        });
+
+        if (hasPrize) {
+            let tenHienThi = tenGiaiMap[tenGiai] || tenGiai;
+            let bgColor = (tenGiai === "G6" || tenGiai === "G7") ? "background-color: #ffeeb6;" : "background-color: #fff;";
+            let rowHtml = `<tr style="${bgColor}">`;
+            rowHtml += `<td class="ten-giai" style="font-weight: bold; border: 1px solid #ccc; text-align: center; font-size: 0.9rem;">${tenHienThi}</td>`;
+            
+            danhSachCot.forEach(cot => {
+                let keyToUse = cot.ketQua[tenGiai] ? tenGiai : (cot.ketQua["G." + tenGiai.replace("G","")] ? "G." + tenGiai.replace("G","") : null);
+                if (!keyToUse && cot.ketQua[tenGiai.replace("G.","G")]) keyToUse = tenGiai.replace("G.","G");
+                if (!keyToUse && tenGiai === "ĐB" && cot.ketQua["ĐB"]) keyToUse = "ĐB";
+                
+                let cellHtml = "";
+                if (keyToUse && cot.ketQua[keyToUse]) {
+                    let cacSoRaw = cot.ketQua[keyToUse].split('-');
+                    let cacSoFormatted = cacSoRaw.map(s => {
+                        s = s.trim();
+                        if (highlightSo !== null && s.length >= 2) {
+                            let haiSoCuoi = s.substring(s.length - 2);
+                            if (haiSoCuoi.includes(highlightSo)) {
+                                let phanDau = s.substring(0, s.length - 2);
+                                let colorClass = getBallColorClass(haiSoCuoi); 
+                                let htmlHaiSoCuoi = "";
+                                if (highlightSo.length === 2 && haiSoCuoi === highlightSo) {
+                                     htmlHaiSoCuoi = `<span class="ball ${colorClass}">${haiSoCuoi}</span>`;
+                                } else if (haiSoCuoi[0] === highlightSo && haiSoCuoi[1] === highlightSo) {
+                                     htmlHaiSoCuoi = `<span class="ball ${colorClass}">${haiSoCuoi}</span>`;
+                                } else if (haiSoCuoi[0] === highlightSo) {
+                                     htmlHaiSoCuoi = `<span class="ball ${colorClass}">${haiSoCuoi[0]}</span>${haiSoCuoi[1]}`;
+                                } else {
+                                     htmlHaiSoCuoi = `${haiSoCuoi[0]}<span class="ball ${colorClass}">${haiSoCuoi[1]}</span>`;
+                                }
+                                return `${phanDau}${htmlHaiSoCuoi}`;
+                            }
+                        }
+                        return s;
+                    }).join('<br>');
+                    
+                    if (tenGiai === "ĐB") {
+                        cellHtml = `<span style="color: #cc0000; font-size: 1.6rem; font-weight: bold;">${cacSoFormatted}</span>`;
+                    } else if (tenGiai === "G8") {
+                        cellHtml = `<span style="color: #cc0000; font-size: 1.5rem; font-weight: bold;">${cacSoFormatted}</span>`;
+                    } else {
+                        cellHtml = `<span style="font-size: 1.2rem; font-weight: bold; color: #333;">${cacSoFormatted}</span>`;
+                    }
+                }
+                rowHtml += `<td class="so-giai" style="text-align: center; vertical-align: middle; border: 1px solid #ccc; line-height: 1.5; padding: 5px;">${cellHtml}</td>`;
+            });
+            
+            rowHtml += `</tr>`;
+            tbodyHtml += rowHtml;
+        }
+    });
+    
+    
+    let toolbarHtml = `
+    <tr>
+        <td colspan="${danhSachCot.length + 1}" style="text-align: center; background: #e9ecef; padding: 12px; font-weight: bold; border-top: 2px solid #0056b3; white-space: nowrap;">
+            <span style="font-size: 0.95rem; margin-right: 10px;">Hãy chọn số:</span> 
+    `;
+    
+    let isNormal = (highlightSo === null);
+    let n_color = isNormal ? 'red' : '#333';
+    let n_bg = isNormal ? '#fff' : 'transparent';
+    toolbarHtml += `<span style="display:inline-block; padding: 2px 8px; border-radius: 4px; background: ${n_bg}; color: ${n_color}; cursor: pointer; margin: 0 4px; border: 1px solid #ccc;" onclick="highlightNumberTable(null)">Bỏ Chọn</span>`;
+    
+    toolbarHtml += ` <span style="color: #ccc; margin: 0 5px;">|</span> `;
+    
+    for(let i=0; i<=9; i++) {
+        let strI = String(i);
+        let isSel = (highlightSo === strI);
+        toolbarHtml += `<span style="display:inline-block; width: 32px; height: 32px; line-height:32px; border-radius: 50%; background: ${isSel?'red':'#fff'}; border: 1px solid #ccc; color: ${isSel?'white':'black'}; cursor:pointer; margin: 0 4px; font-size: 1.2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onclick="highlightNumberTable('${strI}')">${i}</span>`;
+    }
+    
+    toolbarHtml += `</td></tr>`;
+
+    let html = `<table class="bang-kqxs-unified" style="width: 100%; border-collapse: collapse; margin-top: 5px; background: #fff; border: 2px solid #0056b3;">
+ style="width: 100%; border-collapse: collapse; margin-top: 5px; background: #fff; border: 2px solid #0056b3;">
+        <thead style="background: #f8f9fa;">${theadHtml}</thead>
+        <tbody>${tbodyHtml}${toolbarHtml}</tbody>
+    </table>`;
+    
+    khung.innerHTML = `<div style="width: 100%; overflow-x: auto; padding-bottom: 15px;">${html}</div>`;
+    khung.style.display = "block";
+}
+
 
 // Hàm xử lý bung menu trượt ngang thả xuống khi người dùng chạm tay vào thanh Tab ngang
 function bamMoTabHanhChinh(mienClick) {
@@ -544,6 +627,19 @@ function bamChonDai(linkIframe, codeDai, element) {
     if(nutQuayVe) nutQuayVe.style.display = "block";
     
     let tenDai = element ? element.innerText.split('\n')[0] : "Miền Bắc";
+    
+    let khungChonNgay = document.getElementById("khung-chon-ngay");
+    if(khungChonNgay && typeof dbKetQua !== 'undefined' && dbKetQua[codeDai]) {
+        khungChonNgay.style.display = "block";
+        let cacNgayCuaDai = dbKetQua[codeDai].map(item => item.ngay).slice(0, 7);
+        let html = '';
+        cacNgayCuaDai.forEach(ngay => {
+            let ngayNgan = ngay.split('/')[0];
+            html += `<span style="cursor: pointer; margin: 0 5px;" onclick="document.getElementById('col-${codeDai}-${ngay.replace(/\\//g, '')}').scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'center'})">${ngayNgan}</span>`;
+        });
+        khungChonNgay.innerHTML = `KẾT QUẢ ${tenDai.toUpperCase()} NGÀY: <span id="ds-ngay">${html}</span>`;
+    }
+    
     let tieuDeThongKe = document.getElementById('tieu-de-thong-ke');
     if(tieuDeThongKe) tieuDeThongKe.innerText = `📊 XÁC SUẤT ĐÀI ${tenDai.toUpperCase()}`;
     
