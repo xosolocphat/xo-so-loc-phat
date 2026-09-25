@@ -209,7 +209,7 @@
   </div>
   <!-- THANH CHỌN NGÀY -->
   <div id="khung-chon-ngay" style="text-align: center; margin-top: 10px; padding: 10px; border-radius: 10px 10px 0 0; background: linear-gradient(135deg, #e3f2fd, #bbdefb); box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 2px solid #90caf9; border-bottom: none; display: none;">
-    <span style="color: #0d47a1; font-weight: bold; font-size: 1.05rem; margin-right: 8px; text-shadow: 1px 1px 2px rgba(255,255,255,0.5);">📅 KẾT QUẢ NGÀY:</span> <span id="ds-ngay" style="display: inline-flex; align-items: center; justify-content: center;"></span>
+    <span id="tieu-de-chon-ngay" style="color: #0d47a1; font-weight: bold; font-size: 1.05rem; margin-right: 8px; text-shadow: 1px 1px 2px rgba(255,255,255,0.5);">📅 KẾT QUẢ NGÀY:</span> <span id="ds-ngay" style="display: inline-flex; align-items: center; justify-content: center;"></span>
   </div>
   <div id="khung-kqxs-native" class="khung-kqxs-native">
       <!-- Bảng kết quả xổ số sẽ được JavaScript vẽ tự động vào đây -->
@@ -710,6 +710,14 @@ function renderBangChung(danhSachCot, highlightSo = null) {
 // Hàm xử lý bung menu trượt ngang thả xuống khi người dùng chạm tay vào thanh Tab ngang
 function bamMoTabHanhChinh(mienClick) {
     mienHienTai = mienClick;
+    
+    // Đặt lại tiêu đề "KẾT QUẢ MIỀN..."
+    let tieuDeNode = document.getElementById("tieu-de-chon-ngay");
+    if(tieuDeNode) {
+        let tenMienText = (mienClick === 'bac') ? 'MIỀN BẮC' : (mienClick === 'trung' ? 'MIỀN TRUNG' : 'MIỀN NAM');
+        tieuDeNode.innerText = `KẾT QUẢ ${tenMienText}:`;
+    }
+    
     apDungCauHinhVungMien(mienClick);
     renderKetQuaTheoNgayMien(ngayHienTai, mienHienTai);
 }
@@ -817,7 +825,8 @@ function bamChonDai(linkIframe, codeDai, element) {
             let isFirst = (idx === 0);
             html += `<span class="btn-ngay-dai" data-ngay="${ngay}" style="display:inline-flex; justify-content:center; align-items:center; width:30px; height:30px; border-radius:50%; font-weight:bold; cursor: pointer; margin: 0 3px; font-size: 0.95rem; transition: 0.2s; ${isFirst ? 'color: white; background: #d32f2f; border: 1px solid #b71c1c;' : 'color: #333; background: transparent; border: 1px solid transparent;'}" onclick="highlightDayColumn('${codeDai}', '${ngay}')">${ngayNgan}</span>`;
         });
-        khungChonNgay.innerHTML = `<span style="font-size: 0.9rem; font-weight: bold; color: #0d47a1; margin-right: 5px;">KẾT QUẢ ${tenDai.toUpperCase()}:</span> <span id="ds-ngay" style="display: inline-flex; align-items: center;">${html}</span>`;
+        document.getElementById("tieu-de-chon-ngay").innerText = `KẾT QUẢ ${tenDai.toUpperCase()}:`;
+        document.getElementById("ds-ngay").innerHTML = html;
         if (cacNgayCuaDai.length > 0) {
             setTimeout(() => highlightDayColumn(codeDai, cacNgayCuaDai[0]), 100);
         }
