@@ -1,0 +1,35 @@
+name: Robot Cap Nhat Du Lieu Xo So Loc Phat Tuan Thu AdSense
+on:
+  schedule:
+    # Cấu hình chuẩn Cron Job theo giờ quốc tế UTC (Giờ Việt Nam = Giờ UTC + 7 tiếng)
+    # Cài đặt chạy đúng 16h45 và 18h45 hàng ngày theo giờ Việt Nam
+    - cron: '45 9 * * *'   # 9h45 UTC tương ứng 16h45 giờ Việt Nam (Sau khi có kết quả miền Nam/Trung)
+    - cron: '45 11 * * *
+'  #
+ 11h45 UTC tương ứng 18h45 giờ Việt Nam (Sau khi có kết quả miền Bắc)
+  workflow_dispatch:       # Tính năng cho phép bạn bấm nút tự chạy thủ công bất kỳ lúc nào nếu muốn
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest # Chạy trên máy chủ ảo hệ điều hành Linux siêu tốc của GitHub
+    steps:
+    - name: Buoc 1 - Kich hoat va tai ma nguon tu kho luu tru
+      uses: actions/checkout@v3
+    - name: Buoc 2 - Thiet lap moi truong ngon ngu Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10' # Khởi tạo phiên bản Python ổn định cao nhất
+    - name: Buoc 3 - Cai dat cac thu vien phu tro (Neu co)
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests beautifulsoup4
+    - name: Buoc 4 - Bat Robot Python len tu dong tinh toan ma tran xac suat
+      run: python auto_bot.py
+    - name: Buoc 5 - Tu dong ghi de và dong bo so lieu sach vao trang web cong khai
+      run: |
+        git config --local 
+user.email
+ "actions@github.com"
+        git config --local user.name "GitHub Actions"
+        git add index.html
+        # Chi thuc hien lenh gui du lieu len internet neu file co sự thay doi so lieu moi
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Robot tu dong dong bo so lieu va gia vang sach [AdSense OK]" && git push)
