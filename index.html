@@ -388,7 +388,7 @@ function renderThanhChonNgay() {
     khungChon.style.display = "block";
     let html = '';
     
-    let itemsPerPage = 10;
+    let itemsPerPage = 8;
     let maxPage = Math.ceil(cacNgayCoKetQua.length / itemsPerPage) - 1;
     let startIdx = trangNgayHienTai * itemsPerPage;
     let pageNgay = cacNgayCoKetQua.slice(startIdx, startIdx + itemsPerPage);
@@ -827,7 +827,7 @@ function bamChonDai(linkIframe, codeDai, element) {
     let khungChonNgay = document.getElementById("khung-chon-ngay");
     if(khungChonNgay && typeof dbKetQua !== 'undefined' && dbKetQua[codeDai]) {
         khungChonNgay.style.display = "block";
-        let cacNgayCuaDai = dbKetQua[codeDai].map(item => item.ngay).slice(0, 10);
+        let cacNgayCuaDai = dbKetQua[codeDai].map(item => item.ngay).slice(0, 9);
         let html = '';
         cacNgayCuaDai.forEach((ngay, idx) => {
             let ngayNgan = ngay.split('/')[0];
