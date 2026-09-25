@@ -587,12 +587,21 @@ function renderBangChung(danhSachCot, highlightSo = null) {
     }
 
     const tenGiaiMap = {
-        'ĐB': 'Giải Đặc Biệt', 'G1': 'Giải nhất', 'G2': 'Giải nhì', 'G3': 'Giải ba',
-        'G4': 'Giải tư', 'G5': 'Giải năm', 'G6': 'Giải sáu', 'G7': 'Giải bảy', 'G8': 'Giải tám'
+        'ĐB': 'Giải ĐB', 'G1': 'Giải 1', 'G2': 'Giải 2', 'G3': 'Giải 3',
+        'G4': 'Giải 4', 'G5': 'Giải 5', 'G6': 'Giải 6', 'G7': 'Giải 7', 'G8': 'Giải 8'
     };
     let thuTuGiai = ['G8', 'G7', 'G6', 'G5', 'G4', 'G3', 'G2', 'G1', 'ĐB'];
     
-    let theadHtml = `<tr><th style="width: 70px; min-width: 70px; max-width: 70px; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-bottom: 2px solid #0056b3;"></th>`;
+    let numCols = danhSachCot.length;
+    let dbFontSize = numCols >= 4 ? '1.1rem' : (numCols === 3 ? '1.25rem' : '1.4rem');
+    let g8FontSize = numCols >= 4 ? '1.05rem' : (numCols === 3 ? '1.2rem' : '1.3rem');
+    let normalFontSize = numCols >= 4 ? '0.9rem' : (numCols === 3 ? '1.0rem' : '1.1rem');
+    let headFontSize = numCols >= 4 ? '0.75rem' : '0.85rem';
+    let dateFontSize = numCols >= 4 ? '0.65rem' : '0.75rem';
+    let padCell = numCols >= 4 ? '4px 1px' : '6px 2px';
+    let padGiai = numCols >= 4 ? '5px 2px' : '8px 4px';
+    let fontSizeGiai = numCols >= 4 ? '0.8rem' : '0.85rem';
+    let theadHtml = `<tr><th style="width: 50px; min-width: 50px; max-width: 50px; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-bottom: 2px solid #0056b3;"></th>`;
     danhSachCot.forEach(cot => {
         let tenDaiText = cot.codeDai.toUpperCase();
         for(let k in configCacDai) {
@@ -601,9 +610,9 @@ function renderBangChung(danhSachCot, highlightSo = null) {
         }
         let cellWidth = 100 / danhSachCot.length;
         let colId = `col-${cot.codeDai}-${cot.ngay.replace(/\//g, '')}`;
-        theadHtml += `<th id="${colId}" class="col-header-${cot.codeDai}" style="width: ${cellWidth}%; text-align: center; font-size: 0.95rem; color: #cc0000; padding: 10px 2px; background: linear-gradient(to bottom, #ffffff, #fdfdfd); border-bottom: 2px solid #0056b3; border-right: 1px solid #eaeaea; box-shadow: inset 0 -1px 0 rgba(0,0,0,0.05);">
-            <div style="font-size: 0.9rem; font-weight: bold; text-transform: uppercase;">${tenDaiText}</div>
-            <div class="ngay-header" style="font-size: 0.75rem; font-weight: normal; color: #666; margin-top: 2px;">${cot.ngay}</div>
+        theadHtml += `<th id="${colId}" class="col-header-${cot.codeDai}" style="width: ${cellWidth}%; text-align: center; font-size: ${headFontSize}; color: #cc0000; padding: 5px 1px; background: linear-gradient(to bottom, #ffffff, #fdfdfd); border-bottom: 2px solid #0056b3; border-right: 1px solid #eaeaea; box-shadow: inset 0 -1px 0 rgba(0,0,0,0.05);">
+            <div style="font-size: ${headFontSize}; font-weight: bold; text-transform: uppercase;">${tenDaiText}</div>
+            <div class="ngay-header" style="font-size: ${dateFontSize}; font-weight: normal; color: #666; margin-top: 2px;">${cot.ngay}</div>
         </th>`;
     });
     theadHtml += '</tr>';
@@ -624,7 +633,7 @@ function renderBangChung(danhSachCot, highlightSo = null) {
             let tenHienThi = tenGiaiMap[tenGiai] || tenGiai;
             let bgColor = (tenGiai === "G6" || tenGiai === "G7") ? "background-color: #fdf5e6;" : "background-color: #fff;";
             let rowHtml = `<tr style="${bgColor}">`;
-            rowHtml += `<td class="ten-giai" style="font-weight: bold; color: #555; border: 1px solid #eaeaea; border-left: none; text-align: center; font-size: 0.9rem; padding: 10px 5px; background: linear-gradient(to right, #f8f9fa, #ffffff);">${tenHienThi}</td>`;
+            rowHtml += `<td class="ten-giai" style="font-weight: bold; color: #555; border: 1px solid #eaeaea; border-left: none; text-align: center; font-size: ${fontSizeGiai}; padding: ${padGiai}; background: linear-gradient(to right, #f8f9fa, #ffffff);">${tenHienThi}</td>`;
             
             danhSachCot.forEach(cot => {
                 let keyToUse = cot.ketQua[tenGiai] ? tenGiai : (cot.ketQua["G." + tenGiai.replace("G","")] ? "G." + tenGiai.replace("G","") : null);
@@ -660,15 +669,15 @@ function renderBangChung(danhSachCot, highlightSo = null) {
                     }).join('<br>');
                     
                     if (tenGiai === "ĐB") {
-                        cellHtml = `<span style="color: #cc0000; font-size: 1.6rem; font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">${cacSoFormatted}</span>`;
+                        cellHtml = `<span style="color: #cc0000; font-size: ${dbFontSize}; font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">${cacSoFormatted}</span>`;
                     } else if (tenGiai === "G8") {
-                        cellHtml = `<span style="color: #cc0000; font-size: 1.5rem; font-weight: bold;">${cacSoFormatted}</span>`;
+                        cellHtml = `<span style="color: #cc0000; font-size: ${g8FontSize}; font-weight: bold;">${cacSoFormatted}</span>`;
                     } else {
-                        cellHtml = `<span style="font-size: 1.25rem; font-weight: bold; color: #333; letter-spacing: 1px;">${cacSoFormatted}</span>`;
+                        cellHtml = `<span style="font-size: ${normalFontSize}; font-weight: bold; color: #333; letter-spacing: 1px;">${cacSoFormatted}</span>`;
                     }
                 }
                 let cellId = `cell-${cot.codeDai}-${cot.ngay.replace(/\//g, '')}`;
-                rowHtml += `<td class="so-giai col-cell-${cot.codeDai} ${cellId}" style="text-align: center; vertical-align: middle; border: 1px solid #eaeaea; line-height: 1.6; padding: 8px 4px;">${cellHtml}</td>`;
+                rowHtml += `<td class="so-giai col-cell-${cot.codeDai} ${cellId}" style="text-align: center; vertical-align: middle; border: 1px solid #eaeaea; line-height: 1.4; padding: ${padCell};">${cellHtml}</td>`;
             });
             
             rowHtml += `</tr>`;
@@ -697,7 +706,7 @@ function renderBangChung(danhSachCot, highlightSo = null) {
     
     toolbarHtml += `</div></td></tr>`;
 
-    let html = `<table class="bang-kqxs-unified" style="width: 100%; border-collapse: separate; border-spacing: 0; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #0056b3;">
+    let html = `<table class="bang-kqxs-unified" style="table-layout: fixed; width: 100%; border-collapse: separate; border-spacing: 0; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #0056b3;">
         <thead>${theadHtml}</thead>
         <tbody>${tbodyHtml}${toolbarHtml}</tbody>
     </table>`;
