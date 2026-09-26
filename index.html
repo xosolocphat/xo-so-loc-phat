@@ -215,6 +215,15 @@
   <div id="khung-chon-ngay" style="text-align: center; margin-top: 10px; padding: 5px; border-radius: 10px 10px 0 0; background: linear-gradient(135deg, #e3f2fd, #bbdefb); box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 2px solid #90caf9; border-bottom: none; display: none;">
     <span id="tieu-de-chon-ngay" style="color: #0d47a1; font-weight: bold; font-size: 0.95rem; margin-right: 4px; text-shadow: 1px 1px 2px rgba(255,255,255,0.5);">📅 KẾT QUẢ NGÀY:</span> <span id="ds-ngay" style="display: inline-flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px;"></span>
   </div>
+  
+  <div id="khung-truc-tiep" style="display: none; margin-top: 15px; position: relative; width: 100%; border: 2px solid #d32f2f; border-radius: 8px; background: #fff; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+    <div style="background: linear-gradient(135deg, #d32f2f, #b71c1c); padding: 8px; display: flex; justify-content: space-between; align-items: center;">
+        <span style="color: white; font-weight: bold; font-size: 0.9rem;">🔴 TRỰC TIẾP MINH NGỌC</span>
+        <button onclick="dongTrucTiep()" style="background: white; color: #d32f2f; border: none; padding: 4px 12px; font-weight: bold; cursor: pointer; border-radius: 4px; font-size: 0.8rem; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">❌ ĐÓNG LẠI</button>
+    </div>
+    <iframe id="iframe-truc-tiep" src="" width="100%" height="700px" frameborder="0" style="display: block;"></iframe>
+  </div>
+
   <div id="khung-kqxs-native" class="khung-kqxs-native">
       <!-- Bảng kết quả xổ số sẽ được JavaScript vẽ tự động vào đây -->
   </div>
@@ -252,20 +261,40 @@
   <button class="btn-ai-random" onclick="kichHoatAiQuetSo()">🤖 BẤM ĐỂ AI GỢI Ý CẶP SỐ THUẬT TOÁN HÔM NAY</button>
   <div class="khu-vuc-ai-so" id="ket-qua-ai-quet">HỆ THỐNG AI ĐANG PHÂN TÍCH LUỒNG SỐ...</div>
 
-  <div class="khung-gia-vang">
-    <div class="khung-vang-grid">
-      <div class="khoi-vang-item">
-        <p class="ten-vang-label">🟡 VÀNG SJC (Triệu/Lượng)</p>
-        <span id="sjc-gia">Mua: 141.40 - Bán: 144.40</span>
+  <div class="khung-gia-vang" style="box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-radius: 10px; border: 1px solid #e0e0e0; background: linear-gradient(180deg, #ffffff, #f9f9f9); padding: 12px;">
+    <div style="font-weight: 900; text-align: center; margin-bottom: 12px; font-size: 0.85rem; color: #2c3e50; text-transform: uppercase; border-bottom: 2px dashed #ddd; padding-bottom: 8px;">📊 BẢNG THÔNG TIN KINH TẾ TỔNG HỢP</div>
+    
+    <div class="khung-vang-grid" style="grid-template-columns: repeat(2, 1fr); gap: 8px;">
+      <!-- Vàng SJC -->
+      <div class="khoi-vang-item" style="background: linear-gradient(135deg, #fffde7, #fff9c4); border: 1px solid #ffd54f; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        <p class="ten-vang-label" style="color: #f57f17; font-size: 0.72rem;">🟡 VÀNG SJC (Triệu/Lượng)</p>
+        <span id="sjc-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: 141.40 - Bán: 144.40</span>
       </div>
-      <div class="khoi-vang-item">
-        <p class="ten-vang-label">🟡 VÀNG 9999 (Triệu/Nhẫn)</p>
-        <span id="nhan-gia">Mua: 141.50 - Bán: 145.50</span>
+      <!-- Vàng 9999 -->
+      <div class="khoi-vang-item" style="background: linear-gradient(135deg, #fffde7, #fff9c4); border: 1px solid #ffd54f; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        <p class="ten-vang-label" style="color: #f57f17; font-size: 0.72rem;">🟡 VÀNG 9999 (Triệu/Nhẫn)</p>
+        <span id="nhan-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: 141.50 - Bán: 145.50</span>
+      </div>
+      <!-- Vàng 24K -->
+      <div class="khoi-vang-item" style="background: linear-gradient(135deg, #fffde7, #fff9c4); border: 1px solid #ffd54f; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        <p class="ten-vang-label" style="color: #f57f17; font-size: 0.72rem;">🟠 VÀNG 24K (Nữ trang)</p>
+        <span id="vang24k-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: 141.40 - Bán: 144.40</span>
+      </div>
+      <!-- USD -->
+      <div class="khoi-vang-item" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border: 1px solid #81c784; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        <p class="ten-vang-label" style="color: #1b5e20; font-size: 0.72rem;">💵 ĐÔ LA MỸ (USD)</p>
+        <span id="usd-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: 25,760 - Bán: 26,170</span>
       </div>
     </div>
-    <div class="khoi-vang-item" style="margin-top: 10px; font-size: 0.75rem; text-align: center;">
-      <p class="ten-vang-label">💵 ĐÔ LA MỸ - USD (Vietcombank Tiền mặt / Chuyển khoản)</p>
-      <span id="usd-gia">Mua vào: 25,760đ - Bán ra: 26,170đ</span>
+    
+    <!-- Xăng Dầu -->
+    <div class="khoi-vang-item" style="margin-top: 8px; background: linear-gradient(135deg, #e3f2fd, #bbdefb); border: 1px solid #64b5f6; box-shadow: 0 2px 4px rgba(0,0,0,0.05); text-align: center;">
+      <p class="ten-vang-label" style="color: #0d47a1; font-size: 0.75rem; margin-bottom: 6px;">⛽ GIÁ XĂNG DẦU (Petrolimex)</p>
+      <div style="display: flex; justify-content: center; gap: 15px; font-size: 0.8rem; color: #424242; font-weight: bold; flex-wrap: wrap;">
+          <span><b style="color: #c62828;">RON 95-III:</b> 27,080đ/l</span>
+          <span><b style="color: #c62828;">E5 RON 92:</b> 26,390đ/l</span>
+          <span><b style="color: #2e7d32;">DO 0,05S:</b> 30,490đ/l</span>
+      </div>
     </div>
   </div>
 
@@ -895,14 +924,52 @@ function kichHoatAiQuetSo() {
 
 function chayDongHoDemNguoc() {
     setInterval(() => {
-        let gioHienTai = new Date(); let gioDich = new Date(); gioDich.setHours(16, 15, 0, 0);
-        if (gioHienTai > gioDich) gioDich.setHours(18, 15, 0, 0);
-        let khoangCach = gioDich - gioHienTai;
-        if (khoangCach < 0) { document.getElementById("countdown-timer").innerText = "🎉 ĐANG TRONG KHUNG GIỜ VÀNG MỞ THƯỞNG TRỰC TIẾP!"; return; }
+        let now = new Date();
+        let h = now.getHours();
+        let m = now.getMinutes();
+        let currentTimeMinutes = h * 60 + m;
+
+        let mnStart = 16 * 60 + 15;
+        let mnEnd = 16 * 60 + 35;
+        
+        let mtStart = 17 * 60 + 15;
+        let mtEnd = 17 * 60 + 35;
+        
+        let mbStart = 18 * 60 + 15;
+        let mbEnd = 18 * 60 + 35;
+        
+        let targetTime = null;
+        let targetName = "";
+        
+        if (currentTimeMinutes >= mnStart && currentTimeMinutes < mnEnd) {
+            document.getElementById("countdown-timer").innerHTML = `<div style="cursor: pointer; background: linear-gradient(to right, #ffeb3b, #ffc107); color: #d32f2f; border-radius: 20px; padding: 4px 12px; display: inline-block; animation: pop 1s infinite alternate; box-shadow: 0 0 12px rgba(255, 235, 59, 0.9); border: 2px solid #fbc02d; font-weight: bold; text-shadow: 1px 1px 0px rgba(255,255,255,0.7);" onclick="moTrucTiep('mn')">📺 ĐANG XỔ MIỀN NAM - BẤM VÀO XEM TRỰC TIẾP 👈</div>`;
+            return;
+        } else if (currentTimeMinutes >= mtStart && currentTimeMinutes < mtEnd) {
+            document.getElementById("countdown-timer").innerHTML = `<div style="cursor: pointer; background: linear-gradient(to right, #ffeb3b, #ffc107); color: #d32f2f; border-radius: 20px; padding: 4px 12px; display: inline-block; animation: pop 1s infinite alternate; box-shadow: 0 0 12px rgba(255, 235, 59, 0.9); border: 2px solid #fbc02d; font-weight: bold; text-shadow: 1px 1px 0px rgba(255,255,255,0.7);" onclick="moTrucTiep('mt')">📺 ĐANG XỔ MIỀN TRUNG - BẤM VÀO XEM TRỰC TIẾP 👈</div>`;
+            return;
+        } else if (currentTimeMinutes >= mbStart && currentTimeMinutes < mbEnd) {
+            document.getElementById("countdown-timer").innerHTML = `<div style="cursor: pointer; background: linear-gradient(to right, #ffeb3b, #ffc107); color: #d32f2f; border-radius: 20px; padding: 4px 12px; display: inline-block; animation: pop 1s infinite alternate; box-shadow: 0 0 12px rgba(255, 235, 59, 0.9); border: 2px solid #fbc02d; font-weight: bold; text-shadow: 1px 1px 0px rgba(255,255,255,0.7);" onclick="moTrucTiep('mb')">📺 ĐANG XỔ MIỀN BẮC - BẤM VÀO XEM TRỰC TIẾP 👈</div>`;
+            return;
+        }
+        
+        if (currentTimeMinutes < mnStart) {
+            targetTime = new Date(); targetTime.setHours(16, 15, 0, 0); targetName = "MIỀN NAM";
+        } else if (currentTimeMinutes < mtStart) {
+            targetTime = new Date(); targetTime.setHours(17, 15, 0, 0); targetName = "MIỀN TRUNG";
+        } else if (currentTimeMinutes < mbStart) {
+            targetTime = new Date(); targetTime.setHours(18, 15, 0, 0); targetName = "MIỀN BẮC";
+        } else {
+            targetTime = new Date(); 
+            targetTime.setDate(targetTime.getDate() + 1);
+            targetTime.setHours(16, 15, 0, 0);
+            targetName = "MIỀN NAM";
+        }
+        
+        let khoangCach = targetTime - now;
         let hours = String(Math.floor((khoangCach % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
         let minutes = String(Math.floor((khoangCach % (1000 * 60)) / (1000 * 60))).padStart(2, '0');
         let seconds = String(Math.floor((khoangCach % (1000 * 60)) / 1000)).padStart(2, '0');
-        document.getElementById("countdown-timer").innerText = `⏳ CÒN ${hours} GIỜ : ${minutes} PHÚT : ${seconds} GIÊY ĐẾN GIỜ QUAY TRỰC TIẾP!`;
+        document.getElementById("countdown-timer").innerText = `⏳ CÒN ${hours} GIỜ : ${minutes} PHÚT : ${seconds} GIÂY ĐẾN GIỜ QUAY TRỰC TIẾP ${targetName}!`;
     }, 1000);
 }
 chayDongHoDemNguoc();
@@ -920,6 +987,52 @@ function moCuaSoChinhSach(loaiChinhSach) {
     document.getElementById("khung-chinh-sach-modal").style.display = "flex";
 }
 function dongCuaSoChinhSach() { document.getElementById("khung-chinh-sach-modal").style.display = "none"; }
+
+function moTrucTiep(mien) {
+    let urls = {
+        'mn': 'https://www.minhngoc.net.vn/truc-tiep-xo-so/mien-nam.html',
+        'mt': 'https://www.minhngoc.net.vn/truc-tiep-xo-so/mien-trung.html',
+        'mb': 'https://www.minhngoc.net.vn/truc-tiep-xo-so/mien-bac.html'
+    };
+    
+    // Gán iframe url
+    document.getElementById("iframe-truc-tiep").src = urls[mien];
+    
+    // Ẩn bảng kết quả xổ số thường và phần thống kê
+    document.getElementById("khung-kqxs-native").style.display = "none";
+    let boLocKhuVuc = document.querySelector(".bo-loc-khu-vuc");
+    if(boLocKhuVuc) boLocKhuVuc.style.display = "none";
+    let khungThongKe = document.querySelector(".khung-thong-ke-doi-xung");
+    if(khungThongKe) khungThongKe.style.display = "none";
+    
+    // Ẩn thanh ngày
+    document.getElementById("khung-chon-ngay").style.display = "none";
+    
+    // Hiện khung trực tiếp
+    document.getElementById("khung-truc-tiep").style.display = "block";
+    
+    // Cuộn xuống khu vực xem
+    document.getElementById("khung-truc-tiep").scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function dongTrucTiep() {
+    // Đóng iframe
+    document.getElementById("khung-truc-tiep").style.display = "none";
+    document.getElementById("iframe-truc-tiep").src = "";
+    
+    // Mở lại bảng kết quả thường
+    document.getElementById("khung-kqxs-native").style.display = "block";
+    let boLocKhuVuc = document.querySelector(".bo-loc-khu-vuc");
+    if(boLocKhuVuc) boLocKhuVuc.style.display = "flex";
+    let khungThongKe = document.querySelector(".khung-thong-ke-doi-xung");
+    if(khungThongKe) khungThongKe.style.display = "flex";
+    
+    // Mở lại thanh ngày nếu đang xem chi tiết đài
+    let dsNgay = document.getElementById("ds-ngay");
+    if (dsNgay && dsNgay.innerHTML.trim() !== "") {
+        document.getElementById("khung-chon-ngay").style.display = "block";
+    }
+}
 
 // Hàm tự động gọi bộ nhớ đệm kiểm tra lựa chọn chế độ ban đêm cũ của người dùng
 window.onload = function() {
