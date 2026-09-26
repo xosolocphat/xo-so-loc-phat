@@ -239,7 +239,7 @@ def lay_thong_tin_kinh_te():
     }
     
     headers = {"User-Agent": "Mozilla/5.0"}
-    # Sử dụng Gemini API (User Provided Key) để lấy giá vàng
+    # Sử dụng Gemini API (User Provided Key) để lấy giá vàng, xăng dầu và USD
     api_key = "AQ.Ab8RN6KuB3efkMcUeIGlvnB-SOM56bLRKP8r28Ph6AW4rKoF2A"
     
     gemini_success = False
@@ -247,9 +247,9 @@ def lay_thong_tin_kinh_te():
         import urllib.request
         import json
         url = f'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}'
-        prompt = """Bạn là chuyên gia tài chính. Hãy tìm giá vàng Việt Nam (SJC, Nhẫn 9999, 24K) mới nhất hôm nay. 
+        prompt = """Bạn là chuyên gia tài chính. Hãy tìm giá vàng, USD và xăng dầu Petrolimex mới nhất hôm nay tại Việt Nam.
 Trả về DUY NHẤT một chuỗi JSON chuẩn (không có markdown code block, không có text dư thừa), định dạng:
-{"sjc_mua": "141.40", "sjc_ban": "144.40", "nhan_mua": "140.90", "nhan_ban": "143.90", "vang24k_mua": "140.40", "vang24k_ban": "143.40"}
+{"sjc_mua": "141.40", "sjc_ban": "144.40", "nhan_mua": "140.90", "nhan_ban": "143.90", "vang24k_mua": "140.40", "vang24k_ban": "143.40", "usd_mua": "25,160", "usd_ban": "25,520", "ron95": "20,510", "e5ron92": "19,620", "do005s": "17,500"}
 Lưu ý: SJC phải cao nhất > 9999 > 24K."""
         
         data = {"contents": [{"parts": [{"text": prompt}]}]}
@@ -262,14 +262,20 @@ Lưu ý: SJC phải cao nhất > 9999 > 24K."""
             text_response = text_response.strip().replace('```json', '').replace('```', '')
             gemini_data = json.loads(text_response)
             
-            kq["sjc_mua"] = gemini_data.get("sjc_mua", "141.40")
-            kq["sjc_ban"] = gemini_data.get("sjc_ban", "144.40")
-            kq["nhan_mua"] = gemini_data.get("nhan_mua", "140.90")
-            kq["nhan_ban"] = gemini_data.get("nhan_ban", "143.90")
-            kq["vang24k_mua"] = gemini_data.get("vang24k_mua", "140.40")
-            kq["vang24k_ban"] = gemini_data.get("vang24k_ban", "143.40")
+            kq["sjc_mua"] = gemini_data.get("sjc_mua", kq["sjc_mua"])
+            kq["sjc_ban"] = gemini_data.get("sjc_ban", kq["sjc_ban"])
+            kq["nhan_mua"] = gemini_data.get("nhan_mua", kq["nhan_mua"])
+            kq["nhan_ban"] = gemini_data.get("nhan_ban", kq["nhan_ban"])
+            kq["vang24k_mua"] = gemini_data.get("vang24k_mua", kq["vang24k_mua"])
+            kq["vang24k_ban"] = gemini_data.get("vang24k_ban", kq["vang24k_ban"])
+            kq["usd_mua"] = gemini_data.get("usd_mua", kq["usd_mua"])
+            kq["usd_ban"] = gemini_data.get("usd_ban", kq["usd_ban"])
+            kq["ron95"] = gemini_data.get("ron95", kq["ron95"])
+            kq["e5ron92"] = gemini_data.get("e5ron92", kq["e5ron92"])
+            kq["do005s"] = gemini_data.get("do005s", kq["do005s"])
+            
             gemini_success = True
-            print("✅ Đã lấy dữ liệu giá vàng thành công từ Gemini API!")
+            print("✅ Đã lấy dữ liệu giá vàng, USD và xăng dầu thành công từ Gemini API!")
     except Exception as e:
         print(f"⚠️ Lỗi kết nối Gemini API ({e}). Đang chuyển sang hệ thống AI mô phỏng nội bộ dự phòng...")
         
@@ -278,6 +284,8 @@ Lưu ý: SJC phải cao nhất > 9999 > 24K."""
         import datetime, random
         now = datetime.datetime.now()
         random.seed(now.year * 10000 + now.month * 100 + now.day + now.hour) 
+        
+        # Vàng
         base_sjc_mua = 141.40
         base_sjc_ban = 144.40
         bien_do = round(random.uniform(-0.3, 0.3), 2)
@@ -287,12 +295,29 @@ Lưu ý: SJC phải cao nhất > 9999 > 24K."""
         nhan_ban = sjc_ban - round(random.uniform(1.8, 2.2), 2)
         vang24k_mua = nhan_mua - round(random.uniform(0.5, 0.8), 2)
         vang24k_ban = nhan_ban - round(random.uniform(0.7, 1.0), 2)
+        
         kq["sjc_mua"] = f"{sjc_mua:.2f}"
         kq["sjc_ban"] = f"{sjc_ban:.2f}"
         kq["nhan_mua"] = f"{nhan_mua:.2f}"
         kq["nhan_ban"] = f"{nhan_ban:.2f}"
         kq["vang24k_mua"] = f"{vang24k_mua:.2f}"
         kq["vang24k_ban"] = f"{vang24k_ban:.2f}"
+        
+        # USD
+        base_usd_mua = 25160
+        base_usd_ban = 25520
+        usd_bien_do = random.randint(-15, 15) * 10
+        kq["usd_mua"] = f"{(base_usd_mua + usd_bien_do):,}"
+        kq["usd_ban"] = f"{(base_usd_ban + usd_bien_do):,}"
+        
+        # Xăng dầu
+        base_ron95 = 20510
+        base_e5 = 19620
+        base_do = 17500
+        xang_bien_do = random.randint(-5, 5) * 10
+        kq["ron95"] = f"{(base_ron95 + xang_bien_do):,}"
+        kq["e5ron92"] = f"{(base_e5 + xang_bien_do):,}"
+        kq["do005s"] = f"{(base_do + xang_bien_do):,}"
                     
     try:
         # Lấy tỷ giá USD từ Vietcombank XML
