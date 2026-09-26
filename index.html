@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XỔ SỐ LỘC PHÁT - Kết Quả & Xác Suất Siêu Tốc Mobile</title>
+    <title>XỔ SỐ PHÁT ĐẠT - Kết Quả & Xác Suất Siêu Tốc Mobile</title>
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Hệ thống XỔ SỐ LỘC PHÁT cập nhật kết quả trực tiếp Real-time sạch 100%. Công cụ phân tích xác suất top 7 cặp số về nhiều và chu kỳ khan đối xứng 50/50 thẳng hàng trên di động.">
-    <meta name="keywords" content="xo so loc phat, xổ số lộc phát, chu ky khan, tan suat ve, thong ke xac suat mobile">
+    <meta name="description" content="Hệ thống XỔ SỐ PHÁT ĐẠT cập nhật kết quả trực tiếp Real-time sạch 100%. Công cụ phân tích xác suất top 7 cặp số về nhiều và chu kỳ khan đối xứng 50/50 thẳng hàng trên di động.">
+    <meta name="keywords" content="xo so phat dat, xổ số phát đạt, chu ky khan, tan suat ve, thong ke xac suat mobile">
     <style>
         /* --- HỆ THỐNG MÀU SẮC CHUYỂN ĐỔI DARK MODE BAN ĐÊM --- */
         :root {
@@ -76,9 +76,10 @@
         .khung-chuyen-muc-dai { display: flex; flex-direction: column; }
         .vung-mien-block { background: var(--bg-block); border: 1px solid var(--border-color); padding: 8px 10px; margin-bottom: 6px; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); text-align: left; }
         .tieu-de-mien-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; cursor: pointer; }
-        .ten-mien-header { font-weight: bold; font-size: 0.82rem; padding: 2px 6px; border-left: 3px solid #d32f2f; color: var(--text-main); margin: 0; }
-        .vung-mien-block.mien-trung-style .ten-mien-header { border-left-color: #007bff; }
-        .vung-mien-block.mien-nam-style .ten-mien-header { border-left-color: #2e7d32; }
+        .ten-mien-header { font-weight: 900; font-size: 0.85rem; padding: 5px 12px; color: #ffffff !important; margin: 0; border-radius: 6px; text-shadow: 1px 1px 1px #000, 2px 2px 3px rgba(0,0,0,0.5); display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.4); border-bottom: 3px solid; border-top: 1px solid; letter-spacing: 0.5px; }
+        .vung-mien-block.mien-bac-style .ten-mien-header { background: linear-gradient(to bottom, #ff4b4b, #b71c1c); border-bottom-color: #7f0000; border-top-color: #ff7961; }
+        .vung-mien-block.mien-trung-style .ten-mien-header { background: linear-gradient(to bottom, #448aff, #0d47a1); border-bottom-color: #002171; border-top-color: #83b9ff; }
+        .vung-mien-block.mien-nam-style .ten-mien-header { background: linear-gradient(to bottom, #4caf50, #1b5e20); border-bottom-color: #003300; border-top-color: #80e27e; }
         .id-huong-dan-luot { font-size: 0.7rem; font-weight: bold; color: #dc3545; animation: blink 1.2s infinite; }
 
         /* THANH TAB NGANG CHO VÙNG MIỀN BỊ THU GỌN */
@@ -172,12 +173,9 @@
 <body>
 
 <div class="xo-so-container">
-    <div style="text-align: center; font-size: 0.85rem; font-weight: 900; color: #ffffff; text-transform: uppercase; letter-spacing: 1px; text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 2px 2px 4px rgba(0,0,0,0.8); margin-bottom: 8px; padding: 6px; background: linear-gradient(to bottom, #ff9800, #e65100); border-radius: 8px; border-bottom: 3px solid #bf360c; border-top: 1px solid #ffcc80; box-shadow: 0 4px 6px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.4); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-    ⚡ Trực Tiếp Siêu Tốc - Chính Xác Tuyệt Đối ⚡
-  </div>
-  <div class="header-top">
-    <h2>XỔ SỐ LỘC PHÁT</h2>
-    <button class="btn-mode-top" id="dark-mode-toggle" onclick="chuyenDoiCheDoBanden()">🌙 Mode</button>
+  <div class="header-top" style="margin-top: 4px; margin-bottom: 8px; padding: 8px 10px; background: linear-gradient(to bottom, #32cd32, #008000); border-radius: 8px; border-bottom: 4px solid #004d00; border-top: 1px solid #90ee90; box-shadow: 0 4px 6px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.5);">
+    <h2 style="font-size: 0.75rem; font-weight: 900; color: #ffffff; text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 2px 2px 4px rgba(0,0,0,0.8); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-grow: 1; text-align: left;">XỔ SỐ PHÁT ĐẠT - CHÍNH XÁC - NHANH CHÓNG - TIỆN LỢI</h2>
+    <button class="btn-mode-top" id="dark-mode-toggle" onclick="chuyenDoiCheDoBanden()" style="flex-shrink: 0; margin-left: 8px;">🌙 Mode</button>
   </div>
   
   <div class="countdown-bar" id="countdown-timer">Đang kết nối đồng hồ giờ vàng...</div>
