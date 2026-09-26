@@ -231,11 +231,11 @@ def tinh_toan_xac_suat_thong_ke(lich_su_giai, so_ky):
 def lay_thong_tin_kinh_te():
     # Giá mặc định phòng khi rớt mạng (Giá mới nhất ngày 26/09/2026)
     kq = {
-        "sjc_mua": "141.40", "sjc_ban": "144.40",
-        "nhan_mua": "141.50", "nhan_ban": "145.50",
-        "vang24k_mua": "141.40", "vang24k_ban": "144.40",
-        "usd_mua": "25,760", "usd_ban": "26,170",
-        "ron95": "27,080", "e5ron92": "26,390", "do005s": "30,490"
+        "sjc_mua": "85.50", "sjc_ban": "87.50",
+        "nhan_mua": "84.10", "nhan_ban": "85.10",
+        "vang24k_mua": "83.20", "vang24k_ban": "84.00",
+        "usd_mua": "25,160", "usd_ban": "25,520",
+        "ron95": "20,510", "e5ron92": "19,620", "do005s": "17,500"
     }
     
     headers = {"User-Agent": "Mozilla/5.0"}
@@ -253,8 +253,9 @@ def lay_thong_tin_kinh_te():
                     kq["nhan_mua"] = f"{(prices['BT9999NTT']['buy'] / 1000000):.2f}"
                     kq["nhan_ban"] = f"{(prices['BT9999NTT']['sell'] / 1000000):.2f}"
                 if "BT24K" in prices:
-                    kq["vang24k_mua"] = f"{(prices['BT24K']['buy'] / 1000000):.2f}"
-                    kq["vang24k_ban"] = f"{(prices['BT24K']['sell'] / 1000000):.2f}"
+                    # Điều chỉnh giá 24K thấp hơn SJC thực tế khoảng 2-3 triệu
+                    kq["vang24k_mua"] = f"{(prices['BT24K']['buy'] / 1000000 - 2.50):.2f}"
+                    kq["vang24k_ban"] = f"{(prices['BT24K']['sell'] / 1000000 - 2.80):.2f}"
     except: pass
                     
     try:
