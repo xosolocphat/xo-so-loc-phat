@@ -83,7 +83,7 @@
 
         /* LƯỚT NGANG 2 HÀNG ĐÀI ĐỐI XỨNG CẤT NỬA NÚT */
         .danh-sach-dai-scroll { 
-            display: grid; grid-template-rows: repeat(2, auto); grid-auto-flow: column; grid-auto-columns: 19%; 
+            display: grid; grid-template-rows: repeat(2, auto); grid-auto-flow: column; grid-auto-columns: 24%; 
             gap: 6px; overflow-x: auto; scroll-behavior: smooth; padding-bottom: 4px; padding-top: 4px; -webkit-overflow-scrolling: touch;
         }
         .danh-sach-dai-scroll::-webkit-scrollbar { display: none; }
@@ -95,7 +95,7 @@
             -webkit-tap-highlight-color: transparent; display: flex; align-items: center; justify-content: center; gap: 3px;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
-        [data-theme="dark"] .btn-dai { background: linear-gradient(135deg, #424242, #212121); color: #fff; border-color: #555; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        [data-theme="dark"] .btn-dai { width: 100%; padding: 4px 2px; background: linear-gradient(135deg, #ffffff, #f0f0f0); border: 1px solid #ddd; color: #333; cursor: pointer; border-radius: 20px; font-size: 0.65rem; font-weight: bold; text-align: center; box-sizing: border-box; box-shadow: 0 4px 6px rgba(0,0,0,0.1), inset 0 2px 4px rgba(255,255,255,0.8); -webkit-tap-highlight-color: transparent; display: flex; align-items: center; justify-content: center; gap: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         
         .btn-dai:nth-child(5n+1) { background: linear-gradient(135deg, #ffcdd2, #ef9a9a); border-color: #e57373; color: #b71c1c; }
         .btn-dai:nth-child(5n+2) { background: linear-gradient(135deg, #c8e6c9, #a5d6a7); border-color: #81c784; color: #1b5e20; }
@@ -182,7 +182,7 @@
         @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
         @media (min-width: 600px) {
             .xo-so-container { max-width: 650px; padding: 15px; margin: 15px auto; }
-            .danh-sach-dai-scroll { grid-auto-columns: 19%; }
+            .danh-sach-dai-scroll { grid-auto-columns: 24%; }
         }
 </style>
 </head>
