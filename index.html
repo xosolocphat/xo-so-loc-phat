@@ -30,10 +30,10 @@
         .xo-so-container { max-width: 100%; margin: 6px auto; padding: 6px; background: var(--bg-block); border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); box-sizing: border-box; }
         
         .so-lo, .ball {
-            display: inline-block; width: 34px; height: 34px; border-radius: 50%;
-            line-height: 34px; text-align: center; font-weight: bold; color: #000;
+            display: inline-block; width: 40px; height: 40px; border-radius: 50%;
+            line-height: 40px; text-align: center; font-weight: bold; color: #000;
             box-shadow: inset -3px -3px 6px rgba(0,0,0,0.4), inset 3px 3px 6px rgba(255,255,255,0.9), 2px 2px 4px rgba(0,0,0,0.3);
-            text-shadow: 1px 1px 1px rgba(255,255,255,0.4); margin: 0 3px; vertical-align: middle; font-size: 1.1rem;
+            text-shadow: 1px 1px 1px rgba(255,255,255,0.4); margin: 0 3px; vertical-align: middle; font-size: 1.3rem;
         }
         .bg-red, .ball-red { background: radial-gradient(circle at 10px 10px, #ff9999, #d32f2f); color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
         .bg-orange, .ball-orange { background: radial-gradient(circle at 10px 10px, #ffcc99, #f57c00); color: #000; text-shadow: 1px 1px 1px rgba(255,255,255,0.6); }
@@ -283,7 +283,7 @@
         <div style="font-size: 1.8rem; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2));">🧽</div>
         <div style="text-align: left; flex-grow: 1;">
             <p class="ten-vang-label" style="color: #f57f17; font-size: 0.72rem; margin:0 0 2px 0;">🟡 VÀNG SJC (Triệu/Lượng)</p>
-            <span id="sjc-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: 141.40 - Bán: 144.40</span>
+            <span id="sjc-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: 141.18 - Bán: 144.18</span>
         </div>
       </div>
       <!-- Vàng 9999 -->
@@ -291,7 +291,7 @@
         <div style="font-size: 1.8rem; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2));">🪙</div>
         <div style="text-align: left; flex-grow: 1;">
             <p class="ten-vang-label" style="color: #f57f17; font-size: 0.72rem; margin:0 0 2px 0;">🟡 VÀNG 9999 (Triệu/Nhẫn)</p>
-            <span id="nhan-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: 141.40 - Bán: 145.40</span>
+            <span id="nhan-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: 139.60 - Bán: 142.23</span>
         </div>
       </div>
       <!-- Vàng 24K -->
@@ -299,7 +299,7 @@
         <div style="font-size: 1.8rem; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2));">📿</div>
         <div style="text-align: left; flex-grow: 1;">
             <p class="ten-vang-label" style="color: #f57f17; font-size: 0.72rem; margin:0 0 2px 0;">🟠 VÀNG 24K (Nữ trang)</p>
-            <span id="vang24k-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: 83.20 - Bán: 84.00</span>
+            <span id="vang24k-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: 138.99 - Bán: 141.34</span>
         </div>
       </div>
       <!-- USD -->
@@ -919,14 +919,14 @@ function veBangThongKe() {
     let htmlVeNhieu = "";
     dataKy.ve_nhieu.forEach((item, index) => {
         let colorClass = getBallColorClass(item.s);
-        htmlVeNhieu += `<tr><td><b>${index + 1}</b></td><td><span class="ball ${colorClass}" onclick="highlightNumber('${item.s}')" style="cursor:pointer;" title="Nhấn để dò số">${item.s}</span></td><td><b>${item.l} kỳ</b></td></tr>`;
+        htmlVeNhieu += `<tr><td style="font-size: 1.1rem;"><b>${index + 1}</b></td><td><span class="ball ${colorClass}" onclick="highlightNumber('${item.s}')" style="cursor:pointer;" title="Nhấn để dò số">${item.s}</span></td><td style="font-size: 1.1rem; font-weight: bold;">${item.l} kỳ</td></tr>`;
     });
     document.getElementById('du-lieu-ve-nhieu').innerHTML = htmlVeNhieu;
 
     let htmlChuaVe = "";
     dataKy.chua_ve.forEach((item, index) => {
         let colorClass = getBallColorClass(item.s);
-        htmlChuaVe += `<tr><td><b>${index + 1}</b></td><td><span class="ball ${colorClass}" onclick="highlightNumber('${item.s}')" style="cursor:pointer;" title="Nhấn để dò số">${item.s}</span></td><td><b>${item.l} kỳ</b></td></tr>`;
+        htmlChuaVe += `<tr><td style="font-size: 1.1rem;"><b>${index + 1}</b></td><td><span class="ball ${colorClass}" onclick="highlightNumber('${item.s}')" style="cursor:pointer;" title="Nhấn để dò số">${item.s}</span></td><td style="font-size: 1.1rem; font-weight: bold;">${item.l} kỳ</td></tr>`;
     });
     document.getElementById('du-lieu-chua-ve').innerHTML = htmlChuaVe;
 }
