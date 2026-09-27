@@ -1197,6 +1197,9 @@ function moTrucTiep(mien) {
     khungVietlott.style.display = "none";
     document.getElementById("iframe-truc-tiep").src = urls[mien];
     
+    let mienHanhChinh = (mien === 'mb') ? 'bac' : (mien === 'mt' ? 'trung' : 'nam');
+    bamMoTabHanhChinh(mienHanhChinh);
+    
     if(tieuDeNode) {
         let tenMienText = (mien === 'mb') ? 'MIỀN BẮC' : (mien === 'mt' ? 'MIỀN TRUNG' : 'MIỀN NAM');
         tieuDeNode.innerText = `📺 TRỰC TIẾP ${tenMienText}:`;
@@ -1271,6 +1274,12 @@ function dongTrucTiep() {
     let dsNgay = document.getElementById("ds-ngay");
     if (dsNgay && dsNgay.innerHTML.trim() !== "") {
         document.getElementById("khung-chon-ngay").style.display = "block";
+    }
+    
+    let tieuDeNode = document.getElementById("tieu-de-chon-ngay");
+    if(tieuDeNode) {
+        let tenMienText = (mienHienTai === 'bac') ? 'MIỀN BẮC' : (mienHienTai === 'trung' ? 'MIỀN TRUNG' : 'MIỀN NAM');
+        tieuDeNode.innerText = `🗓 KẾT QUẢ ${tenMienText}:`;
     }
 }
 
