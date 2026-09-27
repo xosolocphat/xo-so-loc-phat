@@ -821,6 +821,11 @@ function bamMoTabHanhChinh(mienClick) {
         tieuDeNode.innerText = `KẾT QUẢ ${tenMienText}:`;
     }
     
+    let khungVietlott = document.getElementById("khung-vietlott-native");
+    if (khungVietlott) khungVietlott.style.display = "none";
+    let nativeKqxs = document.getElementById("khung-kqxs-native");
+    if (nativeKqxs) nativeKqxs.style.display = "";
+    
     apDungCauHinhVungMien(mienClick);
     renderKetQuaTheoNgayMien(ngayHienTai, mienHienTai);
 }
@@ -918,6 +923,7 @@ function bamChonDai(linkIframe, codeDai, element) {
             <button class="btn-dai" style="flex: 1; background: linear-gradient(135deg, #ffd54f, #ffca28); color: #333; font-weight: bold; border-radius: 8px; border: 1px solid #ffc107; box-shadow: 0 4px 6px rgba(0,0,0,0.1), inset 0 2px 4px rgba(255,255,255,0.6); padding: 8px 2px; font-size: 0.7rem; text-shadow: 1px 1px 1px rgba(255,255,255,0.5);" onclick="quayVeVung('bac')">MIỀN BẮC</button>
             <button class="btn-dai" style="flex: 1; background: linear-gradient(135deg, #4fc3f7, #29b6f6); color: #fff; font-weight: bold; border-radius: 8px; border: 1px solid #03a9f4; box-shadow: 0 4px 6px rgba(0,0,0,0.1), inset 0 2px 4px rgba(255,255,255,0.6); padding: 8px 2px; font-size: 0.7rem; text-shadow: 1px 1px 1px rgba(0,0,0,0.2);" onclick="quayVeVung('trung')">MIỀN TRUNG</button>
             <button class="btn-dai" style="flex: 1; background: linear-gradient(135deg, #ffffff, #f5f5f5); color: #333; font-weight: bold; border-radius: 8px; border: 1px solid #ccc; box-shadow: 0 4px 6px rgba(0,0,0,0.1), inset 0 2px 4px rgba(255,255,255,0.8); padding: 8px 2px; font-size: 0.7rem; text-shadow: 1px 1px 1px rgba(255,255,255,0.8);" onclick="quayVeVung('nam')">MIỀN NAM</button>
+            <button class="btn-dai" style="flex: 1; background: linear-gradient(135deg, #ce93d8, #ab47bc); color: #fff; font-weight: bold; border-radius: 8px; border: 1px solid #9c27b0; box-shadow: 0 4px 6px rgba(0,0,0,0.1), inset 0 2px 4px rgba(255,255,255,0.6); padding: 8px 2px; font-size: 0.7rem; text-shadow: 1px 1px 1px rgba(0,0,0,0.2);" onclick="moTrucTiep('vl')">VIETLOTT</button>
         </div>
     `;
     
@@ -1145,39 +1151,24 @@ function moTrucTiep(mien) {
     
     let khungVietlott = document.getElementById("khung-vietlott-native");
     if (!khungVietlott) {
-        // Tạo khung vietlott native nếu chưa có
+        // Chỉ thay đổi khu vực hiển thị Vietlott; các cấu trúc khác của trang giữ nguyên.
         khungVietlott = document.createElement("div");
         khungVietlott.id = "khung-vietlott-native";
         khungVietlott.className = "khung-kqxs-native";
         khungVietlott.style.flexDirection = "column";
         khungVietlott.style.alignItems = "center";
-        khungVietlott.style.gap = "20px";
+        khungVietlott.style.gap = "12px";
+        khungVietlott.style.overflow = "visible";
         khungVietlott.innerHTML = `
-            <div style="width: 100%; max-width: 600px; background: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 2px solid #e53935; overflow: hidden; margin-top: 15px;">
-                <div style="background: linear-gradient(135deg, #e53935, #c62828); color: white; padding: 10px; text-align: center; font-weight: bold; font-size: 1.2rem;">KẾT QUẢ MEGA 6/45 <br><span id="vl-mega-date" style="font-size: 0.8rem; font-weight: normal;">Đang tải...</span></div>
-                <div style="padding: 20px; text-align: center;">
-                    <div id="vl-mega-balls" style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 15px;"></div>
-                    <div style="font-size: 1.1rem; color: #d32f2f; font-weight: bold;">JACKPOT: <span id="vl-mega-jackpot">...</span> VNĐ</div>
+            <div id="vl-list" style="width:100%; max-width:600px; display:flex; flex-direction:column; gap:14px;"></div>
+            <div id="vl-data-status" style="width:100%; max-width:600px; font-size:0.68rem; line-height:1.45; color:#777; text-align:center; padding:2px 8px; box-sizing:border-box;"></div>
+            <div id="nut-quay-ve-vl" style="width:100%; text-align:center; margin-top:2px; margin-bottom:20px;">
+                <div style="display:flex; gap:8px; width:100%; max-width:600px; margin:0 auto; flex-wrap:wrap;">
+                    <button class="btn-dai" style="flex:1; min-width:150px; background:linear-gradient(135deg,#e53935,#c62828); color:white; padding:10px; border-radius:8px;" onclick="dongTrucTiep(); window.scrollTo(0,0);">ĐÓNG VIETLOTT</button>
                 </div>
             </div>
-            
-            <div style="width: 100%; max-width: 600px; background: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 2px solid #d81b60; overflow: hidden;">
-                <div style="background: linear-gradient(135deg, #d81b60, #ad1457); color: white; padding: 10px; text-align: center; font-weight: bold; font-size: 1.2rem;">KẾT QUẢ POWER 6/55 <br><span id="vl-power-date" style="font-size: 0.8rem; font-weight: normal;">Đang tải...</span></div>
-                <div style="padding: 20px; text-align: center;">
-                    <div id="vl-power-balls" style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 15px;"></div>
-                    <div style="font-size: 1.1rem; color: #c2185b; font-weight: bold;">JACKPOT 1: <span id="vl-power-jackpot">...</span> VNĐ</div>
-                </div>
-            </div>
-            <div id="nut-quay-ve-vl" style="width: 100%; text-align: center; margin-top: 10px; margin-bottom: 20px;"></div>
         `;
         document.getElementById("khung-truc-tiep").insertAdjacentElement("afterend", khungVietlott);
-        
-        let nutQuayVeVL = document.getElementById("nut-quay-ve-vl");
-        nutQuayVeVL.innerHTML = `
-            <div style="display: flex; gap: 8px; margin-bottom: 15px; width: 100%; max-width: 600px; margin: 0 auto; flex-wrap: wrap;">
-                <button class="btn-dai" style="flex: 1; min-width: 150px; background: linear-gradient(135deg, #e53935, #c62828); color: white; padding: 10px; border-radius: 8px;" onclick="dongTrucTiep(); window.scrollTo(0,0);">ĐÓNG VIETLOTT</button>
-            </div>
-        `;
     }
 
     if (mien === 'vl') {
@@ -1189,6 +1180,9 @@ function moTrucTiep(mien) {
             let el = document.getElementById(`ds-mien-${m}`);
             if(el) el.style.display = 'none';
         });
+        
+        let nativeKqxs = document.getElementById("khung-kqxs-native");
+        if(nativeKqxs) nativeKqxs.style.display = "none";
         
         fetchVietlottData();
         return;
@@ -1212,39 +1206,393 @@ function moTrucTiep(mien) {
     document.getElementById("khung-truc-tiep").scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-function renderBongs(ballsArray, containerId, colorCode) {
-    let html = '';
-    ballsArray.forEach(num => {
-        if(num) {
-            html += `<div style="width: 40px; height: 40px; border-radius: 50%; background: ${colorCode}; color: white; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 1.2rem; box-shadow: inset -2px -2px 6px rgba(0,0,0,0.3); border: 2px solid #fff;">${num}</div>`;
+// ===================== VIETLOTT: GIAO DIỆN ĐẦY ĐỦ + SẮP XẾP MỚI NHẤT =====================
+// Dữ liệu dự phòng được nhúng trực tiếp để khung Vietlott luôn hiển thị đầy đủ ngay cả khi nguồn ngoài lỗi.
+// Nếu có file vietlott.json cùng thư mục, dữ liệu mới hơn trong file đó sẽ được ưu tiên.
+const VL_FALLBACK_GAMES = [
+    {
+        kind: 'mega',
+        date: '2026-09-27',
+        id: '01568',
+        balls: ['02','04','13','25','31','39'],
+        prizes: [
+            { key:'jackpot',  name:'Jackpot',    match:'○ ○ ○ ○ ○ ○', winners:0,     value:139776125000 },
+            { key:'first',    name:'Giải nhất',  match:'○ ○ ○ ○ ○',   winners:84,    value:10000000 },
+            { key:'second',   name:'Giải nhì',   match:'○ ○ ○ ○',     winners:4591,  value:300000 },
+            { key:'third',    name:'Giải ba',    match:'○ ○ ○',       winners:74955, value:30000 }
+        ],
+        source: 'embedded'
+    },
+    {
+        kind: 'power',
+        date: '2026-09-26',
+        id: '01403',
+        balls: ['14','18','21','38','48','52'],
+        bonus: '49',
+        prizes: [
+            { key:'jackpot1', name:'Jackpot 1', match:'○ ○ ○ ○ ○ ○', winners:0,     value:91387533000 },
+            { key:'jackpot2', name:'Jackpot 2', match:'○ ○ ○ ○ ○ | ●', winners:0,   value:3512286700 },
+            { key:'first',    name:'Giải nhất', match:'○ ○ ○ ○ ○',   winners:26,    value:40000000 },
+            { key:'second',   name:'Giải nhì',  match:'○ ○ ○ ○',     winners:1211,  value:500000 },
+            { key:'third',    name:'Giải ba',   match:'○ ○ ○',       winners:25149, value:50000 }
+        ],
+        source: 'embedded'
+    }
+];
+
+function vlClone(obj) {
+    return JSON.parse(JSON.stringify(obj));
+}
+
+function vlNormalizeBall(value) {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return String(value ?? '');
+    return String(Math.trunc(n)).padStart(2, '0');
+}
+
+function vlDateKey(value) {
+    const s = String(value || '').trim().split('T')[0];
+    let m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (m) return `${m[1]}-${m[2]}-${m[3]}`;
+    m = s.match(/^(\d{2})[\/-](\d{2})[\/-](\d{4})$/);
+    if (m) return `${m[3]}-${m[2]}-${m[1]}`;
+    return s;
+}
+
+function vlFormatDate(dateValue) {
+    const key = vlDateKey(dateValue);
+    const m = key.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    return m ? `${m[3]}/${m[2]}/${m[1]}` : String(dateValue || '');
+}
+
+function vlWeekday(dateValue) {
+    const key = vlDateKey(dateValue);
+    const m = key.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!m) return '';
+    const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+    return ['Chủ nhật','Thứ hai','Thứ ba','Thứ tư','Thứ năm','Thứ sáu','Thứ bảy'][d.getDay()];
+}
+
+function vlFormatNumber(value) {
+    if (value === null || value === undefined || value === '') return '—';
+    const n = Number(String(value).replace(/[^0-9.-]/g, ''));
+    return Number.isFinite(n) ? new Intl.NumberFormat('en-US').format(n) : String(value);
+}
+
+function vlFormatMoney(value) {
+    if (value === null || value === undefined || value === '') return 'Đang cập nhật';
+    const n = Number(String(value).replace(/[^0-9.-]/g, ''));
+    if (!Number.isFinite(n) || n < 0) return 'Đang cập nhật';
+    return new Intl.NumberFormat('en-US').format(n) + '<sup style="font-size:.68em; margin-left:1px;">đ</sup>';
+}
+
+function vlDefaultPrizes(kind) {
+    if (kind === 'power') {
+        return [
+            { key:'jackpot1', name:'Jackpot 1', match:'○ ○ ○ ○ ○ ○', winners:null, value:null },
+            { key:'jackpot2', name:'Jackpot 2', match:'○ ○ ○ ○ ○ | ●', winners:null, value:null },
+            { key:'first', name:'Giải nhất', match:'○ ○ ○ ○ ○', winners:null, value:40000000 },
+            { key:'second', name:'Giải nhì', match:'○ ○ ○ ○', winners:null, value:500000 },
+            { key:'third', name:'Giải ba', match:'○ ○ ○', winners:null, value:50000 }
+        ];
+    }
+    return [
+        { key:'jackpot', name:'Jackpot', match:'○ ○ ○ ○ ○ ○', winners:null, value:null },
+        { key:'first', name:'Giải nhất', match:'○ ○ ○ ○ ○', winners:null, value:10000000 },
+        { key:'second', name:'Giải nhì', match:'○ ○ ○ ○', winners:null, value:300000 },
+        { key:'third', name:'Giải ba', match:'○ ○ ○', winners:null, value:30000 }
+    ];
+}
+
+function vlPrizeValueFromGame(game, key, fallbackValue = null) {
+    const aliases = {
+        jackpot: ['jackpot','jackpot_value','jackpotValue'],
+        jackpot1: ['jackpot1','jackpot','jackpot1_value','jackpot1Value'],
+        jackpot2: ['jackpot2','jackpot2_value','jackpot2Value'],
+        first: ['firstPrize','first_prize','giaiNhatValue'],
+        second: ['secondPrize','second_prize','giaiNhiValue'],
+        third: ['thirdPrize','third_prize','giaiBaValue']
+    };
+    for (const name of (aliases[key] || [])) {
+        if (game[name] !== undefined && game[name] !== null && game[name] !== '') return game[name];
+    }
+    return fallbackValue;
+}
+
+function vlPrizeWinnersFromGame(game, key) {
+    const aliases = {
+        jackpot: ['jackpotWinners','jackpot_winners','jackpot_count'],
+        jackpot1: ['jackpot1Winners','jackpot1_winners','jackpot1_count','jackpotWinners'],
+        jackpot2: ['jackpot2Winners','jackpot2_winners','jackpot2_count'],
+        first: ['firstWinners','first_winners','giaiNhat','giai_nhat','first_count'],
+        second: ['secondWinners','second_winners','giaiNhi','giai_nhi','second_count'],
+        third: ['thirdWinners','third_winners','giaiBa','giai_ba','third_count']
+    };
+    for (const name of (aliases[key] || [])) {
+        if (game[name] !== undefined && game[name] !== null && game[name] !== '') return game[name];
+    }
+    return null;
+}
+
+function vlNormalizePrizes(game, kind) {
+    const defaults = vlDefaultPrizes(kind);
+    const raw = Array.isArray(game?.prizes) ? game.prizes : null;
+    if (raw && raw.length) {
+        return defaults.map((def, idx) => {
+            const found = raw.find(p => p && (p.key === def.key || String(p.name || '').toLowerCase() === def.name.toLowerCase())) || raw[idx] || {};
+            return {
+                ...def,
+                ...found,
+                winners: found.winners ?? found.count ?? found.quantity ?? def.winners,
+                value: found.value ?? found.amount ?? found.prize ?? def.value
+            };
+        });
+    }
+    return defaults.map(def => ({
+        ...def,
+        winners: vlPrizeWinnersFromGame(game || {}, def.key),
+        value: vlPrizeValueFromGame(game || {}, def.key, def.value)
+    }));
+}
+
+function vlNormalizeLocalGame(game, kind) {
+    if (!game || !Array.isArray(game.balls) || game.balls.length < 6) return null;
+    const isPower = kind === 'power';
+    const bonusRaw = game.bonus ?? game.special ?? game.specialBall ?? (isPower && game.balls.length > 6 ? game.balls[6] : null);
+    return {
+        kind,
+        date: game.date || game.draw_date || '',
+        id: game.id || game.drawId || game.draw_id || '',
+        balls: game.balls.slice(0, 6).map(vlNormalizeBall),
+        bonus: isPower && bonusRaw !== null && bonusRaw !== undefined && bonusRaw !== '' ? vlNormalizeBall(bonusRaw) : null,
+        prizes: vlNormalizePrizes(game, kind),
+        source: 'local'
+    };
+}
+
+function vlNormalizeCommunity(row, kind) {
+    if (!row || !Array.isArray(row.result) || row.result.length < 6) return null;
+    const isPower = kind === 'power';
+    return {
+        kind,
+        date: row.date || '',
+        id: row.id || '',
+        balls: row.result.slice(0, 6).map(vlNormalizeBall),
+        bonus: isPower && row.result.length > 6 ? vlNormalizeBall(row.result[6]) : null,
+        prizes: vlDefaultPrizes(kind),
+        source: 'community'
+    };
+}
+
+function vlLatestFromJsonl(text) {
+    const rows = String(text || '')
+        .split(/\r?\n/)
+        .map(line => line.trim())
+        .filter(Boolean)
+        .map(line => { try { return JSON.parse(line); } catch (e) { return null; } })
+        .filter(row => row && row.date && Array.isArray(row.result) && row.result.length >= 6);
+    if (!rows.length) return null;
+    rows.sort((a,b) => {
+        const da = vlDateKey(a.date), db = vlDateKey(b.date);
+        if (da !== db) return db.localeCompare(da);
+        return String(b.id || '').localeCompare(String(a.id || ''));
+    });
+    return rows[0];
+}
+
+async function vlFetchText(url, timeoutMs = 9000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+        const res = await fetch(url, {
+            cache: 'no-store',
+            signal: controller.signal,
+            headers: { 'Accept': 'application/json,text/plain,*/*' }
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.text();
+    } finally {
+        clearTimeout(timer);
+    }
+}
+
+function vlPrizeDetailScore(game) {
+    if (!game || !Array.isArray(game.prizes)) return 0;
+    return game.prizes.reduce((sum, p) => sum + (p?.winners !== null && p?.winners !== undefined ? 1 : 0) + (p?.value !== null && p?.value !== undefined ? 1 : 0), 0);
+}
+
+function vlMergeSameDraw(primary, secondary) {
+    if (!primary) return secondary;
+    if (!secondary) return primary;
+    const result = { ...secondary, ...primary };
+    if ((!primary.bonus || primary.bonus === '') && secondary.bonus) result.bonus = secondary.bonus;
+
+    const p1 = Array.isArray(primary.prizes) ? primary.prizes : [];
+    const p2 = Array.isArray(secondary.prizes) ? secondary.prizes : [];
+    const keys = new Set([...p1.map(p => p.key), ...p2.map(p => p.key)]);
+    result.prizes = Array.from(keys).map(key => {
+        const a = p1.find(p => p.key === key) || {};
+        const b = p2.find(p => p.key === key) || {};
+        return {
+            ...b,
+            ...a,
+            winners: (a.winners !== null && a.winners !== undefined) ? a.winners : b.winners,
+            value: (a.value !== null && a.value !== undefined) ? a.value : b.value
+        };
+    });
+    return result;
+}
+
+function vlPickLatest(...games) {
+    const valid = games.filter(Boolean);
+    if (!valid.length) return null;
+    valid.sort((a,b) => {
+        const da = vlDateKey(a.date), db = vlDateKey(b.date);
+        if (da !== db) return db.localeCompare(da);
+        const ia = String(a.id || ''), ib = String(b.id || '');
+        if (ia !== ib) return ib.localeCompare(ia);
+        return vlPrizeDetailScore(b) - vlPrizeDetailScore(a);
+    });
+    const newest = valid[0];
+    let merged = newest;
+    valid.slice(1).forEach(g => {
+        if (vlDateKey(g.date) === vlDateKey(newest.date) && String(g.id || '') === String(newest.id || '')) {
+            const detailedFirst = vlPrizeDetailScore(merged) >= vlPrizeDetailScore(g) ? merged : g;
+            const other = detailedFirst === merged ? g : merged;
+            merged = vlMergeSameDraw(detailedFirst, other);
         }
     });
-    document.getElementById(containerId).innerHTML = html;
+    return merged;
+}
+
+function vlPrizeRowsHtml(game) {
+    const isPower = game.kind === 'power';
+    const prizes = Array.isArray(game.prizes) && game.prizes.length ? game.prizes : vlDefaultPrizes(game.kind);
+    return prizes.map((p, idx) => {
+        const isJackpot = String(p.key || '').startsWith('jackpot');
+        let match = p.match || '';
+        if (p.key === 'jackpot2') {
+            match = '<span style="color:#555;">○ ○ ○ ○ ○</span> <span style="color:#aaa;">|</span> <span style="color:#d32f2f; font-size:1.08em;">●</span>';
+        }
+        return `
+            <tr style="background:${idx % 2 ? '#fbfbfb' : '#ffffff'}; border-bottom:1px solid #eeeeee;">
+                <td style="padding:7px 5px; text-align:left; font-weight:${isJackpot ? '700' : '500'}; white-space:nowrap;">${p.name || ''}</td>
+                <td style="padding:7px 3px; text-align:center; letter-spacing:1px; white-space:nowrap; color:${isPower && isJackpot ? '#b9154f' : '#444'}; font-size:0.9rem;">${match}</td>
+                <td style="padding:7px 3px; text-align:center; white-space:nowrap;">${vlFormatNumber(p.winners)}</td>
+                <td style="padding:7px 5px; text-align:right; white-space:nowrap; font-weight:${isJackpot ? '700' : '500'}; color:${isJackpot ? (isPower ? '#ad1457' : '#c62828') : '#111'};">${vlFormatMoney(p.value)}</td>
+            </tr>`;
+    }).join('');
+}
+
+function vlBallsHtml(game) {
+    const balls = (game.balls || []).map(num => `
+        <span style="width:48px; height:48px; border-radius:50%; background:linear-gradient(145deg,#fafafa,#b8b8ba); box-shadow:inset 5px 5px 9px rgba(255,255,255,.85), inset -5px -5px 9px rgba(0,0,0,.12), 0 1px 3px rgba(0,0,0,.12); display:inline-flex; align-items:center; justify-content:center; font-size:1.55rem; font-weight:900; color:#2f343a;">${num}</span>`).join('');
+    if (game.kind === 'power' && game.bonus) {
+        return `${balls}<span style="color:#999; font-size:1.4rem; margin:0 2px;">|</span><span style="width:48px; height:48px; border-radius:50%; background:linear-gradient(145deg,#ffd3da,#df2335); box-shadow:inset 5px 5px 9px rgba(255,255,255,.55), inset -5px -5px 9px rgba(0,0,0,.12), 0 1px 3px rgba(0,0,0,.12); display:inline-flex; align-items:center; justify-content:center; font-size:1.55rem; font-weight:900; color:#222;">${game.bonus}</span>`;
+    }
+    return balls;
+}
+
+function vlCardHtml(game) {
+    const isPower = game.kind === 'power';
+    const title = isPower ? 'POWER 6/55' : 'MEGA 6/45';
+    const liveTime = '18:05:00';
+    const borderColor = isPower ? '#9e9e9e' : '#bdbdbd';
+    return `
+        <section data-vl-date="${vlDateKey(game.date)}" style="width:100%; background:#fff; border:1px solid ${borderColor}; border-radius:4px; overflow:hidden; box-shadow:0 1px 2px rgba(0,0,0,.08); color:#111; box-sizing:border-box;">
+            <div style="padding:5px 7px 3px; background:#f0f0f0; border-bottom:1px solid #ddd; text-align:left;">
+                <div style="font-family:Georgia,'Times New Roman',serif; font-weight:700; font-size:0.96rem; line-height:1.2; color:#24313a;">KẾT QUẢ XỔ SỐ ${title} - NGÀY: ${vlFormatDate(game.date)}</div>
+                <div style="margin-top:2px; color:#00a97b; font-family:Georgia,'Times New Roman',serif; font-style:italic; font-size:0.64rem;">Tường thuật trực tiếp vào lúc ${liveTime}</div>
+            </div>
+            <div style="padding:10px 10px 5px;">
+                <div style="display:grid; grid-template-columns:minmax(70px,1fr) minmax(0,2.8fr); gap:8px; align-items:center; font-size:0.82rem; margin-bottom:12px;">
+                    <div style="text-align:left;">${vlWeekday(game.date)}</div>
+                    <div style="text-align:left;">Kỳ vé: <b>#${String(game.id || '').replace(/^#/,'')}</b> | Ngày quay thưởng ${vlFormatDate(game.date)}</div>
+                </div>
+                <div style="display:flex; justify-content:center; align-items:center; gap:8px; flex-wrap:wrap; margin:4px 0 12px;">${vlBallsHtml(game)}</div>
+                <div style="overflow-x:auto; width:100%;">
+                    <table style="width:100%; min-width:430px; border-collapse:collapse; table-layout:fixed; font-size:0.78rem;">
+                        <colgroup><col style="width:22%;"><col style="width:24%;"><col style="width:22%;"><col style="width:32%;"></colgroup>
+                        <thead>
+                            <tr style="border-bottom:1px solid #ddd; background:#fff;">
+                                <th style="padding:6px 5px; text-align:left; font-weight:500;">Giải thưởng</th>
+                                <th style="padding:6px 3px; text-align:center; font-weight:500;">Trùng khớp</th>
+                                <th style="padding:6px 3px; text-align:center; font-weight:500;">Số lượng giải</th>
+                                <th style="padding:6px 5px; text-align:right; font-weight:500;">Giá trị giải (đồng)</th>
+                            </tr>
+                        </thead>
+                        <tbody>${vlPrizeRowsHtml(game)}</tbody>
+                    </table>
+                </div>
+                <div style="text-align:right; margin-top:5px; font-size:0.67rem;">
+                    <button onclick="window.print()" style="border:0; background:transparent; color:#1976d2; cursor:pointer; padding:2px 0;">🖨 In vé dò</button>
+                </div>
+            </div>
+        </section>`;
+}
+
+function vlRenderGames(games) {
+    const list = document.getElementById('vl-list');
+    if (!list) return;
+    const valid = (games || []).filter(Boolean).sort((a,b) => {
+        const da = vlDateKey(a.date), db = vlDateKey(b.date);
+        if (da !== db) return db.localeCompare(da); // ngày mới nhất nằm trên cùng
+        return String(b.id || '').localeCompare(String(a.id || ''));
+    });
+    list.innerHTML = valid.map(vlCardHtml).join('') || '<div class="msg-chua-co">Chưa lấy được dữ liệu Vietlott.</div>';
 }
 
 async function fetchVietlottData() {
-    try {
-        let res = await fetch('vietlott.json?t=' + Date.now());
-        let data = await res.json();
-        
-        let megaData = data.mega;
-        if(megaData && megaData.balls && megaData.balls.length > 0) {
-            renderBongs(megaData.balls, 'vl-mega-balls', '#e53935');
-            document.getElementById('vl-mega-jackpot').innerText = new Intl.NumberFormat('vi-VN').format(megaData.jackpot);
-            let dDate = megaData.date.includes('T') ? megaData.date.split('T')[0].split('-').reverse().join('/') : megaData.date;
-            document.getElementById('vl-mega-date').innerText = 'Kỳ quay: ' + dDate;
-        }
+    const statusEl = document.getElementById('vl-data-status');
 
-        let powerData = data.power;
-        if(powerData && powerData.balls && powerData.balls.length > 0) {
-            renderBongs(powerData.balls, 'vl-power-balls', '#d81b60');
-            document.getElementById('vl-power-jackpot').innerText = new Intl.NumberFormat('vi-VN').format(powerData.jackpot);
-            let dDate = powerData.date.includes('T') ? powerData.date.split('T')[0].split('-').reverse().join('/') : powerData.date;
-            document.getElementById('vl-power-date').innerText = 'Kỳ quay: ' + dDate;
+    // Hiển thị ngay dữ liệu đầy đủ đã nhúng, không để màn hình trống khi mạng chậm/lỗi.
+    const fallbackMega = vlClone(VL_FALLBACK_GAMES.find(g => g.kind === 'mega'));
+    const fallbackPower = vlClone(VL_FALLBACK_GAMES.find(g => g.kind === 'power'));
+    vlRenderGames([fallbackMega, fallbackPower]);
+    if (statusEl) statusEl.innerText = 'Đang kiểm tra dữ liệu Vietlott mới hơn...';
+
+    let localMega = null, localPower = null;
+    let remoteMega = null, remotePower = null;
+    let localLoaded = false;
+
+    // Nguồn ưu tiên: vietlott.json cùng thư mục. Hỗ trợ cả dữ liệu giải thưởng/số lượng giải nếu có.
+    try {
+        const localText = await vlFetchText(`vietlott.json?t=${Date.now()}`, 4500);
+        const localData = JSON.parse(localText);
+        localMega = vlNormalizeLocalGame(localData.mega, 'mega');
+        localPower = vlNormalizeLocalGame(localData.power, 'power');
+        localLoaded = !!(localMega || localPower);
+    } catch (e) {
+        console.warn('Không có vietlott.json hoặc file chưa hợp lệ; dùng dữ liệu nhúng và nguồn dự phòng.', e);
+    }
+
+    // Nguồn dự phòng chỉ để bắt kỳ quay mới (ngày, kỳ, bộ số). Nếu cùng kỳ, dữ liệu giải thưởng đầy đủ sẽ được ghép từ nguồn local/nhúng.
+    const megaUrl = 'https://raw.githubusercontent.com/vietvudanh/vietlott-data/main/data/power645.jsonl';
+    const powerUrl = 'https://raw.githubusercontent.com/vietvudanh/vietlott-data/main/data/power655.jsonl';
+    const results = await Promise.allSettled([
+        vlFetchText(`${megaUrl}?t=${Date.now()}`, 10000),
+        vlFetchText(`${powerUrl}?t=${Date.now()}`, 10000)
+    ]);
+
+    if (results[0].status === 'fulfilled') remoteMega = vlNormalizeCommunity(vlLatestFromJsonl(results[0].value), 'mega');
+    else console.warn('Lỗi nguồn Mega dự phòng:', results[0].reason);
+
+    if (results[1].status === 'fulfilled') remotePower = vlNormalizeCommunity(vlLatestFromJsonl(results[1].value), 'power');
+    else console.warn('Lỗi nguồn Power dự phòng:', results[1].reason);
+
+    const mega = vlPickLatest(localMega, remoteMega, fallbackMega);
+    const power = vlPickLatest(localPower, remotePower, fallbackPower);
+    vlRenderGames([mega, power]);
+
+    if (statusEl) {
+        const remoteNewer = [mega, power].some(g => g && g.source === 'community' && vlPrizeDetailScore(g) < 6);
+        if (remoteNewer) {
+            statusEl.innerText = 'Đã nhận kỳ quay mới nhất. Chi tiết số lượng giải/Jackpot của kỳ mới sẽ tự đầy đủ khi vietlott.json được cập nhật.';
+        } else if (localLoaded) {
+            statusEl.innerText = 'Đã tải dữ liệu Vietlott đầy đủ từ file cập nhật của website.';
+        } else {
+            statusEl.innerText = 'Đang hiển thị dữ liệu đầy đủ tích hợp sẵn; hệ thống vẫn kiểm tra nguồn dự phòng cho kỳ quay mới.';
         }
-    } catch(e) {
-        console.error(e);
-        document.getElementById('vl-mega-date').innerText = "Dữ liệu đang được cập nhật...";
     }
 }
 
