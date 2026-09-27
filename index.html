@@ -106,7 +106,7 @@
         .btn-dai.active { box-shadow: inset 0 3px 6px rgba(0,0,0,0.3); border-width: 2px; border-color: #333 !important; transform: scale(0.95); }
 
         /* VÙNG ƯU TIÊN LỚN: Khung kết quả hiển thị Native */
-        .khung-kqxs-native { width: 100%; min-height: 400px; margin-top: 8px; font-family: 'Segoe UI', Arial, sans-serif; display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 10px; justify-content: flex-start; padding-bottom: 15px; }
+        .khung-kqxs-native { width: 100%; min-height: auto; margin-top: 8px; font-family: 'Segoe UI', Arial, sans-serif; display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 10px; justify-content: flex-start; padding-bottom: 15px; }
         .bang-kqxs { width: 100%; border-collapse: collapse; border-radius: 12px; overflow: hidden; border: 1px solid #ccc; text-align: center; background: var(--bg-block); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .bang-kqxs th, .bang-kqxs td { border: 1px solid var(--border-color); padding: 4px 2px; font-size: 0.8rem; font-weight: bold; }
         
@@ -136,8 +136,9 @@
         .khung-thong-ke-doi-xung { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 8px; width: 100%; }
         .cot-thong-ke { width: 100%; overflow: hidden; background: var(--bg-block); border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border: 1px solid var(--border-color); }
         .bang-thong-ke { width: 100%; border-collapse: collapse; font-size: 0.7rem; table-layout: fixed; }
-        .bang-thong-ke th, .bang-thong-ke td { border-bottom: 1px solid var(--border-color); padding: 8px 2px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: bold; }
-        .bang-thong-ke th { color: #fff; font-size: 0.7rem; text-transform: uppercase; padding: 8px 2px; text-shadow: 1px 1px 1px rgba(0,0,0,0.3); }
+        .bang-thong-ke th, .bang-thong-ke td { border-bottom: 1px solid var(--border-color); padding: 4px 2px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: bold; }
+        .bang-thong-ke th { color: #fff; font-size: 0.7rem; text-transform: uppercase; padding: 4px 2px; text-shadow: 1px 1px 1px rgba(0,0,0,0.3); }
+        .ball-sm { width: 26px !important; height: 26px !important; line-height: 26px !important; font-size: 0.85rem !important; margin: 0 !important; }
         .cot-ve-nhieu th { background: linear-gradient(to bottom, #ef5350, #c62828); }
         .cot-chua-ve th { background: linear-gradient(to bottom, #42a5f5, #1565c0); }
         .so-may-man { font-weight: bold; font-size: 0.8rem; display: inline-block; padding: 4px 8px; border-radius: 12px; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.1); }
@@ -237,7 +238,7 @@
     <iframe id="iframe-truc-tiep" src="" width="100%" height="700px" frameborder="0" style="display: block;"></iframe>
   </div>
 
-  <div id="khung-kqxs-native" class="khung-kqxs-native">
+  <div id="khung-kqxs-native" class="khung-kqxs-native" style="min-height: auto !important; height: auto !important; margin-bottom: 0 !important;">
       <!-- Bảng kết quả xổ số sẽ được JavaScript vẽ tự động vào đây -->
   </div>
 
@@ -271,8 +272,8 @@
     </div>
   </div>
 
-  <button class="btn-ai-random" onclick="kichHoatAiQuetSo()">🤖 BẤM ĐỂ AI GỢI Ý CẶP SỐ THUẬT TOÁN HÔM NAY</button>
-  <div class="khu-vuc-ai-so" id="ket-qua-ai-quet">HỆ THỐNG AI ĐANG PHÂN TÍCH LUỒNG SỐ...</div>
+  <button class="btn-ai-random" onclick="kichHoatAiQuetSo()">🤖 XEM PHÂN TÍCH THỐNG KÊ HÔM NAY</button>
+  <div class="khu-vuc-ai-so" id="ket-qua-ai-quet">HỆ THỐNG ĐANG XỬ LÝ DỮ LIỆU THỐNG KÊ...</div>
 
   <div class="khung-gia-vang" style="box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-radius: 10px; border: 1px solid #e0e0e0; background: linear-gradient(180deg, #ffffff, #f9f9f9); padding: 12px;">
     <div style="font-weight: 900; text-align: center; margin-bottom: 12px; font-size: 0.8rem; color: #2c3e50; text-transform: uppercase; border-bottom: 2px dashed #ddd; padding-bottom: 8px;">📊 BẢNG THÔNG TIN KINH TẾ TỔNG HỢP</div>
@@ -283,7 +284,7 @@
         <div style="font-size: 1.8rem; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2));">🧽</div>
         <div style="text-align: left; flex-grow: 1;">
             <p class="ten-vang-label" style="color: #f57f17; font-size: 0.72rem; margin:0 0 2px 0;">🟡 VÀNG SJC (Triệu/Lượng)</p>
-            <span id="sjc-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: 141.18 - Bán: 144.18</span>
+            <span id="sjc-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: 141.18<br>Bán: 144.18</span>
         </div>
       </div>
       <!-- Vàng 9999 -->
@@ -291,7 +292,7 @@
         <div style="font-size: 1.8rem; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2));">🪙</div>
         <div style="text-align: left; flex-grow: 1;">
             <p class="ten-vang-label" style="color: #f57f17; font-size: 0.72rem; margin:0 0 2px 0;">🟡 VÀNG 9999 (Triệu/Nhẫn)</p>
-            <span id="nhan-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: 139.60 - Bán: 142.23</span>
+            <span id="nhan-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: 139.60<br>Bán: 142.23</span>
         </div>
       </div>
       <!-- Vàng 24K -->
@@ -299,7 +300,7 @@
         <div style="font-size: 1.8rem; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2));">📿</div>
         <div style="text-align: left; flex-grow: 1;">
             <p class="ten-vang-label" style="color: #f57f17; font-size: 0.72rem; margin:0 0 2px 0;">🟠 VÀNG 24K (Nữ trang)</p>
-            <span id="vang24k-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: 138.99 - Bán: 141.34</span>
+            <span id="vang24k-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: 138.99<br>Bán: 141.34</span>
         </div>
       </div>
       <!-- USD -->
@@ -307,23 +308,32 @@
         <div style="font-size: 1.8rem; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2));">💵</div>
         <div style="text-align: left; flex-grow: 1;">
             <p class="ten-vang-label" style="color: #1b5e20; font-size: 0.72rem; margin:0 0 2px 0;">💵 ĐÔ LA MỸ (USD)</p>
-            <span id="usd-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: 25,290 - Bán: 25,650</span>
+            <span id="usd-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: 25,290<br>Bán: 25,650</span>
         </div>
       </div>
     </div>
     
     <!-- Xăng Dầu -->
-    <div class="khoi-vang-item" style="margin-top: 8px; background: linear-gradient(135deg, #e3f2fd, #bbdefb); border: 1px solid #64b5f6; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; padding: 6px 15px;">
-      <div style="font-size: 2rem; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2));">⛽</div>
-      <div style="text-align: center; flex-grow: 1;">
-          <p class="ten-vang-label" style="color: #0d47a1; font-size: 0.7rem; margin:0 0 4px 0;">⛽ GIÁ XĂNG DẦU (Petrolimex)</p>
-          <div style="display: flex; justify-content: center; gap: 15px; font-size: 0.7rem; color: #424242; font-weight: bold; flex-wrap: wrap;">
-              <span><b style="color: #c62828;">RON 95-III:</b> <span id="fuel-ron95">20,520đ/l</span></span>
-              <span><b style="color: #c62828;">E5 RON 92:</b> <span id="fuel-e5">19,630đ/l</span></span>
-              <span><b style="color: #2e7d32;">DO 0,05S:</b> <span id="fuel-do">17,510đ/l</span></span>
-          </div>
-      </div>
-      <div style="font-size: 2.2rem; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2));">🛢️</div>
+    <div class="khoi-vang-item" style="margin-top: 8px; background: linear-gradient(135deg, #e3f2fd, #bbdefb); border: 1px solid #64b5f6; box-shadow: 0 2px 4px rgba(0,0,0,0.05); padding: 6px 10px;">
+        <p class="ten-vang-label" style="color: #0d47a1; font-size: 0.75rem; margin:0 0 6px 0; text-align: center;">⛽ GIÁ XĂNG DẦU (Petrolimex)</p>
+        <div style="display: flex; justify-content: space-evenly; align-items: center; font-size: 0.75rem; color: #424242; font-weight: bold; width: 100%;">
+            
+            <div style="font-size: 2.2rem; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2)); margin-right: 5px;">⛽</div>
+            
+            <!-- Cột Xăng -->
+            <div style="display: flex; flex-direction: column; gap: 4px; text-align: right;">
+                <span><b style="color: #c62828;">RON 95-III:</b> <span id="fuel-ron95">20,520đ/l</span></span>
+                <span><b style="color: #c62828;">E5 RON 92:</b> <span id="fuel-e5">19,630đ/l</span></span>
+            </div>
+            
+            <div style="width: 1px; height: 30px; background-color: #64b5f6; margin: 0 5px;"></div>
+            
+            <!-- Cột Dầu -->
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                <span style="font-size: 1.5rem; filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.2));">🛢️</span>
+                <span><b style="color: #2e7d32;">DẦU DIESEL:</b> <span id="fuel-do">17,510đ/l</span></span>
+            </div>
+        </div>
     </div>
     <div id="market-status" style="font-size: 0.65rem; color: #666; text-align: center; margin-top: 5px;"></div>
     </div>
@@ -335,7 +345,7 @@
       <a href="javascript:void(0)" onclick="moCuaSoChinhSach('terms')">Điều Khoản</a> | 
       <a href="javascript:void(0)" onclick="moCuaSoChinhSach('contact')">Liên Hệ</a>
     </div>
-    <p class="disclaimer-text">🛡️ Miễn trừ trách nhiệm: Mọi thông tin dựa trên dữ liệu toán học xác suất kiến thiết chính thức, chỉ mang tính chất tham khảo học thuật và giải trí lành mạnh.</p>
+    <p class="disclaimer-text">🛡️ Lưu ý: Thông tin trên website được cung cấp phục vụ mục đích tra cứu, thống kê và tham khảo. Dữ liệu có thể thay đổi theo nguồn cung cấp và thời điểm cập nhật. Người dùng nên đối chiếu với nguồn chính thức khi cần.</p>
   </div>
 </div>
 
@@ -784,8 +794,10 @@ function renderBangChung(danhSachCot, highlightSo = null) {
         <tbody>${tbodyHtml}${toolbarHtml}</tbody>
     </table>`;
     
-    khung.innerHTML = `<div style="width: 100%; overflow-x: auto; padding-bottom: 15px;">${html}</div>`;
+    khung.innerHTML = `<div style="width: 100%; overflow-x: auto; padding-bottom: 0px;">${html}</div>`;
     khung.style.display = "block";
+    khung.style.minHeight = "auto";
+    khung.style.height = "auto";
 }
 
 function bamMoTabHanhChinh(mienClick) {
@@ -938,14 +950,14 @@ function veBangThongKe() {
     let htmlVeNhieu = "";
     dataKy.ve_nhieu.forEach((item, index) => {
         let colorClass = getBallColorClass(item.s);
-        htmlVeNhieu += `<tr><td style="font-size: 1.1rem;"><b>${index + 1}</b></td><td><span class="ball ${colorClass}" onclick="highlightNumber('${item.s}')" style="cursor:pointer;" title="Nhấn để dò số">${item.s}</span></td><td style="font-size: 1.1rem; font-weight: bold;">${item.l} kỳ</td></tr>`;
+        htmlVeNhieu += `<tr><td style="font-size: 0.95rem;"><b>${index + 1}</b></td><td><span class="ball ball-sm ${colorClass}" onclick="highlightNumber('${item.s}')" style="cursor:pointer;" title="Nhấn để dò số">${item.s}</span></td><td style="font-size: 0.95rem; font-weight: bold;">${item.l} kỳ</td></tr>`;
     });
     document.getElementById('du-lieu-ve-nhieu').innerHTML = htmlVeNhieu;
 
     let htmlChuaVe = "";
     dataKy.chua_ve.forEach((item, index) => {
         let colorClass = getBallColorClass(item.s);
-        htmlChuaVe += `<tr><td style="font-size: 1.1rem;"><b>${index + 1}</b></td><td><span class="ball ${colorClass}" onclick="highlightNumber('${item.s}')" style="cursor:pointer;" title="Nhấn để dò số">${item.s}</span></td><td style="font-size: 1.1rem; font-weight: bold;">${item.l} kỳ</td></tr>`;
+        htmlChuaVe += `<tr><td style="font-size: 0.95rem;"><b>${index + 1}</b></td><td><span class="ball ball-sm ${colorClass}" onclick="highlightNumber('${item.s}')" style="cursor:pointer;" title="Nhấn để dò số">${item.s}</span></td><td style="font-size: 0.95rem; font-weight: bold;">${item.l} kỳ</td></tr>`;
     });
     document.getElementById('du-lieu-chua-ve').innerHTML = htmlChuaVe;
 }
@@ -977,11 +989,11 @@ function kichHoatAiQuetSo() {
     let hieuUngChopNhay = setInterval(() => {
         let soGiaLap1 = String(Math.floor(Math.random() * 100)).padStart(2, '0');
         let soGiaLap2 = String(Math.floor(Math.random() * 100)).padStart(2, '0');
-        vungHienThi.innerHTML = `🤖 ĐANG PHÂN TÍCH LUỒNG SỐ... <span style="opacity:0.5">[${soGiaLap1}] - [${soGiaLap2}]</span>`;
+        vungHienThi.innerHTML = `🤖 ĐANG XỬ LÝ DỮ LIỆU THỐNG KÊ... <span style="opacity:0.5">[${soGiaLap1}] - [${soGiaLap2}]</span>`;
         boDemGiay += 100;
         if (boDemGiay >= 1500) {
             clearInterval(hieuUngChopNhay);
-            vungHienThi.innerHTML = `🔮 AI PHÂN TÍCH CẶP SỐ THUẬT TOÁN: <span style="font-size:1.2rem; color:#d32f2f;">[${soChot1}]</span> - <span style="font-size:1.2rem; color:#0d47a1;">[${soChot2}]</span>`;
+            vungHienThi.innerHTML = `🔮 DỮ LIỆU ĐƯỢC QUAN TÂM HÔM NAY: <span style="font-size:1.2rem; color:#d32f2f;">[${soChot1}]</span> - <span style="font-size:1.2rem; color:#0d47a1;">[${soChot2}]</span>`;
             bieuTuongNut.disabled = false;
         }
     }, 100);
@@ -1045,11 +1057,61 @@ function chuyenDoiCheDoBanden() {
     else { bodyNode.setAttribute("data-theme", "dark"); nutToggle.innerText = "☀️ Mode"; localStorage.setItem("theme", "dark"); }
 }
 
+const vanBanChinhSach = {
+    'privacy': {
+        tieuDe: 'CHÍNH SÁCH BẢO MẬT',
+        noiDung: `<p>Website Xổ Số Phát Đạt tôn trọng quyền riêng tư của người truy cập và cam kết xử lý thông tin theo hướng minh bạch, an toàn và phù hợp với mục đích vận hành website.</p>
+        <p>Khi người dùng truy cập website, hệ thống có thể tự động ghi nhận một số dữ liệu kỹ thuật cơ bản như địa chỉ IP, loại thiết bị, loại trình duyệt, thời gian truy cập, các trang đã xem và một số thông tin kỹ thuật cần thiết để duy trì hoạt động ổn định của website.</p>
+        <p>Các dữ liệu này có thể được sử dụng để:</p>
+        <ul>
+            <li>Cải thiện tốc độ và hiệu suất website.</li>
+            <li>Phân tích lưu lượng truy cập.</li>
+            <li>Cải thiện trải nghiệm người dùng.</li>
+            <li>Phát hiện và xử lý lỗi kỹ thuật.</li>
+            <li>Nâng cao chất lượng nội dung và dịch vụ.</li>
+        </ul>
+        <p>Website có thể sử dụng cookie hoặc các công nghệ tương tự để ghi nhớ tùy chọn của người dùng, hỗ trợ phân tích lưu lượng và phục vụ hoạt động hiển thị nội dung.</p>
+        <p>Trong trường hợp website sử dụng các dịch vụ của Google như Google Analytics, Google AdSense hoặc các dịch vụ quảng cáo hợp pháp khác, các bên cung cấp dịch vụ có thể sử dụng cookie, địa chỉ IP, web beacon hoặc các mã nhận dạng tương tự nhằm đo lường hiệu quả quảng cáo, phân tích lượt truy cập và cung cấp nội dung quảng cáo phù hợp. Đây cũng là nội dung Google yêu cầu các nhà xuất bản công khai trong chính sách bảo mật. <a href="https://support.google.com/adsense/answer/10502938" target="_blank">[Hỗ trợ Google]</a></p>
+        <p>Google và các nhà cung cấp bên thứ ba có thể sử dụng cookie để hiển thị quảng cáo dựa trên lượt truy cập trước đó của người dùng. Người dùng có thể quản lý tùy chọn quảng cáo cá nhân hóa thông qua phần cài đặt quảng cáo của Google. <a href="https://support.google.com/adsense/answer/1348695" target="_blank">[Hỗ trợ Google]</a></p>
+        <p>Website không chủ động yêu cầu người dùng cung cấp mật khẩu ngân hàng, số thẻ thanh toán hoặc các thông tin tài chính nhạy cảm.</p>
+        <p>Một số nội dung có thể dẫn đến website của bên thứ ba. Chính sách bảo mật của các website bên ngoài có thể khác với website này và người dùng nên tự xem chính sách của từng đơn vị trước khi sử dụng dịch vụ của họ.</p>
+        <p>Chính sách bảo mật có thể được cập nhật khi cần thiết để phù hợp với hoạt động của website và các quy định áp dụng tại từng thời điểm.</p>`
+    },
+    'terms': {
+        tieuDe: 'ĐIỀU KHOẢN SỬ DỤNG',
+        noiDung: `<p>Website Xổ Số Phát Đạt cung cấp nội dung phục vụ mục đích tra cứu thông tin, thống kê dữ liệu, phân tích dữ liệu lịch sử và tham khảo.</p>
+        <p>Các kết quả, số liệu, biểu đồ, tần suất, dữ liệu lịch sử và nội dung phân tích trên website được cung cấp nhằm giúp người dùng thuận tiện hơn trong việc theo dõi và nghiên cứu thông tin.</p>
+        <p>Website luôn cố gắng cập nhật dữ liệu nhanh chóng và chính xác. Tuy nhiên, do dữ liệu có thể được tổng hợp từ các nguồn công khai hoặc dịch vụ của bên thứ ba, website không thể bảo đảm rằng mọi thông tin luôn hoàn toàn không có sai sót tại mọi thời điểm.</p>
+        <p>Người dùng nên đối chiếu với nguồn chính thức khi cần sử dụng thông tin cho mục đích quan trọng.</p>
+        <p>Các dữ liệu về giá vàng, tỷ giá ngoại tệ, giá nhiên liệu và các thông tin kinh tế khác chỉ mang tính tham khảo tại thời điểm cập nhật và có thể thay đổi theo nguồn cung cấp dữ liệu.</p>
+        <p>Website không đưa ra cam kết về kết quả trong tương lai dựa trên bất kỳ dữ liệu thống kê hoặc mô hình phân tích nào.</p>
+        <p>Người dùng tự chịu trách nhiệm đối với việc sử dụng thông tin được cung cấp trên website.</p>
+        <p>Không được sử dụng website để:</p>
+        <ul>
+            <li>Phá hoại hoặc can thiệp vào hoạt động của hệ thống.</li>
+            <li>Phát tán mã độc hoặc nội dung gây hại.</li>
+            <li>Sao chép toàn bộ nội dung nhằm mục đích thương mại khi chưa được phép.</li>
+            <li>Thực hiện các hành vi trái với quy định pháp luật hiện hành.</li>
+        </ul>
+        <p>Website có quyền chỉnh sửa, bổ sung hoặc thay đổi nội dung và chức năng khi cần thiết nhằm cải thiện chất lượng dịch vụ.</p>
+        <p>Việc tiếp tục sử dụng website sau khi các điều khoản được cập nhật được xem là người dùng đã đọc và chấp nhận phiên bản mới.</p>`
+    },
+    'contact': {
+        tieuDe: 'LIÊN HỆ',
+        noiDung: `<p>Nếu bạn cần góp ý, báo lỗi dữ liệu, phản hồi về nội dung hoặc cần hỗ trợ liên quan đến website Xổ Số Phát Đạt, vui lòng liên hệ:</p>
+        <p><strong>Email:</strong> <a href="mailto:ksphanvuthanh@gmail.com">ksphanvuthanh@gmail.com</a></p>
+        <p><strong>Zalo:</strong> 0366179965</p>
+        <p>Chúng tôi sẽ cố gắng phản hồi trong thời gian phù hợp.</p>`
+    }
+};
+
 function moCuaSoChinhSach(loaiChinhSach) {
     let cuonNguon = vanBanChinhSach[loaiChinhSach];
-    document.getElementById("tieu-de-modal").innerText = cuonNguon.tieuDe;
-    document.getElementById("noi-dung-modal").innerHTML = cuonNguon.noiDung;
-    document.getElementById("khung-chinh-sach-modal").style.display = "flex";
+    if (cuonNguon) {
+        document.getElementById("tieu-de-modal").innerText = cuonNguon.tieuDe;
+        document.getElementById("noi-dung-modal").innerHTML = cuonNguon.noiDung;
+        document.getElementById("khung-chinh-sach-modal").style.display = "flex";
+    }
 }
 function dongCuaSoChinhSach() { document.getElementById("khung-chinh-sach-modal").style.display = "none"; }
 
@@ -1126,12 +1188,12 @@ function hienThiDuLieuThiTruong() {
 
     try {
         if (d.gold) {
-            if (d.gold.sjc) document.getElementById('sjc-gia').textContent = `Mua: ${marketGold(d.gold.sjc.buy)} - Bán: ${marketGold(d.gold.sjc.sell)}`;
-            if (d.gold.ring_9999) document.getElementById('nhan-gia').textContent = `Mua: ${marketGold(d.gold.ring_9999.buy)} - Bán: ${marketGold(d.gold.ring_9999.sell)}`;
-            if (d.gold.jewelry_24k) document.getElementById('vang24k-gia').textContent = `Mua: ${marketGold(d.gold.jewelry_24k.buy)} - Bán: ${marketGold(d.gold.jewelry_24k.sell)}`;
+            if (d.gold.sjc) document.getElementById('sjc-gia').innerHTML = `Mua: ${marketGold(d.gold.sjc.buy)}<br>Bán: ${marketGold(d.gold.sjc.sell)}`;
+            if (d.gold.ring_9999) document.getElementById('nhan-gia').innerHTML = `Mua: ${marketGold(d.gold.ring_9999.buy)}<br>Bán: ${marketGold(d.gold.ring_9999.sell)}`;
+            if (d.gold.jewelry_24k) document.getElementById('vang24k-gia').innerHTML = `Mua: ${marketGold(d.gold.jewelry_24k.buy)}<br>Bán: ${marketGold(d.gold.jewelry_24k.sell)}`;
         }
         if (d.usd) {
-            document.getElementById('usd-gia').textContent = `Mua: ${marketNumber(d.usd.buy)} - Bán: ${marketNumber(d.usd.sell)}`;
+            document.getElementById('usd-gia').innerHTML = `Mua: ${marketNumber(d.usd.buy)}<br>Bán: ${marketNumber(d.usd.sell)}`;
         }
         if (d.fuel) {
             document.getElementById('fuel-ron95').textContent = `${marketNumber(d.fuel.e10_ron95_iii)}đ/l`;
