@@ -7,26 +7,26 @@ import requests
 from bs4 import BeautifulSoup
 from collections import defaultdict
 
-# Danh sách mã đài tương ứng với tên hiển thị trên trang XSKT/MinhNgoc
+# Danh sÃ¡ch mÃ£ Ä‘Ã i tÆ°Æ¡ng á»©ng vá»›i tÃªn hiá»ƒn thá»‹ trÃªn trang XSKT/MinhNgoc
 MAP_DAI = {
-    "mb": "Miền Bắc", 
-    "bdi": "Bình Định", "dnang": "Đà Nẵng", "dlk": "Đắk Lắk", "kh": "Khánh Hòa", 
-    "kt": "Kon Tum", "nt": "Ninh Thuận", "py": "Phú Yên", "qnam": "Quảng Nam", 
-    "qngai": "Quảng Ngãi", "qt": "Quảng Trị", "tthue": "Thừa Thiên Huế", "qb": "Quảng Bình", "gl": "Gia Lai", "dno": "Đắk Nông",
-    "ag": "An Giang", "bl": "Bạc Liêu", "bt": "Bến Tre", "bd": "Bình Dương", 
-    "bp": "Bình Phước", "bth": "Bình Thuận", "cmau": "Cà Mau", "ctho": "Cần Thơ", 
-    "dl": "Đà Lạt", "dn": "Đồng Nai", "dthap": "Đồng Tháp", "hg": "Hậu Giang", 
-    "la": "Long An", "st": "Sóc Trăng", "tn": "Tây Ninh", "tg": "Tiền Giang", 
-    "hcm": "TP. HCM", "tv": "Trà Vinh", "vl": "Vĩnh Long", "vt": "Vũng Tàu", "kg": "Kiên Giang"
+    "mb": "Miá»n Báº¯c", 
+    "bdi": "BÃ¬nh Äá»‹nh", "dnang": "ÄÃ  Náºµng", "dlk": "Äáº¯k Láº¯k", "kh": "KhÃ¡nh HÃ²a", 
+    "kt": "Kon Tum", "nt": "Ninh Thuáº­n", "py": "PhÃº YÃªn", "qnam": "Quáº£ng Nam", 
+    "qngai": "Quáº£ng NgÃ£i", "qt": "Quáº£ng Trá»‹", "tthue": "Thá»«a ThiÃªn Huáº¿", "qb": "Quáº£ng BÃ¬nh", "gl": "Gia Lai", "dno": "Äáº¯k NÃ´ng",
+    "ag": "An Giang", "bl": "Báº¡c LiÃªu", "bt": "Báº¿n Tre", "bd": "BÃ¬nh DÆ°Æ¡ng", 
+    "bp": "BÃ¬nh PhÆ°á»›c", "bth": "BÃ¬nh Thuáº­n", "cmau": "CÃ  Mau", "ctho": "Cáº§n ThÆ¡", 
+    "dl": "ÄÃ  Láº¡t", "dn": "Äá»“ng Nai", "dthap": "Äá»“ng ThÃ¡p", "hg": "Háº­u Giang", 
+    "la": "Long An", "st": "SÃ³c TrÄƒng", "tn": "TÃ¢y Ninh", "tg": "Tiá»n Giang", 
+    "hcm": "TP. HCM", "tv": "TrÃ  Vinh", "vl": "VÄ©nh Long", "vt": "VÅ©ng TÃ u", "kg": "KiÃªn Giang"
 }
 
-# Ánh xạ tên để dễ tìm kiếm
+# Ãnh xáº¡ tÃªn Ä‘á»ƒ dá»… tÃ¬m kiáº¿m
 ALIASES = {
-    "tp. hcm": "hcm", "hồ chí minh": "hcm", "tphcm": "hcm", "tp hcm": "hcm",
-    "đà lạt": "dl", "da lat": "dl",
-    "bà rịa vũng tàu": "vt", "vũng tàu": "vt",
-    "thừa t. huế": "tthue", "thừa thiên huế": "tthue", "tt huế": "tthue",
-    "miền bắc": "mb", "truyền thống": "mb"
+    "tp. hcm": "hcm", "há»“ chÃ­ minh": "hcm", "tphcm": "hcm", "tp hcm": "hcm",
+    "Ä‘Ã  láº¡t": "dl", "da lat": "dl",
+    "bÃ  rá»‹a vÅ©ng tÃ u": "vt", "vÅ©ng tÃ u": "vt",
+    "thá»«a t. huáº¿": "tthue", "thá»«a thiÃªn huáº¿": "tthue", "tt huáº¿": "tthue",
+    "miá»n báº¯c": "mb", "truyá»n thá»‘ng": "mb"
 }
 
 def normalize_name(name):
@@ -41,7 +41,7 @@ def normalize_name(name):
 
 def crawl_xskt_today_full_results():
     """
-    Cào toàn bộ dãy số đầy đủ của các đài quay trong ngày hôm nay.
+    CÃ o toÃ n bá»™ dÃ£y sá»‘ Ä‘áº§y Ä‘á»§ cá»§a cÃ¡c Ä‘Ã i quay trong ngÃ y hÃ´m nay.
     """
     session = requests.Session()
     session.headers.update({
@@ -49,7 +49,7 @@ def crawl_xskt_today_full_results():
     })
     
     db = defaultdict(dict)
-    print("Bắt đầu cào dữ liệu dãy số hôm nay...")
+    print("Báº¯t Ä‘áº§u cÃ o dá»¯ liá»‡u dÃ£y sá»‘ hÃ´m nay...")
     
     for mien in ["xsmb", "xsmt", "xsmn"]:
         url = f"https://xskt.com.vn/{mien}"
@@ -61,6 +61,11 @@ def crawl_xskt_today_full_results():
             
             for table in soup.find_all('table'):
                 if 'id' in table.attrs and ('MB0' in table['id'] or 'MT0' in table['id'] or 'MN0' in table['id']):
+                    table_text = table.get_text()
+                    today_short = f"{datetime.date.today().day:02d}/{datetime.date.today().month:02d}"
+                    if today_short not in table_text:
+                        continue # Bỏ qua bảng này vì nó là dữ liệu của ngày trước đó (chưa tới giờ xổ hôm nay)
+                        
                     trs = table.find_all('tr')
                     dais = ["mb"] if mien == "xsmb" else []
                     if mien != "xsmb":
@@ -71,17 +76,17 @@ def crawl_xskt_today_full_results():
                     for tr in trs[1:]:
                         tds = tr.find_all('td')
                         if len(tds) < 2: continue
-                        # Đổi tên giải cho ngắn gọn, vd: "Giải Bảy" -> "G7", "Đặc biệt" -> "ĐB"
-                        ten_giai = tds[0].get_text(" ", strip=True).replace("Giải ", "G").replace("Đặc biệt", "ĐB")
-                        if ten_giai == "GĐB": ten_giai = "ĐB"
+                        # Äá»•i tÃªn giáº£i cho ngáº¯n gá»n, vd: "Giáº£i Báº£y" -> "G7", "Äáº·c biá»‡t" -> "ÄB"
+                        ten_giai = tds[0].get_text(" ", strip=True).replace("Giáº£i ", "G").replace("Äáº·c biá»‡t", "ÄB")
+                        if ten_giai == "GÄB": ten_giai = "ÄB"
                         
                         for idx, td in enumerate(tds[1:]):
                             if idx < len(dais) and dais[idx]:
-                                # Lấy các số trong ô, cách nhau bởi ' - '
+                                # Láº¥y cÃ¡c sá»‘ trong Ã´, cÃ¡ch nhau bá»Ÿi ' - '
                                 nums_str = td.get_text(" - ", strip=True)
                                 db[dais[idx]][ten_giai] = nums_str
         except Exception as e:
-            print(f"Lỗi khi cào {url}: {e}")
+            print(f"Lá»—i khi cÃ o {url}: {e}")
             
     today_str = f"{datetime.date.today().day:02d}/{datetime.date.today().month:02d}/{datetime.date.today().year}"
     for code, result in db.items():
@@ -91,33 +96,33 @@ def crawl_xskt_today_full_results():
 
 def extract_2_digits(text):
     import re
-    # Tìm các cụm số
+    # TÃ¬m cÃ¡c cá»¥m sá»‘
     tokens = re.findall(r'\b\d+\b', text)
-    # Trả về 2 số cuối của mỗi cụm số nếu nó có độ dài hợp lệ của KQXS (>=2)
+    # Tráº£ vá» 2 sá»‘ cuá»‘i cá»§a má»—i cá»¥m sá»‘ náº¿u nÃ³ cÃ³ Ä‘á»™ dÃ i há»£p lá»‡ cá»§a KQXS (>=2)
     return [t[-2:] for t in tokens if len(t) >= 2]
 
 def crawl_xskt_history(days=95):
     """
-    Cào dữ liệu 95 ngày gần nhất từ xskt.com.vn cho cả 3 miền
+    CÃ o dá»¯ liá»‡u 95 ngÃ y gáº§n nháº¥t tá»« xskt.com.vn cho cáº£ 3 miá»n
     """
     session = requests.Session()
     session.headers.update({
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
     })
     
-    # Cấu trúc lưu trữ: db[code_dai][ngay] = [danh_sach_2_so_cuoi]
+    # Cáº¥u trÃºc lÆ°u trá»¯: db[code_dai][ngay] = [danh_sach_2_so_cuoi]
     db = defaultdict(lambda: defaultdict(list))
     db_ket_qua = defaultdict(list)
     
     today = datetime.date.today()
     
-    print(f"Bắt đầu cào dữ liệu {days} ngày...")
+    print(f"Báº¯t Ä‘áº§u cÃ o dá»¯ liá»‡u {days} ngÃ y...")
     
     for i in range(days):
         d = today - datetime.timedelta(days=i)
         date_str = f"{d.day}-{d.month}-{d.year}"
         
-        # Cào 3 miền
+        # CÃ o 3 miá»n
         for mien in ["xsmb", "xsmt", "xsmn"]:
             url = f"https://xskt.com.vn/{mien}/ngay-{date_str}"
             try:
@@ -129,12 +134,12 @@ def crawl_xskt_history(days=95):
                 tables = soup.find_all('table')
                 for table in tables:
                     if 'id' in table.attrs and ('MB0' in table['id'] or 'MT0' in table['id'] or 'MN0' in table['id']):
-                        # Đây là bảng kết quả chính
+                        # ÄÃ¢y lÃ  báº£ng káº¿t quáº£ chÃ­nh
                         trs = table.find_all('tr')
-                        # Lấy danh sách đài trong ngày từ thẻ th
+                        # Láº¥y danh sÃ¡ch Ä‘Ã i trong ngÃ y tá»« tháº» th
                         dais_in_table = []
                         if mien == "xsmb":
-                            dais_in_table = ["mb"] # Miền bắc mặc định
+                            dais_in_table = ["mb"] # Miá»n báº¯c máº·c Ä‘á»‹nh
                         else:
                             ths = trs[0].find_all('th')
                             for th in ths[1:]:
@@ -142,16 +147,16 @@ def crawl_xskt_history(days=95):
                                 code = normalize_name(txt)
                                 dais_in_table.append(code)
                         
-                        # Duyệt các hàng giải thưởng
+                        # Duyá»‡t cÃ¡c hÃ ng giáº£i thÆ°á»Ÿng
                         for tr in trs[1:]:
                             tds = tr.find_all('td')
                             if len(tds) < 2:
                                 continue
                             
-                            ten_giai = tds[0].get_text(" ", strip=True).replace("Giải ", "G").replace("Đặc biệt", "ĐB")
-                            if ten_giai == "GĐB": ten_giai = "ĐB"
+                            ten_giai = tds[0].get_text(" ", strip=True).replace("Giáº£i ", "G").replace("Äáº·c biá»‡t", "ÄB")
+                            if ten_giai == "GÄB": ten_giai = "ÄB"
                             
-                            # Cột 0 là tên giải, các cột tiếp theo là số trúng của các đài
+                            # Cá»™t 0 lÃ  tÃªn giáº£i, cÃ¡c cá»™t tiáº¿p theo lÃ  sá»‘ trÃºng cá»§a cÃ¡c Ä‘Ã i
                             for idx, td in enumerate(tds[1:]):
                                 if idx < len(dais_in_table) and dais_in_table[idx]:
                                     code = dais_in_table[idx]
@@ -164,25 +169,25 @@ def crawl_xskt_history(days=95):
                                             db_ket_qua[code].append({'ngay': ngay_format})
                                         db_ket_qua[code][-1][ten_giai] = td.get_text(" - ", strip=True)
             except Exception as e:
-                print(f"Lỗi khi cào {url}: {e}")
+                print(f"Lá»—i khi cÃ o {url}: {e}")
         
-        time.sleep(0.2) # Tránh bị chặn
+        time.sleep(0.2) # TrÃ¡nh bá»‹ cháº·n
         
         if (i+1) % 10 == 0:
-            print(f"Đã cào {i+1}/{days} ngày...")
+            print(f"ÄÃ£ cÃ o {i+1}/{days} ngÃ y...")
 
-    # Chuyển đổi cấu trúc db thành list theo từng đài
+    # Chuyá»ƒn Ä‘á»•i cáº¥u trÃºc db thÃ nh list theo tá»«ng Ä‘Ã i
     final_db = {}
     for code in MAP_DAI.keys():
-        # Sắp xếp ngày giảm dần
+        # Sáº¯p xáº¿p ngÃ y giáº£m dáº§n
         daily_lists = []
         for i in range(days):
             d = today - datetime.timedelta(days=i)
             date_str = f"{d.day}-{d.month}-{d.year}"
-            if date_str in db[code] and len(db[code][date_str]) >= 16: # Ít nhất 16 giải
+            if date_str in db[code] and len(db[code][date_str]) >= 16: # Ãt nháº¥t 16 giáº£i
                 daily_lists.append(db[code][date_str])
         
-        # Nếu đài không có dữ liệu thực tế (do xskt không đủ hoặc lỗi), sinh giả lập để fallback
+        # Náº¿u Ä‘Ã i khÃ´ng cÃ³ dá»¯ liá»‡u thá»±c táº¿ (do xskt khÃ´ng Ä‘á»§ hoáº·c lá»—i), sinh giáº£ láº­p Ä‘á»ƒ fallback
         if len(daily_lists) < 7:
             daily_lists = fallback_gia_lap(95)
             
@@ -198,10 +203,10 @@ def fallback_gia_lap(moc_ky=95):
     return lich_su_ky
 
 def tinh_toan_xac_suat_thong_ke(lich_su_giai, so_ky):
-    # Lọc lấy chính xác số lượng kỳ quay cần phân tích
+    # Lá»c láº¥y chÃ­nh xÃ¡c sá»‘ lÆ°á»£ng ká»³ quay cáº§n phÃ¢n tÃ­ch
     du_lieu_loc = lich_su_giai[:so_ky]
     
-    # 1. THUẬT TOÁN ĐẾM BIÊN ĐỘ XUẤT HIỆN
+    # 1. THUáº¬T TOÃN Äáº¾M BIÃŠN Äá»˜ XUáº¤T HIá»†N
     tat_ca_so = [so for ky in du_lieu_loc for so in ky]
     dem_so = {f"{i:02d}": 0 for i in range(100)}
     for so in tat_ca_so:
@@ -211,7 +216,7 @@ def tinh_toan_xac_suat_thong_ke(lich_su_giai, so_ky):
     danh_sach_ve = sorted(dem_so.items(), key=lambda x: x[1], reverse=True)
     top_7_ve = [{"s": so, "l": lan} for so, lan in danh_sach_ve[:7]]
     
-    # 2. THUẬT TOÁN ĐẾM CHU KỲ KHAN (SỐ NGÀY VẮNG MẶT)
+    # 2. THUáº¬T TOÃN Äáº¾M CHU Ká»² KHAN (Sá» NGÃ€Y Váº®NG Máº¶T)
     dem_gan = {}
     for i in range(100):
         so_tim = f"{i:02d}"
@@ -229,7 +234,7 @@ def tinh_toan_xac_suat_thong_ke(lich_su_giai, so_ky):
     return {"ve_nhieu": top_7_ve, "chua_ve": top_7_gan}
 
 def lay_thong_tin_kinh_te():
-    # Giá mặc định phòng khi rớt mạng (Giá mới nhất ngày 26/09/2026)
+    # GiÃ¡ máº·c Ä‘á»‹nh phÃ²ng khi rá»›t máº¡ng (GiÃ¡ má»›i nháº¥t ngÃ y 26/09/2026)
     kq = {
         "sjc_mua": "85.50", "sjc_ban": "87.50",
         "nhan_mua": "84.10", "nhan_ban": "85.10",
@@ -239,7 +244,7 @@ def lay_thong_tin_kinh_te():
     }
     
     headers = {"User-Agent": "Mozilla/5.0"}
-    # Sử dụng Gemini API (User Provided Key) để lấy giá vàng, xăng dầu và USD
+    # Sá»­ dá»¥ng Gemini API (User Provided Key) Ä‘á»ƒ láº¥y giÃ¡ vÃ ng, xÄƒng dáº§u vÃ  USD
     api_key = "AQ.Ab8RN6KuB3efkMcUeIGlvnB-SOM56bLRKP8r28Ph6AW4rKoF2A"
     
     gemini_success = False
@@ -247,10 +252,10 @@ def lay_thong_tin_kinh_te():
         import urllib.request
         import json
         url = f'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}'
-        prompt = """Bạn là chuyên gia tài chính. Hãy tìm giá vàng, USD và xăng dầu Petrolimex mới nhất hôm nay tại Việt Nam.
-Trả về DUY NHẤT một chuỗi JSON chuẩn (không có markdown code block, không có text dư thừa), định dạng:
+        prompt = """Báº¡n lÃ  chuyÃªn gia tÃ i chÃ­nh. HÃ£y tÃ¬m giÃ¡ vÃ ng, USD vÃ  xÄƒng dáº§u Petrolimex má»›i nháº¥t hÃ´m nay táº¡i Viá»‡t Nam.
+Tráº£ vá» DUY NHáº¤T má»™t chuá»—i JSON chuáº©n (khÃ´ng cÃ³ markdown code block, khÃ´ng cÃ³ text dÆ° thá»«a), Ä‘á»‹nh dáº¡ng:
 {"sjc_mua": "141.40", "sjc_ban": "144.40", "nhan_mua": "140.90", "nhan_ban": "143.90", "vang24k_mua": "140.40", "vang24k_ban": "143.40", "usd_mua": "25,160", "usd_ban": "25,520", "ron95": "20,510", "e5ron92": "19,620", "do005s": "17,500"}
-Lưu ý: SJC phải cao nhất > 9999 > 24K."""
+LÆ°u Ã½: SJC pháº£i cao nháº¥t > 9999 > 24K."""
         
         data = {"contents": [{"parts": [{"text": prompt}]}]}
         req = urllib.request.Request(url, data=json.dumps(data).encode('utf-8'), headers={'Content-Type': 'application/json'})
@@ -258,7 +263,7 @@ Lưu ý: SJC phải cao nhất > 9999 > 24K."""
             res = json.loads(f.read().decode('utf-8'))
             text_response = res['candidates'][0]['content']['parts'][0]['text']
             
-            # Xử lý text trả về (có thể có chứa markdown)
+            # Xá»­ lÃ½ text tráº£ vá» (cÃ³ thá»ƒ cÃ³ chá»©a markdown)
             text_response = text_response.strip().replace('```json', '').replace('```', '')
             gemini_data = json.loads(text_response)
             
@@ -275,17 +280,17 @@ Lưu ý: SJC phải cao nhất > 9999 > 24K."""
             kq["do005s"] = gemini_data.get("do005s", kq["do005s"])
             
             gemini_success = True
-            print("✅ Đã lấy dữ liệu giá vàng, USD và xăng dầu thành công từ Gemini API!")
+            print("âœ… ÄÃ£ láº¥y dá»¯ liá»‡u giÃ¡ vÃ ng, USD vÃ  xÄƒng dáº§u thÃ nh cÃ´ng tá»« Gemini API!")
     except Exception as e:
-        print(f"⚠️ Lỗi kết nối Gemini API ({e}). Đang chuyển sang hệ thống AI mô phỏng nội bộ dự phòng...")
+        print(f"âš ï¸ Lá»—i káº¿t ná»‘i Gemini API ({e}). Äang chuyá»ƒn sang há»‡ thá»‘ng AI mÃ´ phá»ng ná»™i bá»™ dá»± phÃ²ng...")
         
     if not gemini_success:
-        # HỆ THỐNG MÔ PHỎNG DỰ PHÒNG NẾU API LỖI/HẾT HẠN
+        # Há»† THá»NG MÃ” PHá»ŽNG Dá»° PHÃ’NG Náº¾U API Lá»–I/Háº¾T Háº N
         import datetime, random
         now = datetime.datetime.now()
         random.seed(now.year * 10000 + now.month * 100 + now.day + now.hour) 
         
-        # Vàng
+        # VÃ ng
         base_sjc_mua = 141.40
         base_sjc_ban = 144.40
         bien_do = round(random.uniform(-0.3, 0.3), 2)
@@ -310,7 +315,7 @@ Lưu ý: SJC phải cao nhất > 9999 > 24K."""
         kq["usd_mua"] = f"{(base_usd_mua + usd_bien_do):,}"
         kq["usd_ban"] = f"{(base_usd_ban + usd_bien_do):,}"
         
-        # Xăng dầu
+        # XÄƒng dáº§u
         base_ron95 = 20510
         base_e5 = 19620
         base_do = 17500
@@ -320,7 +325,7 @@ Lưu ý: SJC phải cao nhất > 9999 > 24K."""
         kq["do005s"] = f"{(base_do + xang_bien_do):,}"
                     
     try:
-        # Lấy tỷ giá USD từ Vietcombank XML
+        # Láº¥y tá»· giÃ¡ USD tá»« Vietcombank XML
         r_usd = requests.get("https://portal.vietcombank.com.vn/Usercontrols/TVPortal.TyGia/pXML.aspx", headers=headers, timeout=10)
         if r_usd.status_code == 200:
             import xml.etree.ElementTree as ET
@@ -333,27 +338,27 @@ Lưu ý: SJC phải cao nhất > 9999 > 24K."""
     except: pass
     
     try:
-        # Cào giá Xăng dầu (Từ nguồn api tĩnh hoặc web nếu có) - Ở đây dùng web scraping cơ bản
+        # CÃ o giÃ¡ XÄƒng dáº§u (Tá»« nguá»“n api tÄ©nh hoáº·c web náº¿u cÃ³) - á»ž Ä‘Ã¢y dÃ¹ng web scraping cÆ¡ báº£n
         r_xang = requests.get("https://giaxang.com/", headers=headers, timeout=5)
         if r_xang.status_code == 200:
             soup = BeautifulSoup(r_xang.text, "html.parser")
-            # Trích xuất giá RON 95, E5, DO (nếu tìm thấy, sẽ cập nhật vào biến kq)
-            # Mã cào tùy thuộc cấu trúc trang, dùng try-catch để an toàn
+            # TrÃ­ch xuáº¥t giÃ¡ RON 95, E5, DO (náº¿u tÃ¬m tháº¥y, sáº½ cáº­p nháº­t vÃ o biáº¿n kq)
+            # MÃ£ cÃ o tÃ¹y thuá»™c cáº¥u trÃºc trang, dÃ¹ng try-catch Ä‘á»ƒ an toÃ n
     except: pass
         
     return kq
 
 def van_hanh_cap_nhat_he_thong():
-    print("🤖 Robot Python đang cào dữ liệu thật từ XSKT...")
+    print("ðŸ¤– Robot Python Ä‘ang cÃ o dá»¯ liá»‡u tháº­t tá»« XSKT...")
     
     cac_moc_ky = [7, 15, 30, 60, 90]
     db_ket_qua_tong_hop = {}
     
-    # 1. Cào dữ liệu xác suất và kết quả hôm nay
+    # 1. CÃ o dá»¯ liá»‡u xÃ¡c suáº¥t vÃ  káº¿t quáº£ hÃ´m nay
     lich_su_all_dai, db_ket_qua_history = crawl_xskt_history(95)
     db_ket_qua_hom_nay = crawl_xskt_today_full_results()
     
-    # Trộn kết quả hôm nay vào lịch sử 30 ngày
+    # Trá»™n káº¿t quáº£ hÃ´m nay vÃ o lá»‹ch sá»­ 30 ngÃ y
     today_str = f"{datetime.date.today().day:02d}/{datetime.date.today().month:02d}/{datetime.date.today().year}"
     for code, result in db_ket_qua_hom_nay.items():
         if code not in db_ket_qua_history:
@@ -364,22 +369,22 @@ def van_hanh_cap_nhat_he_thong():
             else:
                 db_ket_qua_history[code].insert(0, result)
     
-    # 2. Xử lý thuật toán xác suất
+    # 2. Xá»­ lÃ½ thuáº­t toÃ¡n xÃ¡c suáº¥t
     for dai, lich_su_dai in lich_su_all_dai.items():
         db_ket_qua_tong_hop[dai] = {}
         for ky in cac_moc_ky:
             db_ket_qua_tong_hop[dai][str(ky)] = tinh_toan_xac_suat_thong_ke(lich_su_dai, ky)
             
-    # Đóng gói ma trận thành chuỗi văn bản JSON
+    # ÄÃ³ng gÃ³i ma tráº­n thÃ nh chuá»—i vÄƒn báº£n JSON
     json_string_xs = json.dumps(db_ket_qua_tong_hop, ensure_ascii=False, separators=(',', ':'))
     json_string_kq = json.dumps(db_ket_qua_history, ensure_ascii=False, separators=(',', ':'))
     
     data_js_inject = f"const dbXacSuat = {json_string_xs};\nconst dbKetQua = {json_string_kq};"
     
-    # Thu thập dữ liệu thông tin kinh tế thực tế
+    # Thu tháº­p dá»¯ liá»‡u thÃ´ng tin kinh táº¿ thá»±c táº¿
     kinh_te = lay_thong_tin_kinh_te()
     
-    # TIẾN HÀNH DÒ TÌM VÀ GHI ĐÈ ĐỒNG BỘ VÀO FILE FRONT-END HTML
+    # TIáº¾N HÃ€NH DÃ’ TÃŒM VÃ€ GHI ÄÃˆ Äá»’NG Bá»˜ VÃ€O FILE FRONT-END HTML
     file_path = "index.html"
     if os.path.exists(file_path):
         with open(file_path, "r", encoding="utf-8") as file:
@@ -398,26 +403,26 @@ def van_hanh_cap_nhat_he_thong():
                 content[end_idx:]
             )
             
-            # Cập nhật thông tin kinh tế
+            # Cáº­p nháº­t thÃ´ng tin kinh táº¿
             import re
-            new_content = re.sub(r'id="sjc-gia"[^>]*>Mua: [\d.]+ - Bán: [\d.]+', f'id="sjc-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: {kinh_te["sjc_mua"]} - Bán: {kinh_te["sjc_ban"]}', new_content)
-            new_content = re.sub(r'id="nhan-gia"[^>]*>Mua: [\d.]+ - Bán: [\d.]+', f'id="nhan-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: {kinh_te["nhan_mua"]} - Bán: {kinh_te["nhan_ban"]}', new_content)
-            new_content = re.sub(r'id="vang24k-gia"[^>]*>Mua: [\d.]+ - Bán: [\d.]+', f'id="vang24k-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: {kinh_te["vang24k_mua"]} - Bán: {kinh_te["vang24k_ban"]}', new_content)
-            new_content = re.sub(r'id="usd-gia"[^>]*>Mua: [\d,]+ - Bán: [\d,]+', f'id="usd-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: {kinh_te["usd_mua"]} - Bán: {kinh_te["usd_ban"]}', new_content)
+            new_content = re.sub(r'id="sjc-gia"[^>]*>Mua: [\d.]+ - BÃ¡n: [\d.]+', f'id="sjc-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: {kinh_te["sjc_mua"]} - BÃ¡n: {kinh_te["sjc_ban"]}', new_content)
+            new_content = re.sub(r'id="nhan-gia"[^>]*>Mua: [\d.]+ - BÃ¡n: [\d.]+', f'id="nhan-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: {kinh_te["nhan_mua"]} - BÃ¡n: {kinh_te["nhan_ban"]}', new_content)
+            new_content = re.sub(r'id="vang24k-gia"[^>]*>Mua: [\d.]+ - BÃ¡n: [\d.]+', f'id="vang24k-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: {kinh_te["vang24k_mua"]} - BÃ¡n: {kinh_te["vang24k_ban"]}', new_content)
+            new_content = re.sub(r'id="usd-gia"[^>]*>Mua: [\d,]+ - BÃ¡n: [\d,]+', f'id="usd-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: {kinh_te["usd_mua"]} - BÃ¡n: {kinh_te["usd_ban"]}', new_content)
             
-            # Cập nhật xăng dầu
-            new_content = re.sub(r'RON 95-III:</b> [\d,]+đ/l', f'RON 95-III:</b> {kinh_te["ron95"]}đ/l', new_content)
-            new_content = re.sub(r'E5 RON 92:</b> [\d,]+đ/l', f'E5 RON 92:</b> {kinh_te["e5ron92"]}đ/l', new_content)
-            new_content = re.sub(r'DO 0,05S:</b> [\d,]+đ/l', f'DO 0,05S:</b> {kinh_te["do005s"]}đ/l', new_content)
+            # Cáº­p nháº­t xÄƒng dáº§u
+            new_content = re.sub(r'RON 95-III:</b> [\d,]+Ä‘/l', f'RON 95-III:</b> {kinh_te["ron95"]}Ä‘/l', new_content)
+            new_content = re.sub(r'E5 RON 92:</b> [\d,]+Ä‘/l', f'E5 RON 92:</b> {kinh_te["e5ron92"]}Ä‘/l', new_content)
+            new_content = re.sub(r'DO 0,05S:</b> [\d,]+Ä‘/l', f'DO 0,05S:</b> {kinh_te["do005s"]}Ä‘/l', new_content)
             
             with open(file_path, "w", encoding="utf-8") as file:
                 file.write(new_content)
             
-            print("✅ Thành công: Hệ thống ma trận dữ liệu đã được đồng bộ hóa sạch sẽ!")
+            print("âœ… ThÃ nh cÃ´ng: Há»‡ thá»‘ng ma tráº­n dá»¯ liá»‡u Ä‘Ã£ Ä‘Æ°á»£c Ä‘á»“ng bá»™ hÃ³a sáº¡ch sáº½!")
         else:
-            print("❌ Lỗi: Thẻ cấu trúc ẩn ngầm bị thay đổi hoặc không tìm thấy.")
+            print("âŒ Lá»—i: Tháº» cáº¥u trÃºc áº©n ngáº§m bá»‹ thay Ä‘á»•i hoáº·c khÃ´ng tÃ¬m tháº¥y.")
     else:
-        print("❌ Lỗi: Không tìm thấy file index.html nằm chung trong thư mục.")
+        print("âŒ Lá»—i: KhÃ´ng tÃ¬m tháº¥y file index.html náº±m chung trong thÆ° má»¥c.")
 
 if __name__ == "__main__":
     van_hanh_cap_nhat_he_thong()
