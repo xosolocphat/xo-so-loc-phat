@@ -12,12 +12,12 @@ MAP_DAI = {
     "mb": "Miền Bắc", 
     "bdi": "Bình Định", "dnang": "Đà Nẵng", "dlk": "Đắk Lắk", "kh": "Khánh Hòa", 
     "kt": "Kon Tum", "nt": "Ninh Thuận", "py": "Phú Yên", "qnam": "Quảng Nam", 
-    "qngai": "Quảng Ngãi", "qt": "Quảng Trị", "tthue": "Thừa Thiên Huế", 
+    "qngai": "Quảng Ngãi", "qt": "Quảng Trị", "tthue": "Thừa Thiên Huế", "qb": "Quảng Bình", "gl": "Gia Lai", "dno": "Đắk Nông",
     "ag": "An Giang", "bl": "Bạc Liêu", "bt": "Bến Tre", "bd": "Bình Dương", 
     "bp": "Bình Phước", "bth": "Bình Thuận", "cmau": "Cà Mau", "ctho": "Cần Thơ", 
     "dl": "Đà Lạt", "dn": "Đồng Nai", "dthap": "Đồng Tháp", "hg": "Hậu Giang", 
     "la": "Long An", "st": "Sóc Trăng", "tn": "Tây Ninh", "tg": "Tiền Giang", 
-    "hcm": "TP. HCM", "tv": "Trà Vinh", "vl": "Vĩnh Long", "vt": "Vũng Tàu"
+    "hcm": "TP. HCM", "tv": "Trà Vinh", "vl": "Vĩnh Long", "vt": "Vũng Tàu", "kg": "Kiên Giang"
 }
 
 # Ánh xạ tên để dễ tìm kiếm
