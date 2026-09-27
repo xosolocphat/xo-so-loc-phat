@@ -83,8 +83,8 @@
 
         /* LƯỚT NGANG 2 HÀNG ĐÀI ĐỐI XỨNG CẤT NỬA NÚT */
         .danh-sach-dai-scroll { 
-            display: grid; grid-template-rows: repeat(2, auto); grid-auto-flow: column; grid-auto-columns: 23%; 
-            gap: 4px; overflow-x: auto; scroll-behavior: smooth; padding-bottom: 4px; padding-top: 4px; -webkit-overflow-scrolling: touch;
+            display: grid; grid-template-rows: repeat(2, auto); grid-auto-flow: column; grid-auto-columns: 31%; 
+            gap: 6px; overflow-x: auto; scroll-behavior: smooth; padding-bottom: 4px; padding-top: 4px; -webkit-overflow-scrolling: touch;
         }
         .danh-sach-dai-scroll::-webkit-scrollbar { display: none; }
 
@@ -182,7 +182,7 @@
         @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
         @media (min-width: 600px) {
             .xo-so-container { max-width: 650px; padding: 15px; margin: 15px auto; }
-            .danh-sach-dai-scroll { grid-auto-columns: 23%; }
+            .danh-sach-dai-scroll { grid-auto-columns: 31%; }
         }
 </style>
 </head>
@@ -689,7 +689,7 @@ function renderBangChung(danhSachCot, highlightSo = null) {
             }
             let cellWidth = 100 / danhSachCot.length;
             let colId = `col-${cot.codeDai}-${cot.ngay.replace(/\//g, '')}`;
-            theadHtml += `<th id="${colId}" class="col-header-${cot.codeDai}" style="width: ${cellWidth}%; text-align: center; font-size: ${headFontSize}; color: #cc0000; padding: 5px 1px; background: linear-gradient(to bottom, #ffffff, #fdfdfd); border-bottom: 2px solid #0056b3; border-right: 1px solid #eaeaea; box-shadow: inset 0 -1px 0 rgba(0,0,0,0.05);">
+            theadHtml += `<th id="${colId}" class="col-header-${cot.codeDai}" style="width: ${cellWidth}%; min-width: 78px; text-align: center; font-size: ${headFontSize}; color: #cc0000; padding: 5px 1px; background: linear-gradient(to bottom, #ffffff, #fdfdfd); border-bottom: 2px solid #0056b3; border-right: 1px solid #eaeaea; box-shadow: inset 0 -1px 0 rgba(0,0,0,0.05); cursor: pointer;" onclick="bamChonDai('', '${cot.codeDai}', null)">
                 <div style="font-size: ${headFontSize}; font-weight: bold; text-transform: uppercase;">${tenDaiText}</div>
                 <div class="ngay-header" style="font-size: ${dateFontSize}; font-weight: normal; color: #666; margin-top: 2px;">${cot.ngay}</div>
             </th>`;
@@ -778,7 +778,7 @@ function renderBangChung(danhSachCot, highlightSo = null) {
     
     toolbarHtml += `</div></td></tr>`;
 
-    let html = `<table class="bang-kqxs-unified" style="table-layout: fixed; width: 100%; border-collapse: separate; border-spacing: 0; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #0056b3;">
+    let html = `<table class="bang-kqxs-unified" style="table-layout: fixed; width: 100%; min-width: max-content; border-collapse: separate; border-spacing: 0; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #0056b3;">
         <thead>${theadHtml}</thead>
         <tbody>${tbodyHtml}${toolbarHtml}</tbody>
     </table>`;
@@ -867,7 +867,12 @@ function highlightDayColumn(codeDai, ngay) {
 
 function bamChonDai(linkIframe, codeDai, element) {
     document.querySelectorAll('.btn-dai').forEach(b => b.classList.remove('active'));
-    if(element) element.classList.add('active');
+    if(element) {
+        element.classList.add('active');
+    } else {
+        let btn = document.getElementById('btn-' + codeDai);
+        if (btn) btn.classList.add('active');
+    }
     
     daiHienTai = codeDai;
     renderKetQuaNative(codeDai);
