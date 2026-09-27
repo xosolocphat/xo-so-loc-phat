@@ -80,6 +80,7 @@
         .tab-bac { background: linear-gradient(to bottom, #f44336, #c62828); border-bottom: 4px solid #b71c1c; }
         .tab-trung { background: linear-gradient(to bottom, #2196f3, #1565c0); border-bottom: 4px solid #0d47a1; }
         .tab-nam { background: linear-gradient(to bottom, #4caf50, #2e7d32); border-bottom: 4px solid #1b5e20; }
+        .tab-vietlott { background: linear-gradient(to bottom, #9c27b0, #6a1b9a); border-bottom: 4px solid #4a148c; }
 
         /* LƯỚT NGANG 2 HÀNG ĐÀI ĐỐI XỨNG CẤT NỬA NÚT */
         .danh-sach-dai-scroll { 
@@ -232,7 +233,7 @@
   
   <div id="khung-truc-tiep" style="display: none; margin-top: 15px; position: relative; width: 100%; border: 2px solid #d32f2f; border-radius: 8px; background: #fff; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
     <div style="background: linear-gradient(135deg, #d32f2f, #b71c1c); padding: 8px; display: flex; justify-content: space-between; align-items: center;">
-        <span style="color: white; font-weight: bold; font-size: 0.82rem;">🔴 TRỰC TIẾP MINH NGỌC</span>
+        <span id="tieu-de-iframe" style="color: white; font-weight: bold; font-size: 0.82rem;">🔴 TRỰC TIẾP XSKT</span>
         <button onclick="dongTrucTiep()" style="background: white; color: #d32f2f; border: none; padding: 4px 12px; font-weight: bold; cursor: pointer; border-radius: 4px; font-size: 0.7rem; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">❌ ĐÓNG LẠI</button>
     </div>
     <iframe id="iframe-truc-tiep" src="" width="100%" height="700px" frameborder="0" style="display: block;"></iframe>
@@ -553,24 +554,30 @@ function apDungCauHinhVungMien(mienUuTien) {
         blockTrung.style.display = "none";
         blockNam.style.display = "block";
         tabsPhu.style.display = "grid";
+        tabsPhu.style.gridTemplateColumns = "repeat(3, 1fr)";
         tabsPhu.innerHTML = `<button class="tab-ngang-btn tab-bac" onclick="bamMoTabHanhChinh('bac')">⭐ XEM MIỀN BẮC ❯</button>
-                             <button class="tab-ngang-btn tab-trung" onclick="bamMoTabHanhChinh('trung')">⭐ XEM MIỀN TRUNG ❯</button>`;
+                             <button class="tab-ngang-btn tab-trung" onclick="bamMoTabHanhChinh('trung')">⭐ XEM MIỀN TRUNG ❯</button>
+                             <button class="tab-ngang-btn tab-vietlott" onclick="moTrucTiep('vl')">⭐ XEM VIETLOTT ❯</button>`;
     } else if (mienUuTien === "trung") {
         containerGoc.insertBefore(blockTrung, blockBac);
         blockBac.style.display = "none";
         blockNam.style.display = "none";
         blockTrung.style.display = "block";
         tabsPhu.style.display = "grid";
+        tabsPhu.style.gridTemplateColumns = "repeat(3, 1fr)";
         tabsPhu.innerHTML = `<button class="tab-ngang-btn tab-bac" onclick="bamMoTabHanhChinh('bac')">⭐ XEM MIỀN BẮC ❯</button>
-                             <button class="tab-ngang-btn tab-nam" onclick="bamMoTabHanhChinh('nam')">⭐ XEM MIỀN NAM ❯</button>`;
+                             <button class="tab-ngang-btn tab-nam" onclick="bamMoTabHanhChinh('nam')">⭐ XEM MIỀN NAM ❯</button>
+                             <button class="tab-ngang-btn tab-vietlott" onclick="moTrucTiep('vl')">⭐ XEM VIETLOTT ❯</button>`;
     } else {
         containerGoc.insertBefore(blockBac, blockTrung);
         blockBac.style.display = "block";
         blockTrung.style.display = "none";
         blockNam.style.display = "none";
         tabsPhu.style.display = "grid";
+        tabsPhu.style.gridTemplateColumns = "repeat(3, 1fr)";
         tabsPhu.innerHTML = `<button class="tab-ngang-btn tab-trung" onclick="bamMoTabHanhChinh('trung')">⭐ XEM MIỀN TRUNG ❯</button>
-                             <button class="tab-ngang-btn tab-nam" onclick="bamMoTabHanhChinh('nam')">⭐ XEM MIỀN NAM ❯</button>`;
+                             <button class="tab-ngang-btn tab-nam" onclick="bamMoTabHanhChinh('nam')">⭐ XEM MIỀN NAM ❯</button>
+                             <button class="tab-ngang-btn tab-vietlott" onclick="moTrucTiep('vl')">⭐ XEM VIETLOTT ❯</button>`;
     }
 
     mienHienTai = mienUuTien;
@@ -1117,13 +1124,10 @@ function dongCuaSoChinhSach() { document.getElementById("khung-chinh-sach-modal"
 
 function moTrucTiep(mien) {
     let urls = {
-        'mn': 'https://www.minhngoc.net.vn/truc-tiep-xo-so/mien-nam.html',
-        'mt': 'https://www.minhngoc.net.vn/truc-tiep-xo-so/mien-trung.html',
-        'mb': 'https://www.minhngoc.net.vn/truc-tiep-xo-so/mien-bac.html'
+        'mn': 'https://xskt.com.vn/xsmn',
+        'mt': 'https://xskt.com.vn/xsmt',
+        'mb': 'https://xskt.com.vn/xsmb'
     };
-    
-    // Gán iframe url
-    document.getElementById("iframe-truc-tiep").src = urls[mien];
     
     // Ẩn bảng kết quả xổ số thường và phần thống kê
     document.getElementById("khung-kqxs-native").style.display = "none";
@@ -1131,21 +1135,126 @@ function moTrucTiep(mien) {
     if(boLocKhuVuc) boLocKhuVuc.style.display = "none";
     let khungThongKe = document.querySelector(".khung-thong-ke-doi-xung");
     if(khungThongKe) khungThongKe.style.display = "none";
-    
-    // Ẩn thanh ngày
     document.getElementById("khung-chon-ngay").style.display = "none";
     
-    // Hiện khung trực tiếp
-    document.getElementById("khung-truc-tiep").style.display = "block";
+    let tieuDeNode = document.getElementById("tieu-de-chon-ngay");
     
-    // Cuộn xuống khu vực xem
+    let khungVietlott = document.getElementById("khung-vietlott-native");
+    if (!khungVietlott) {
+        // Tạo khung vietlott native nếu chưa có
+        khungVietlott = document.createElement("div");
+        khungVietlott.id = "khung-vietlott-native";
+        khungVietlott.className = "khung-kqxs-native";
+        khungVietlott.style.flexDirection = "column";
+        khungVietlott.style.alignItems = "center";
+        khungVietlott.style.gap = "20px";
+        khungVietlott.innerHTML = `
+            <div style="width: 100%; max-width: 600px; background: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 2px solid #e53935; overflow: hidden; margin-top: 15px;">
+                <div style="background: linear-gradient(135deg, #e53935, #c62828); color: white; padding: 10px; text-align: center; font-weight: bold; font-size: 1.2rem;">KẾT QUẢ MEGA 6/45 <br><span id="vl-mega-date" style="font-size: 0.8rem; font-weight: normal;">Đang tải...</span></div>
+                <div style="padding: 20px; text-align: center;">
+                    <div id="vl-mega-balls" style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 15px;"></div>
+                    <div style="font-size: 1.1rem; color: #d32f2f; font-weight: bold;">JACKPOT: <span id="vl-mega-jackpot">...</span> VNĐ</div>
+                </div>
+            </div>
+            
+            <div style="width: 100%; max-width: 600px; background: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 2px solid #d81b60; overflow: hidden;">
+                <div style="background: linear-gradient(135deg, #d81b60, #ad1457); color: white; padding: 10px; text-align: center; font-weight: bold; font-size: 1.2rem;">KẾT QUẢ POWER 6/55 <br><span id="vl-power-date" style="font-size: 0.8rem; font-weight: normal;">Đang tải...</span></div>
+                <div style="padding: 20px; text-align: center;">
+                    <div id="vl-power-balls" style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 15px;"></div>
+                    <div style="font-size: 1.1rem; color: #c2185b; font-weight: bold;">JACKPOT 1: <span id="vl-power-jackpot">...</span> VNĐ</div>
+                </div>
+            </div>
+            <div id="nut-quay-ve-vl" style="width: 100%; text-align: center; margin-top: 10px; margin-bottom: 20px;"></div>
+        `;
+        document.getElementById("khung-truc-tiep").insertAdjacentElement("afterend", khungVietlott);
+        
+        let nutQuayVeVL = document.getElementById("nut-quay-ve-vl");
+        nutQuayVeVL.innerHTML = `
+            <div style="display: flex; gap: 8px; margin-bottom: 15px; width: 100%; max-width: 600px; margin: 0 auto; flex-wrap: wrap;">
+                <button class="btn-dai" style="flex: 1; min-width: 150px; background: linear-gradient(135deg, #e53935, #c62828); color: white; padding: 10px; border-radius: 8px;" onclick="dongTrucTiep(); window.scrollTo(0,0);">ĐÓNG VIETLOTT</button>
+            </div>
+        `;
+    }
+
+    if (mien === 'vl') {
+        document.getElementById("khung-truc-tiep").style.display = "none";
+        khungVietlott.style.display = "flex";
+        if(tieuDeNode) tieuDeNode.innerText = `⭐ KẾT QUẢ XỔ SỐ VIETLOTT:`;
+        
+        ['bac', 'trung', 'nam'].forEach(m => {
+            let el = document.getElementById(`ds-mien-${m}`);
+            if(el) el.style.display = 'none';
+        });
+        
+        fetchVietlottData();
+        return;
+    }
+    
+    khungVietlott.style.display = "none";
+    document.getElementById("iframe-truc-tiep").src = urls[mien];
+    
+    if(tieuDeNode) {
+        let tenMienText = (mien === 'mb') ? 'MIỀN BẮC' : (mien === 'mt' ? 'MIỀN TRUNG' : 'MIỀN NAM');
+        tieuDeNode.innerText = `📺 TRỰC TIẾP ${tenMienText}:`;
+    }
+    
+    document.getElementById("khung-truc-tiep").style.display = "block";
+    let nutQuayVe = document.getElementById("nut-quay-ve");
+    if(nutQuayVe) nutQuayVe.style.display = "inline-block";
+    
     document.getElementById("khung-truc-tiep").scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function renderBongs(ballsArray, containerId, colorCode) {
+    let html = '';
+    ballsArray.forEach(num => {
+        if(num) {
+            html += `<div style="width: 40px; height: 40px; border-radius: 50%; background: ${colorCode}; color: white; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 1.2rem; box-shadow: inset -2px -2px 6px rgba(0,0,0,0.3); border: 2px solid #fff;">${num}</div>`;
+        }
+    });
+    document.getElementById(containerId).innerHTML = html;
+}
+
+async function fetchVietlottData() {
+    try {
+        let res = await fetch('vietlott.json?t=' + Date.now());
+        let data = await res.json();
+        
+        let megaData = data.mega;
+        if(megaData && megaData.balls && megaData.balls.length > 0) {
+            renderBongs(megaData.balls, 'vl-mega-balls', '#e53935');
+            document.getElementById('vl-mega-jackpot').innerText = new Intl.NumberFormat('vi-VN').format(megaData.jackpot);
+            let dDate = megaData.date.includes('T') ? megaData.date.split('T')[0].split('-').reverse().join('/') : megaData.date;
+            document.getElementById('vl-mega-date').innerText = 'Kỳ quay: ' + dDate;
+        }
+
+        let powerData = data.power;
+        if(powerData && powerData.balls && powerData.balls.length > 0) {
+            renderBongs(powerData.balls, 'vl-power-balls', '#d81b60');
+            document.getElementById('vl-power-jackpot').innerText = new Intl.NumberFormat('vi-VN').format(powerData.jackpot);
+            let dDate = powerData.date.includes('T') ? powerData.date.split('T')[0].split('-').reverse().join('/') : powerData.date;
+            document.getElementById('vl-power-date').innerText = 'Kỳ quay: ' + dDate;
+        }
+    } catch(e) {
+        console.error(e);
+        document.getElementById('vl-mega-date').innerText = "Dữ liệu đang được cập nhật...";
+    }
 }
 
 function dongTrucTiep() {
     // Đóng iframe
     document.getElementById("khung-truc-tiep").style.display = "none";
     document.getElementById("iframe-truc-tiep").src = "";
+    
+    // Đóng Vietlott native nếu có
+    let khungVietlott = document.getElementById("khung-vietlott-native");
+    if(khungVietlott) khungVietlott.style.display = "none";
+    
+    // Hiện lại các đài
+    ['bac', 'trung', 'nam'].forEach(m => {
+        let el = document.getElementById(`ds-mien-${m}`);
+        if(el) el.style.display = 'block';
+    });
     
     // Mở lại bảng kết quả thường
     document.getElementById("khung-kqxs-native").style.display = "block";
