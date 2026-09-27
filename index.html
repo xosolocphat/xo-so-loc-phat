@@ -1013,13 +1013,13 @@ function chayDongHoDemNguoc() {
         let m = now.getMinutes();
         let currentTimeMinutes = h * 60 + m;
 
-        let mnStart = 16 * 60 + 15;
+        let mnStart = 16 * 60 + 12;
         let mnEnd = 16 * 60 + 35;
         
-        let mtStart = 17 * 60 + 15;
+        let mtStart = 17 * 60 + 12;
         let mtEnd = 17 * 60 + 35;
         
-        let mbStart = 18 * 60 + 15;
+        let mbStart = 18 * 60 + 12;
         let mbEnd = 18 * 60 + 35;
         
         let targetTime = null;
@@ -1037,15 +1037,15 @@ function chayDongHoDemNguoc() {
         }
         
         if (currentTimeMinutes < mnStart) {
-            targetTime = new Date(); targetTime.setHours(16, 15, 0, 0); targetName = "MIỀN NAM";
+            targetTime = new Date(); targetTime.setHours(16, 12, 0, 0); targetName = "MIỀN NAM";
         } else if (currentTimeMinutes < mtStart) {
-            targetTime = new Date(); targetTime.setHours(17, 15, 0, 0); targetName = "MIỀN TRUNG";
+            targetTime = new Date(); targetTime.setHours(17, 12, 0, 0); targetName = "MIỀN TRUNG";
         } else if (currentTimeMinutes < mbStart) {
-            targetTime = new Date(); targetTime.setHours(18, 15, 0, 0); targetName = "MIỀN BẮC";
+            targetTime = new Date(); targetTime.setHours(18, 12, 0, 0); targetName = "MIỀN BẮC";
         } else {
             targetTime = new Date(); 
             targetTime.setDate(targetTime.getDate() + 1);
-            targetTime.setHours(16, 15, 0, 0);
+            targetTime.setHours(16, 12, 0, 0);
             targetName = "MIỀN NAM";
         }
         
