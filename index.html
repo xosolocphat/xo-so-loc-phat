@@ -83,19 +83,19 @@
 
         /* LƯỚT NGANG 2 HÀNG ĐÀI ĐỐI XỨNG CẤT NỬA NÚT */
         .danh-sach-dai-scroll { 
-            display: grid; grid-template-rows: repeat(2, auto); grid-auto-flow: column; grid-auto-columns: 24%; 
-            gap: 6px; overflow-x: auto; scroll-behavior: smooth; padding-bottom: 4px; padding-top: 4px; -webkit-overflow-scrolling: touch;
+            display: grid; grid-template-rows: repeat(2, auto); grid-auto-flow: column; grid-auto-columns: 23%; 
+            gap: 4px; overflow-x: auto; scroll-behavior: smooth; padding-bottom: 4px; padding-top: 4px; -webkit-overflow-scrolling: touch;
         }
         .danh-sach-dai-scroll::-webkit-scrollbar { display: none; }
 
         .btn-dai { 
-            width: 100%; padding: 4px 2px; background: linear-gradient(135deg, #ffffff, #f0f0f0); border: 1px solid #ddd; 
-            color: #333; cursor: pointer; border-radius: 20px; font-size: 0.65rem; font-weight: bold; text-align: center; 
+            width: 100%; padding: 4px 1px; background: linear-gradient(135deg, #ffffff, #f0f0f0); border: 1px solid #ddd; 
+            color: #333; cursor: pointer; border-radius: 20px; font-size: 0.6rem; font-weight: bold; text-align: center; 
             box-sizing: border-box; box-shadow: 0 4px 6px rgba(0,0,0,0.1), inset 0 2px 4px rgba(255,255,255,0.8); 
-            -webkit-tap-highlight-color: transparent; display: flex; align-items: center; justify-content: center; gap: 3px;
+            -webkit-tap-highlight-color: transparent; display: flex; align-items: center; justify-content: center; gap: 2px;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
-        [data-theme="dark"] .btn-dai { width: 100%; padding: 4px 2px; background: linear-gradient(135deg, #ffffff, #f0f0f0); border: 1px solid #ddd; color: #333; cursor: pointer; border-radius: 20px; font-size: 0.65rem; font-weight: bold; text-align: center; box-sizing: border-box; box-shadow: 0 4px 6px rgba(0,0,0,0.1), inset 0 2px 4px rgba(255,255,255,0.8); -webkit-tap-highlight-color: transparent; display: flex; align-items: center; justify-content: center; gap: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        [data-theme="dark"] .btn-dai { width: 100%; padding: 4px 1px; background: linear-gradient(135deg, #ffffff, #f0f0f0); border: 1px solid #ddd; color: #333; cursor: pointer; border-radius: 20px; font-size: 0.6rem; font-weight: bold; text-align: center; box-sizing: border-box; box-shadow: 0 4px 6px rgba(0,0,0,0.1), inset 0 2px 4px rgba(255,255,255,0.8); -webkit-tap-highlight-color: transparent; display: flex; align-items: center; justify-content: center; gap: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         
         .btn-dai:nth-child(5n+1) { background: linear-gradient(135deg, #ffcdd2, #ef9a9a); border-color: #e57373; color: #b71c1c; }
         .btn-dai:nth-child(5n+2) { background: linear-gradient(135deg, #c8e6c9, #a5d6a7); border-color: #81c784; color: #1b5e20; }
@@ -182,7 +182,7 @@
         @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
         @media (min-width: 600px) {
             .xo-so-container { max-width: 650px; padding: 15px; margin: 15px auto; }
-            .danh-sach-dai-scroll { grid-auto-columns: 24%; }
+            .danh-sach-dai-scroll { grid-auto-columns: 23%; }
         }
 </style>
 </head>
@@ -318,13 +318,15 @@
       <div style="text-align: center; flex-grow: 1;">
           <p class="ten-vang-label" style="color: #0d47a1; font-size: 0.7rem; margin:0 0 4px 0;">⛽ GIÁ XĂNG DẦU (Petrolimex)</p>
           <div style="display: flex; justify-content: center; gap: 15px; font-size: 0.7rem; color: #424242; font-weight: bold; flex-wrap: wrap;">
-              <span><b style="color: #c62828;">RON 95-III:</b> 20,520đ/l</span>
-              <span><b style="color: #c62828;">E5 RON 92:</b> 19,630đ/l</span>
-              <span><b style="color: #2e7d32;">DO 0,05S:</b> 17,510đ/l</span>
+              <span><b style="color: #c62828;">RON 95-III:</b> <span id="fuel-ron95">20,520đ/l</span></span>
+              <span><b style="color: #c62828;">E5 RON 92:</b> <span id="fuel-e5">19,630đ/l</span></span>
+              <span><b style="color: #2e7d32;">DO 0,05S:</b> <span id="fuel-do">17,510đ/l</span></span>
           </div>
       </div>
       <div style="font-size: 2.2rem; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2));">🛢️</div>
-    </div></div>
+    </div>
+    <div id="market-status" style="font-size: 0.65rem; color: #666; text-align: center; margin-top: 5px;"></div>
+    </div>
   </div>
 
   <div class="footer-compliance">
@@ -503,7 +505,18 @@ function apDungCauHinhVungMien(mienUuTien) {
 
     ["bac", "trung", "nam"].forEach(m => {
         let htmlButtons = "";
-        let danhSachDaiTheoMien = configCacDai[m] || [];
+        let danhSachDaiTheoMien = [...(configCacDai[m] || [])];
+        let thuHomNay = new Date().getDay();
+        let thuHomQua = thuHomNay === 0 ? 6 : thuHomNay - 1;
+        danhSachDaiTheoMien.sort((a, b) => {
+            let aHomNay = a.thu.includes(thuHomNay) ? 1 : 0;
+            let bHomNay = b.thu.includes(thuHomNay) ? 1 : 0;
+            if (aHomNay !== bHomNay) return bHomNay - aHomNay;
+            let aHomQua = a.thu.includes(thuHomQua) ? 1 : 0;
+            let bHomQua = b.thu.includes(thuHomQua) ? 1 : 0;
+            if (aHomQua !== bHomQua) return bHomQua - aHomQua;
+            return 0;
+        });
         let mauTrangTri = [
             'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)', 
             'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)', 
@@ -650,15 +663,15 @@ function renderBangChung(danhSachCot, highlightSo = null) {
     }
 
     const tenGiaiMap = {
-        'ĐB': 'Giải ĐB', 'G1': 'Giải 1', 'G2': 'Giải 2', 'G3': 'Giải 3',
-        'G4': 'Giải 4', 'G5': 'Giải 5', 'G6': 'Giải 6', 'G7': 'Giải 7', 'G8': 'Giải 8'
+        'ĐB': 'ĐB', 'G1': 'G1', 'G2': 'G2', 'G3': 'G3',
+        'G4': 'G4', 'G5': 'G5', 'G6': 'G6', 'G7': 'G7', 'G8': 'G8'
     };
     let thuTuGiai = ['G8', 'G7', 'G6', 'G5', 'G4', 'G3', 'G2', 'G1', 'ĐB'];
     
     let numCols = danhSachCot.length;
-    let dbFontSize = numCols >= 4 ? '1.1rem' : (numCols === 3 ? '1.25rem' : '1.4rem');
-    let g8FontSize = numCols >= 4 ? '1.05rem' : (numCols === 3 ? '1.2rem' : '1.3rem');
-    let normalFontSize = numCols >= 4 ? '0.9rem' : (numCols === 3 ? '1.0rem' : '1.1rem');
+    let dbFontSize = numCols >= 4 ? '1.25rem' : (numCols === 3 ? '1.4rem' : '1.5rem');
+    let g8FontSize = numCols >= 4 ? '1.15rem' : (numCols === 3 ? '1.3rem' : '1.4rem');
+    let normalFontSize = numCols >= 4 ? '1.05rem' : (numCols === 3 ? '1.15rem' : '1.25rem');
     let headFontSize = numCols >= 4 ? '0.75rem' : '0.85rem';
     let dateFontSize = numCols >= 4 ? '0.65rem' : '0.75rem';
     let padCell = numCols >= 4 ? '4px 1px' : '6px 2px';
@@ -667,7 +680,7 @@ function renderBangChung(danhSachCot, highlightSo = null) {
     
     let theadHtml = '';
     if (danhSachCot.length > 1) {
-        theadHtml = `<tr><th style="width: 50px; min-width: 50px; max-width: 50px; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-bottom: 2px solid #0056b3;"></th>`;
+        theadHtml = `<tr><th style="width: 35px; min-width: 35px; max-width: 35px; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-bottom: 2px solid #0056b3;"></th>`;
         danhSachCot.forEach(cot => {
             let tenDaiText = cot.codeDai.toUpperCase();
             for(let k in configCacDai) {
@@ -1080,13 +1093,80 @@ function dongTrucTiep() {
     }
 }
 
+function marketNumber(value, isVND = false) {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return "--";
+    let digits = isVND ? 0 : 2;
+    if (n % 1 === 0) digits = 0;
+    return n.toLocaleString('vi-VN', {
+        minimumFractionDigits: digits,
+        maximumFractionDigits: digits
+    });
+}
+
+function marketGold(value) {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return "--";
+    return n.toLocaleString('vi-VN', {minimumFractionDigits: 1, maximumFractionDigits: 3});
+}
+
+function hienThiDuLieuThiTruong() {
+    const d = window.MARKET_DATA;
+    const status = document.getElementById('market-status');
+    if (!d) {
+        if (status) status.textContent = '⚠️ Chưa có dữ liệu thị trường. Đang chờ lần cập nhật tự động đầu tiên.';
+        return;
+    }
+
+    try {
+        if (d.gold) {
+            if (d.gold.sjc) document.getElementById('sjc-gia').textContent = `Mua: ${marketGold(d.gold.sjc.buy)} - Bán: ${marketGold(d.gold.sjc.sell)}`;
+            if (d.gold.ring_9999) document.getElementById('nhan-gia').textContent = `Mua: ${marketGold(d.gold.ring_9999.buy)} - Bán: ${marketGold(d.gold.ring_9999.sell)}`;
+            if (d.gold.jewelry_24k) document.getElementById('vang24k-gia').textContent = `Mua: ${marketGold(d.gold.jewelry_24k.buy)} - Bán: ${marketGold(d.gold.jewelry_24k.sell)}`;
+        }
+        if (d.usd) {
+            document.getElementById('usd-gia').textContent = `Mua: ${marketNumber(d.usd.buy)} - Bán: ${marketNumber(d.usd.sell)}`;
+        }
+        if (d.fuel) {
+            document.getElementById('fuel-ron95').textContent = `${marketNumber(d.fuel.e10_ron95_iii)}đ/l`;
+            document.getElementById('fuel-e5').textContent = `${marketNumber(d.fuel.e5_ron92_ii)}đ/l`;
+            document.getElementById('fuel-do').textContent = `${marketNumber(d.fuel.do_005s_ii)}đ/l`;
+        }
+
+        if (status) {
+            const goldTime = d.gold && d.gold.source_time ? `Vàng ${d.gold.source_time}` : '';
+            const usdTime = d.usd && d.usd.source_time ? `USD ${d.usd.source_time}` : '';
+            const fuelTime = d.fuel && d.fuel.source_time ? `Xăng dầu ${d.fuel.source_time}` : '';
+            const parts = [goldTime, usdTime, fuelTime].filter(Boolean);
+            status.textContent = `🟢 Tự động cập nhật • ${parts.join(' • ') || ('Lần đồng bộ: ' + (d.updated_at || 'gần nhất'))}`;
+        }
+    } catch (err) {
+        console.error('Lỗi hiển thị dữ liệu thị trường:', err);
+        if (status) status.textContent = '⚠️ Có lỗi hiển thị dữ liệu thị trường.';
+    }
+}
+
+function taiLaiDuLieuThiTruong() {
+    const old = document.getElementById('market-data-live');
+    if (old) old.remove();
+    const sc = document.createElement('script');
+    sc.id = 'market-data-live';
+    sc.src = `market-data.js?v=${Date.now()}`;
+    sc.onload = hienThiDuLieuThiTruong;
+    sc.onerror = () => hienThiDuLieuThiTruong();
+    document.head.appendChild(sc);
+}
+
 // Hàm tự động gọi bộ nhớ đệm kiểm tra lựa chọn chế độ ban đêm cũ của người dùng
 window.onload = function() {
     let savedTheme = localStorage.getItem("theme");
     if (savedTheme === "dark") { document.documentElement.setAttribute("data-theme", "dark"); document.getElementById("dark-mode-toggle").innerText = "☀️ Mode"; }
     quetIpXacDinhVungMien();
+    hienThiDuLieuThiTruong();
+    setInterval(taiLaiDuLieuThiTruong, 5 * 60 * 1000);
 };
 </script>
+<script id="market-data-live" src="market-data.js"></script>
 </body>
 </html>
 
