@@ -778,7 +778,8 @@ function renderBangChung(danhSachCot, highlightSo = null) {
     
     toolbarHtml += `</div></td></tr>`;
 
-    let html = `<table class="bang-kqxs-unified" style="table-layout: fixed; width: 100%; min-width: max-content; border-collapse: separate; border-spacing: 0; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #0056b3;">
+    let tblMinWidth = danhSachCot.length > 3 ? (danhSachCot.length * 85 + 35) + 'px' : '100%';
+    let html = `<table class="bang-kqxs-unified" style="table-layout: fixed; width: 100%; min-width: ${tblMinWidth}; border-collapse: separate; border-spacing: 0; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #0056b3;">
         <thead>${theadHtml}</thead>
         <tbody>${tbodyHtml}${toolbarHtml}</tbody>
     </table>`;
