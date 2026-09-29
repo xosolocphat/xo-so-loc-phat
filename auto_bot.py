@@ -12,24 +12,24 @@ from collections import defaultdict
 
 # Danh sÃ¡ch mÃ£ Ä‘Ã i tÆ°Æ¡ng á»©ng vá»›i tÃªn hiá»ƒn thá»‹ trÃªn trang XSKT/MinhNgoc
 MAP_DAI = {
-    "mb": "Miá»n Báº¯c", 
-    "bdi": "BÃ¬nh Äá»‹nh", "dnang": "ÄÃ  Náºµng", "dlk": "Äáº¯k Láº¯k", "kh": "KhÃ¡nh HÃ²a", 
-    "kt": "Kon Tum", "nt": "Ninh Thuáº­n", "py": "PhÃº YÃªn", "qnam": "Quáº£ng Nam", 
-    "qngai": "Quáº£ng NgÃ£i", "qt": "Quáº£ng Trá»‹", "tthue": "Thá»«a ThiÃªn Huáº¿", "qb": "Quáº£ng BÃ¬nh", "gl": "Gia Lai", "dno": "Äáº¯k NÃ´ng",
-    "ag": "An Giang", "bl": "Báº¡c LiÃªu", "bt": "Báº¿n Tre", "bd": "BÃ¬nh DÆ°Æ¡ng", 
-    "bp": "BÃ¬nh PhÆ°á»›c", "bth": "BÃ¬nh Thuáº­n", "cmau": "CÃ  Mau", "ctho": "Cáº§n ThÆ¡", 
-    "dl": "ÄÃ  Láº¡t", "dn": "Äá»“ng Nai", "dthap": "Äá»“ng ThÃ¡p", "hg": "Háº­u Giang", 
-    "la": "Long An", "st": "SÃ³c TrÄƒng", "tn": "TÃ¢y Ninh", "tg": "Tiá»n Giang", 
-    "hcm": "TP. HCM", "tv": "TrÃ  Vinh", "vl": "VÄ©nh Long", "vt": "VÅ©ng TÃ u", "kg": "KiÃªn Giang"
+    "mb": "Miền Bắc", 
+    "bdi": "Bình Định", "dnang": "Đà Nẵng", "dlk": "Đắk Lắk", "kh": "Khánh Hòa", 
+    "kt": "Kon Tum", "nt": "Ninh Thuận", "py": "Phú Yên", "qnam": "Quảng Nam", 
+    "qngai": "Quảng Ngãi", "qt": "Quảng Trị", "tthue": "Thừa Thiên Huế", "qb": "Quảng Bình", "gl": "Gia Lai", "dno": "Đắk Nông",
+    "ag": "An Giang", "bl": "Bạc Liêu", "bt": "Bến Tre", "bd": "Bình Dương", 
+    "bp": "Bình Phước", "bth": "Bình Thuận", "cmau": "Cà Mau", "ctho": "Cần Thơ", 
+    "dl": "Đà Lạt", "dn": "Đồng Nai", "dthap": "Đồng Tháp", "hg": "Hậu Giang", 
+    "kg": "Kiên Giang", "la": "Long An", "st": "Sóc Trăng", "tn": "Tây Ninh", "tg": "Tiền Giang", 
+    "tv": "Trà Vinh", "vl": "Vĩnh Long", "vt": "Vũng Tàu", "hcm": "TP. HCM"
 }
 
 # Ãnh xáº¡ tÃªn Ä‘á»ƒ dá»… tÃ¬m kiáº¿m
 ALIASES = {
-    "tp. hcm": "hcm", "há»“ chÃ­ minh": "hcm", "tphcm": "hcm", "tp hcm": "hcm",
-    "Ä‘Ã  láº¡t": "dl", "da lat": "dl",
-    "bÃ  rá»‹a vÅ©ng tÃ u": "vt", "vÅ©ng tÃ u": "vt",
-    "thá»«a t. huáº¿": "tthue", "thá»«a thiÃªn huáº¿": "tthue", "tt huáº¿": "tthue",
-    "miá»n báº¯c": "mb", "truyá»n thá»‘ng": "mb"
+    "tp. hcm": "hcm", "hồ chí minh": "hcm", "tphcm": "hcm", "tp hcm": "hcm",
+    "đà lạt": "dl", "da lat": "dl",
+    "bà rịa vũng tàu": "vt", "vũng tàu": "vt",
+    "thừa t. huế": "tthue", "thừa thiên huế": "tthue", "tt huế": "tthue",
+    "miền bắc": "mb", "truyền thống": "mb"
 }
 
 def normalize_name(name):
