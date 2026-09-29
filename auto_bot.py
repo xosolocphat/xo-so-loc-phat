@@ -1,4 +1,7 @@
 import os
+import sys
+import io
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 import json
 import time
 import datetime
@@ -64,7 +67,7 @@ def crawl_xskt_today_full_results():
                     table_text = table.get_text()
                     today_short = f"{datetime.date.today().day:02d}/{datetime.date.today().month:02d}"
                     if today_short not in table_text:
-                        continue # Bỏ qua bảng này vì nó là dữ liệu của ngày trước đó (chưa tới giờ xổ hôm nay)
+                        continue # Bá» qua báº£ng nÃ y vÃ¬ nÃ³ lÃ  dá»¯ liá»‡u cá»§a ngÃ y trÆ°á»›c Ä‘Ã³ (chÆ°a tá»›i giá» xá»• hÃ´m nay)
                         
                     trs = table.find_all('tr')
                     dais = ["mb"] if mien == "xsmb" else []
