@@ -186,6 +186,20 @@
             .xo-so-container { max-width: 650px; padding: 15px; margin: 15px auto; }
             .danh-sach-dai-scroll { grid-auto-columns: 31%; }
         }
+
+/* CSS For Vietlott robust toggling */
+body.is-vietlott #khung-kqxs-native,
+body.is-vietlott .bo-loc-khu-vuc,
+body.is-vietlott .khung-thong-ke-doi-xung,
+body.is-vietlott #khung-chon-ngay,
+body.is-vietlott #vung-chon-dai-goc,
+body.is-vietlott #vung-tabs-phu {
+    display: none !important;
+}
+body:not(.is-vietlott) #khung-vietlott-native {
+    display: none !important;
+}
+
 </style>
 </head>
 <body>
@@ -812,6 +826,7 @@ function renderBangChung(danhSachCot, highlightSo = null) {
 }
 
 function bamMoTabHanhChinh(mienClick) {
+    document.body.classList.remove(\'is-vietlott\');
     mienHienTai = mienClick;
     
     // Đặt lại tiêu đề "KẾT QUẢ MIỀN..."
@@ -821,11 +836,7 @@ function bamMoTabHanhChinh(mienClick) {
         tieuDeNode.innerText = `KẾT QUẢ ${tenMienText}:`;
     }
     
-    let khungVietlott = document.getElementById("khung-vietlott-native");
-    if (khungVietlott) {
-        khungVietlott.style.setProperty("display", "none", "important");
-    }
-    document.querySelectorAll('#khung-vietlott-native').forEach(el => el.style.setProperty("display", "none", "important"));
+    
     
     let nativeKqxs = document.getElementById("khung-kqxs-native");
     if (nativeKqxs) nativeKqxs.style.display = "";
@@ -904,6 +915,7 @@ function highlightDayColumn(codeDai, ngay) {
 }
 
 function bamChonDai(linkIframe, codeDai, element) {
+    document.body.classList.remove(\'is-vietlott\');
     document.querySelectorAll('.btn-dai').forEach(b => b.classList.remove('active'));
     if(element) {
         element.classList.add('active');
@@ -912,11 +924,7 @@ function bamChonDai(linkIframe, codeDai, element) {
         if (btn) btn.classList.add('active');
     }
     
-    let khungVietlott = document.getElementById("khung-vietlott-native");
-    if (khungVietlott) {
-        khungVietlott.style.setProperty("display", "none", "important");
-    }
-    document.querySelectorAll('#khung-vietlott-native').forEach(el => el.style.setProperty("display", "none", "important"));
+    
     
     daiHienTai = codeDai;
     renderKetQuaNative(codeDai);
@@ -1280,18 +1288,13 @@ function moTrucTiep(mien) {
     }
 
     if (mien === 'vl') {
+        document.body.classList.add('is-vietlott');
         document.getElementById("khung-truc-tiep").style.display = "none";
-        khungVietlott.style.display = "flex";
+        
+        let khungVietlott = document.getElementById("khung-vietlott-native");
+        if(khungVietlott) khungVietlott.style.display = "flex";
+        
         if(tieuDeNode) tieuDeNode.innerText = `⭐ KẾT QUẢ XỔ SỐ VIETLOTT:`;
-        
-        ['bac', 'trung', 'nam'].forEach(m => {
-            let el = document.getElementById(`ds-mien-${m}`);
-            if(el) el.style.display = 'none';
-        });
-        
-        let nativeKqxs = document.getElementById("khung-kqxs-native");
-        if(nativeKqxs) nativeKqxs.style.display = "none";
-        
         fetchVietlottData();
         return;
     }
@@ -1547,6 +1550,7 @@ async function fetchVietlottData() {
 }
 
 function dongTrucTiep() {
+    document.body.classList.remove(\'is-vietlott\');
     // Đóng iframe
     document.getElementById("khung-truc-tiep").style.display = "none";
     document.getElementById("iframe-truc-tiep").src = "";
