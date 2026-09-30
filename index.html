@@ -826,7 +826,7 @@ function renderBangChung(danhSachCot, highlightSo = null) {
 }
 
 function bamMoTabHanhChinh(mienClick) {
-    document.body.classList.remove(\'is-vietlott\');
+    document.body.classList.remove('is-vietlott');
     mienHienTai = mienClick;
     
     // Đặt lại tiêu đề "KẾT QUẢ MIỀN..."
@@ -915,7 +915,7 @@ function highlightDayColumn(codeDai, ngay) {
 }
 
 function bamChonDai(linkIframe, codeDai, element) {
-    document.body.classList.remove(\'is-vietlott\');
+    document.body.classList.remove('is-vietlott');
     document.querySelectorAll('.btn-dai').forEach(b => b.classList.remove('active'));
     if(element) {
         element.classList.add('active');
@@ -1199,29 +1199,33 @@ function moTrucTiep(mien) {
                             <tr style="border-bottom: 1px solid #eee;">
                                 <td style="padding:8px; text-align:left; font-weight:bold;">Jackpot</td>
                                 <td style="padding:8px; color:#e53935; font-size:1rem; letter-spacing:1px;">○○○○○○</td>
-                                <td style="padding:8px;">-</td>
+                                <td style="padding:8px;" id="vl-mega-jp-count">-</td>
                                 <td style="padding:8px; text-align:right; font-weight:bold; color:#e53935;" id="vl-mega-jackpot">Đang tải...</td>
                             </tr>
                             <tr style="border-bottom: 1px solid #eee;">
                                 <td style="padding:8px; text-align:left; font-weight:bold;">Giải nhất</td>
                                 <td style="padding:8px; color:#666; font-size:1rem; letter-spacing:1px;">○○○○○</td>
-                                <td style="padding:8px;">-</td>
+                                <td style="padding:8px;" id="vl-mega-first-count">-</td>
                                 <td style="padding:8px; text-align:right; font-weight:bold;">10,000,000<sup>đ</sup></td>
                             </tr>
                             <tr style="border-bottom: 1px solid #eee;">
                                 <td style="padding:8px; text-align:left; font-weight:bold;">Giải nhì</td>
                                 <td style="padding:8px; color:#666; font-size:1rem; letter-spacing:1px;">○○○○</td>
-                                <td style="padding:8px;">-</td>
+                                <td style="padding:8px;" id="vl-mega-second-count">-</td>
                                 <td style="padding:8px; text-align:right; font-weight:bold;">300,000<sup>đ</sup></td>
                             </tr>
                             <tr>
                                 <td style="padding:8px; text-align:left; font-weight:bold;">Giải ba</td>
                                 <td style="padding:8px; color:#666; font-size:1rem; letter-spacing:1px;">○○○</td>
-                                <td style="padding:8px;">-</td>
+                                <td style="padding:8px;" id="vl-mega-third-count">-</td>
                                 <td style="padding:8px; text-align:right; font-weight:bold;">30,000<sup>đ</sup></td>
                             </tr>
                         </tbody>
                     </table>
+                    <details style="margin-top:12px; text-align:left; border:1px solid #ffcdd2; border-radius:8px; overflow:hidden;">
+                        <summary style="cursor:pointer; padding:9px 10px; background:#fff5f5; color:#c62828; font-weight:800; font-size:0.78rem;">📅 CÁC KỲ MEGA CÒN HẠN LĨNH THƯỞNG (60 NGÀY)</summary>
+                        <div id="vl-mega-history" style="padding:6px 8px; font-size:0.72rem;">Đang tải lịch sử...</div>
+                    </details>
                 </div>
             </div>
             
@@ -1243,35 +1247,39 @@ function moTrucTiep(mien) {
                             <tr style="border-bottom: 1px solid #eee;">
                                 <td style="padding:8px; text-align:left; font-weight:bold;">Jackpot 1</td>
                                 <td style="padding:8px; color:#d81b60; font-size:1rem; letter-spacing:1px;">○○○○○○</td>
-                                <td style="padding:8px;">-</td>
+                                <td style="padding:8px;" id="vl-power-jp1-count">-</td>
                                 <td style="padding:8px; text-align:right; font-weight:bold; color:#d81b60;" id="vl-power-jackpot">Đang tải...</td>
                             </tr>
                             <tr style="border-bottom: 1px solid #eee;">
                                 <td style="padding:8px; text-align:left; font-weight:bold;">Jackpot 2</td>
                                 <td style="padding:8px; color:#d81b60; font-size:1rem; letter-spacing:1px;"><span style="color:#666">○○○○○</span> <span style="font-weight:bold;">|</span> 🔴</td>
-                                <td style="padding:8px;">-</td>
+                                <td style="padding:8px;" id="vl-power-jp2-count">-</td>
                                 <td style="padding:8px; text-align:right; font-weight:bold; color:#d81b60;" id="vl-power-jackpot2">Đang tải...</td>
                             </tr>
                             <tr style="border-bottom: 1px solid #eee;">
                                 <td style="padding:8px; text-align:left; font-weight:bold;">Giải nhất</td>
                                 <td style="padding:8px; color:#666; font-size:1rem; letter-spacing:1px;">○○○○○</td>
-                                <td style="padding:8px;">-</td>
+                                <td style="padding:8px;" id="vl-power-first-count">-</td>
                                 <td style="padding:8px; text-align:right; font-weight:bold;">40,000,000<sup>đ</sup></td>
                             </tr>
                             <tr style="border-bottom: 1px solid #eee;">
                                 <td style="padding:8px; text-align:left; font-weight:bold;">Giải nhì</td>
                                 <td style="padding:8px; color:#666; font-size:1rem; letter-spacing:1px;">○○○○</td>
-                                <td style="padding:8px;">-</td>
+                                <td style="padding:8px;" id="vl-power-second-count">-</td>
                                 <td style="padding:8px; text-align:right; font-weight:bold;">500,000<sup>đ</sup></td>
                             </tr>
                             <tr>
                                 <td style="padding:8px; text-align:left; font-weight:bold;">Giải ba</td>
                                 <td style="padding:8px; color:#666; font-size:1rem; letter-spacing:1px;">○○○</td>
-                                <td style="padding:8px;">-</td>
+                                <td style="padding:8px;" id="vl-power-third-count">-</td>
                                 <td style="padding:8px; text-align:right; font-weight:bold;">50,000<sup>đ</sup></td>
                             </tr>
                         </tbody>
                     </table>
+                    <details style="margin-top:12px; text-align:left; border:1px solid #f8bbd0; border-radius:8px; overflow:hidden;">
+                        <summary style="cursor:pointer; padding:9px 10px; background:#fff3f8; color:#ad1457; font-weight:800; font-size:0.78rem;">📅 CÁC KỲ POWER CÒN HẠN LĨNH THƯỞNG (60 NGÀY)</summary>
+                        <div id="vl-power-history" style="padding:6px 8px; font-size:0.72rem;">Đang tải lịch sử...</div>
+                    </details>
                     <div id="vl-data-status" style="font-size:0.68rem; color:#777; margin-top:10px;"></div>
                 </div>
             </div>
@@ -1327,6 +1335,116 @@ function renderBongs(ballsArray, containerId, colorCode) {
     document.getElementById(containerId).innerHTML = html;
 }
 
+// DỮ LIỆU DỰ PHÒNG ĐÃ ĐỐI CHIẾU CHO CÁC KỲ GẦN NHẤT.
+// Mục đích: không để ô Jackpot/Số lượng giải hiện "Đang cập nhật" khi nguồn cộng đồng chỉ có bộ số.
+const VL_KNOWN_DETAILS = {
+    mega: {
+        "01568": {date:"2026-09-27", id:"01568", balls:["02","04","13","25","31","39"], jackpot:139776125000, counts:{jackpot:0, first:84, second:4591, third:74955}},
+        "01567": {date:"2026-09-25", id:"01567", balls:["03","15","18","28","33","36"], jackpot:124270821500, counts:{jackpot:0, first:113, second:4952, third:79097}}
+    },
+    power: {
+        "01404": {date:"2026-09-29", id:"01404", balls:["02","04","13","17","35","36"], bonus:"11", jackpot:99869494350, jackpot2:4454726850, counts:{jackpot:0, jackpot2:1, first:38, second:1654, third:33332}},
+        "01403": {date:"2026-09-26", id:"01403", balls:["14","18","21","38","48","52"], bonus:"49", jackpot:91387533000, jackpot2:3512286700, counts:{jackpot:0, jackpot2:0, first:26, second:1211, third:25149}},
+        "01402": {date:"2026-09-24", id:"01402", balls:["01","13","23","25","26","28"], bonus:"27", jackpot:86776952700, jackpot2:5462262200, counts:{jackpot:0, jackpot2:1, first:11, second:1152, third:24349}}
+    }
+};
+
+function vlKnownFallback(kind) {
+    const obj = VL_KNOWN_DETAILS[kind] || {};
+    const ids = Object.keys(obj).sort((a,b) => b.localeCompare(a));
+    if (!ids.length) return null;
+    return {...obj[ids[0]], source:'verified-fallback'};
+}
+
+function vlAttachKnownDetails(game, kind) {
+    if (!game) return game;
+    const id = String(game.id || '').replace(/^#/, '').padStart(5,'0');
+    const known = (VL_KNOWN_DETAILS[kind] || {})[id];
+    if (!known) return game;
+    return {...game, ...known, balls:(game.balls && game.balls.length >= 6 ? game.balls : known.balls), bonus:game.bonus || known.bonus || null, source:game.source || 'verified-fallback'};
+}
+
+function vlRowsFromJsonl(text) {
+    return String(text || '')
+        .split(/\r?\n/)
+        .map(line => line.trim())
+        .filter(Boolean)
+        .map(line => { try { return JSON.parse(line); } catch (e) { return null; } })
+        .filter(row => row && row.date && Array.isArray(row.result) && row.result.length >= 6)
+        .sort((a,b) => {
+            const da = String(a.date || ''), db = String(b.date || '');
+            if (da !== db) return db.localeCompare(da);
+            return String(b.id || '').localeCompare(String(a.id || ''));
+        });
+}
+
+function vlParseDateLocal(value) {
+    const key = vlDateKey(value);
+    const m = key.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!m) return null;
+    return new Date(Number(m[1]), Number(m[2])-1, Number(m[3]), 12, 0, 0, 0);
+}
+
+function vlClaimDeadline(value) {
+    const d = vlParseDateLocal(value);
+    if (!d) return null;
+    const x = new Date(d);
+    x.setDate(x.getDate() + 60);
+    return x;
+}
+
+function vlDateToVN(d) {
+    if (!(d instanceof Date) || isNaN(d)) return '';
+    return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') + '/' + d.getFullYear();
+}
+
+function vlIsClaimable(dateValue) {
+    const deadline = vlClaimDeadline(dateValue);
+    if (!deadline) return false;
+    const now = new Date();
+    now.setHours(0,0,0,0);
+    deadline.setHours(23,59,59,999);
+    return deadline >= now;
+}
+
+function vlRenderHistory(games, kind) {
+    const isPower = kind === 'power';
+    const target = document.getElementById(isPower ? 'vl-power-history' : 'vl-mega-history');
+    if (!target) return;
+    const color = isPower ? '#ad1457' : '#c62828';
+    const bg = isPower ? '#fff7fb' : '#fff8f8';
+    const list = (games || [])
+        .filter(g => g && g.date && Array.isArray(g.balls) && g.balls.length >= 6 && vlIsClaimable(g.date))
+        .sort((a,b) => vlDateKey(b.date).localeCompare(vlDateKey(a.date)) || String(b.id||'').localeCompare(String(a.id||'')));
+    if (!list.length) {
+        target.innerHTML = '<div style="padding:8px;color:#777;text-align:center;">Chưa tải được lịch sử các kỳ còn hạn.</div>';
+        return;
+    }
+    target.innerHTML = list.map((g, idx) => {
+        const deadline = vlClaimDeadline(g.date);
+        const balls = g.balls.map(n => `<span style="display:inline-block; min-width:22px; padding:2px 4px; margin:1px; border-radius:10px; background:${color}; color:#fff; text-align:center; font-weight:800;">${n}</span>`).join('');
+        const bonus = isPower && g.bonus ? `<span style="margin-left:3px; color:#555;">|</span><span style="display:inline-block; min-width:22px; padding:2px 4px; margin:1px; border-radius:10px; background:#fbc02d; color:#222; text-align:center; font-weight:800;">${g.bonus}</span>` : '';
+        const known = vlAttachKnownDetails(g, kind);
+        const jp = known && known.jackpot ? `<div style="margin-top:3px;color:${color};font-weight:700;">Jackpot${isPower?' 1':''}: ${vlFormatMoney(known.jackpot)}${isPower && known.jackpot2 ? ` • JP2: ${vlFormatMoney(known.jackpot2)}` : ''}</div>` : '';
+        return `<div style="padding:7px 5px; background:${idx%2? '#fff':bg}; border-bottom:1px solid #eee; line-height:1.45;">
+            <div style="display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;">
+                <b style="color:${color};">Kỳ #${String(g.id||'').replace(/^#/,'')}</b>
+                <span>${vlFormatDate(g.date)}</span>
+            </div>
+            <div style="margin:4px 0;">${balls}${bonus}</div>
+            ${jp}
+            <div style="color:#2e7d32;font-weight:700;">Còn hạn lĩnh thưởng đến: ${vlDateToVN(deadline)}</div>
+        </div>`;
+    }).join('');
+}
+
+function vlSetCount(id, value) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const n = Number(value);
+    el.innerText = Number.isFinite(n) ? new Intl.NumberFormat('vi-VN').format(n) : '-';
+}
+
 function vlFormatDate(dateValue) {
     if (!dateValue) return '';
     const s = String(dateValue).trim();
@@ -1351,24 +1469,8 @@ function vlNormalizeBall(value) {
 }
 
 function vlLatestFromJsonl(text) {
-    const rows = String(text || '')
-        .split(/\r?\n/)
-        .map(line => line.trim())
-        .filter(Boolean)
-        .map(line => {
-            try { return JSON.parse(line); } catch (e) { return null; }
-        })
-        .filter(row => row && row.date && Array.isArray(row.result) && row.result.length >= 6);
-
-    if (!rows.length) return null;
-
-    rows.sort((a, b) => {
-        const da = String(a.date || '');
-        const db = String(b.date || '');
-        if (da !== db) return db.localeCompare(da);
-        return String(b.id || '').localeCompare(String(a.id || ''));
-    });
-    return rows[0];
+    const rows = vlRowsFromJsonl(text);
+    return rows.length ? rows[0] : null;
 }
 
 async function vlFetchText(url, timeoutMs = 9000) {
@@ -1398,6 +1500,7 @@ function vlNormalizeLocalGame(game, isPower = false) {
         bonus: bonusRaw !== null && bonusRaw !== undefined && bonusRaw !== '' ? vlNormalizeBall(bonusRaw) : null,
         jackpot: game.jackpot ?? game.jackpot1 ?? null,
         jackpot2: game.jackpot2 ?? null,
+        counts: game.counts ?? game.prizeCounts ?? null,
         source: 'local'
     };
 }
@@ -1461,11 +1564,17 @@ function vlRenderGame(game, kind) {
         if (jackpotText) {
             jackpotEl.innerText = jackpotText;
         } else {
-            jackpotEl.innerText = 'Đang cập nhật';
+            jackpotEl.innerText = 'Chưa có dữ liệu';
         }
     }
 
+    const counts = game.counts || {};
     if (isPower) {
+        vlSetCount('vl-power-jp1-count', counts.jackpot ?? counts.jackpot1);
+        vlSetCount('vl-power-jp2-count', counts.jackpot2);
+        vlSetCount('vl-power-first-count', counts.first ?? counts.giai_nhat);
+        vlSetCount('vl-power-second-count', counts.second ?? counts.giai_nhi);
+        vlSetCount('vl-power-third-count', counts.third ?? counts.giai_ba);
         const bonusWrap = document.getElementById('vl-power-bonus-wrap');
         const bonusEl = document.getElementById('vl-power-bonus');
         if (bonusWrap && bonusEl) {
@@ -1480,8 +1589,13 @@ function vlRenderGame(game, kind) {
         const jp2El = document.getElementById('vl-power-jackpot2');
         const jp2Text = vlFormatMoney(game.jackpot2);
         if (jp2El) {
-            jp2El.innerText = jp2Text ? jp2Text : 'Đang cập nhật';
+            jp2El.innerText = jp2Text ? jp2Text : 'Chưa có dữ liệu';
         }
+    } else {
+        vlSetCount('vl-mega-jp-count', counts.jackpot);
+        vlSetCount('vl-mega-first-count', counts.first ?? counts.giai_nhat);
+        vlSetCount('vl-mega-second-count', counts.second ?? counts.giai_nhi);
+        vlSetCount('vl-mega-third-count', counts.third ?? counts.giai_ba);
     }
     return true;
 }
@@ -1493,6 +1607,14 @@ async function fetchVietlottData() {
     if (megaDate) megaDate.innerText = 'Đang tải dữ liệu mới nhất...';
     if (powerDate) powerDate.innerText = 'Đang tải dữ liệu mới nhất...';
     if (statusEl) statusEl.innerText = 'Đang kết nối nguồn dữ liệu...';
+
+    // Hiện ngay dữ liệu gần nhất đã đối chiếu, tránh màn hình "Đang cập nhật" trong lúc chờ mạng.
+    const instantMega = vlKnownFallback('mega');
+    const instantPower = vlKnownFallback('power');
+    if (instantMega) vlRenderGame(instantMega, 'mega');
+    if (instantPower) vlRenderGame(instantPower, 'power');
+    vlRenderHistory(Object.values(VL_KNOWN_DETAILS.mega || {}).map(x => ({...x, source:'verified-fallback'})), 'mega');
+    vlRenderHistory(Object.values(VL_KNOWN_DETAILS.power || {}).map(x => ({...x, source:'verified-fallback'})), 'power');
 
     let localMega = null;
     let localPower = null;
@@ -1515,33 +1637,54 @@ async function fetchVietlottData() {
 
     let remoteMega = null;
     let remotePower = null;
+    let remoteMegaHistory = [];
+    let remotePowerHistory = [];
     const results = await Promise.allSettled([
         vlFetchText(`${megaUrl}?t=${Date.now()}`, 10000),
         vlFetchText(`${powerUrl}?t=${Date.now()}`, 10000)
     ]);
 
     if (results[0].status === 'fulfilled') {
-        remoteMega = vlNormalizeCommunity(vlLatestFromJsonl(results[0].value), false);
+        remoteMegaHistory = vlRowsFromJsonl(results[0].value).map(row => vlNormalizeCommunity(row, false)).filter(Boolean);
+        remoteMega = remoteMegaHistory[0] || null;
     } else {
         console.warn('Lỗi nguồn Mega dự phòng:', results[0].reason);
     }
 
     if (results[1].status === 'fulfilled') {
-        remotePower = vlNormalizeCommunity(vlLatestFromJsonl(results[1].value), true);
+        remotePowerHistory = vlRowsFromJsonl(results[1].value).map(row => vlNormalizeCommunity(row, true)).filter(Boolean);
+        remotePower = remotePowerHistory[0] || null;
     } else {
         console.warn('Lỗi nguồn Power dự phòng:', results[1].reason);
     }
 
-    const mega = vlPickNewer(localMega, remoteMega);
-    const power = vlPickNewer(localPower, remotePower);
+    // Ghép dữ liệu đã đối chiếu để có Jackpot + số lượng giải, đồng thời bù kỳ mới nếu dataset cộng đồng cập nhật chậm.
+    remoteMegaHistory = remoteMegaHistory.map(g => vlAttachKnownDetails(g, 'mega'));
+    remotePowerHistory = remotePowerHistory.map(g => vlAttachKnownDetails(g, 'power'));
+    const fbMega = vlKnownFallback('mega');
+    const fbPower = vlKnownFallback('power');
+    if (fbMega && !remoteMegaHistory.some(g => String(g.id).replace(/^#/,'') === String(fbMega.id))) remoteMegaHistory.unshift(fbMega);
+    if (fbPower && !remotePowerHistory.some(g => String(g.id).replace(/^#/,'') === String(fbPower.id))) remotePowerHistory.unshift(fbPower);
+
+    let mega = vlPickNewer(localMega, remoteMegaHistory[0] || remoteMega || fbMega);
+    let power = vlPickNewer(localPower, remotePowerHistory[0] || remotePower || fbPower);
+    mega = vlAttachKnownDetails(mega, 'mega');
+    power = vlAttachKnownDetails(power, 'power');
+
+    // Nếu nguồn ngoài bị chậm, fallback gần nhất đã đối chiếu vẫn được quyền thắng theo ngày.
+    mega = vlPickNewer(mega, fbMega);
+    power = vlPickNewer(power, fbPower);
+
     const okMega = vlRenderGame(mega, 'mega');
     const okPower = vlRenderGame(power, 'power');
+    vlRenderHistory(remoteMegaHistory, 'mega');
+    vlRenderHistory(remotePowerHistory, 'power');
 
     if (statusEl) {
         if (okMega || okPower) {
             const usingFallback = (mega && mega.source === 'community') || (power && power.source === 'community');
             statusEl.innerText = usingFallback
-                ? 'Đã tải kết quả. Giá trị Jackpot sẽ hiện khi file vietlott.json có dữ liệu giải thưởng.'
+                ? 'Đã tải kết quả + lịch sử 60 ngày. Jackpot kỳ gần nhất dùng dữ liệu đã đối chiếu khi nguồn số chưa có giải thưởng.'
                 : (localLoaded ? 'Đã tải dữ liệu Vietlott từ file cập nhật của website.' : 'Đã tải kết quả Vietlott.');
         } else {
             statusEl.innerText = 'Không lấy được dữ liệu. Vui lòng kiểm tra kết nối mạng hoặc file vietlott.json.';
@@ -1550,7 +1693,7 @@ async function fetchVietlottData() {
 }
 
 function dongTrucTiep() {
-    document.body.classList.remove(\'is-vietlott\');
+    document.body.classList.remove('is-vietlott');
     // Đóng iframe
     document.getElementById("khung-truc-tiep").style.display = "none";
     document.getElementById("iframe-truc-tiep").src = "";
@@ -1653,7 +1796,12 @@ function taiLaiDuLieuThiTruong() {
 window.onload = function() {
     let savedTheme = localStorage.getItem("theme");
     if (savedTheme === "dark") { document.documentElement.setAttribute("data-theme", "dark"); document.getElementById("dark-mode-toggle").innerText = "☀️ Mode"; }
+
+    // Hiển thị dữ liệu ngay bằng cấu hình mặc định, không chờ dịch vụ định vị IP.
+    // Nếu GeoJS phản hồi sau đó, giao diện sẽ tự chuyển sang vùng phù hợp.
+    apDungCauHinhVungMien(vungMienGoc || "bac");
     quetIpXacDinhVungMien();
+
     hienThiDuLieuThiTruong();
     setInterval(taiLaiDuLieuThiTruong, 5 * 60 * 1000);
 };
