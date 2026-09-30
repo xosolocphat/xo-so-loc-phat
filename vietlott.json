@@ -1,50 +1,954 @@
 {
-  "updated_at": "2026-09-30T07:30:00+07:00",
+  "updated_at": "2026-09-30T16:03:33+07:00",
   "claim_period_days": 60,
   "mega": {
     "id": "01568",
     "date": "2026-09-27",
-    "balls": [2, 4, 13, 25, 31, 39],
+    "balls": [
+      2,
+      4,
+      13,
+      25,
+      31,
+      39
+    ],
     "bonus": null,
-    "jackpot": 139776125000,
-    "counts": {"jackpot": 0, "first": 84, "second": 4591, "third": 74955},
-    "source": "seed"
-  },
-  "power": {
-    "id": "01404",
-    "date": "2026-09-29",
-    "balls": [2, 4, 13, 17, 35, 36],
-    "bonus": 11,
-    "jackpot": 99869494350,
-    "jackpot2": 4454726850,
-    "counts": {"jackpot": 0, "jackpot2": 1, "first": 38, "second": 1654, "third": 33332},
-    "source": "seed"
+    "jackpot": 30000,
+    "counts": {
+      "first": 7495530000,
+      "jackpot": 7495530000,
+      "second": 7495530000,
+      "third": 7495530000
+    },
+    "source": "github-vietlott-data",
+    "source_detail": "xoso.com.vn"
   },
   "mega_history": [
     {
-      "id": "01568", "date": "2026-09-27", "balls": [2, 4, 13, 25, 31, 39], "bonus": null,
-      "jackpot": 139776125000, "counts": {"jackpot": 0, "first": 84, "second": 4591, "third": 74955}, "source": "seed"
+      "id": "01568",
+      "date": "2026-09-27",
+      "balls": [
+        2,
+        4,
+        13,
+        25,
+        31,
+        39
+      ],
+      "bonus": null,
+      "jackpot": 30000,
+      "counts": {
+        "first": 7495530000,
+        "jackpot": 7495530000,
+        "second": 7495530000,
+        "third": 7495530000
+      },
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn"
     },
     {
-      "id": "01567", "date": "2026-09-25", "balls": [3, 15, 18, 28, 33, 36], "bonus": null,
-      "jackpot": 124270821500, "counts": {"jackpot": 0, "first": 113, "second": 4952, "third": 79097}, "source": "seed"
+      "id": "01567",
+      "date": "2026-09-25",
+      "balls": [
+        3,
+        15,
+        18,
+        28,
+        33,
+        36
+      ],
+      "bonus": null,
+      "jackpot": 30000,
+      "counts": {
+        "first": 7909730000,
+        "jackpot": 7909730000,
+        "second": 7909730000,
+        "third": 7909730000
+      },
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn"
+    },
+    {
+      "id": "01566",
+      "date": "2026-09-23",
+      "balls": [
+        2,
+        6,
+        12,
+        15,
+        25,
+        26
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn",
+      "jackpot": 30000,
+      "counts": {
+        "first": 7602930000,
+        "jackpot": 7602930000,
+        "second": 7602930000,
+        "third": 7602930000
+      }
+    },
+    {
+      "id": "01565",
+      "date": "2026-09-20",
+      "balls": [
+        10,
+        15,
+        16,
+        27,
+        33,
+        38
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn",
+      "jackpot": 30000,
+      "counts": {
+        "first": 5316530000,
+        "jackpot": 5316530000,
+        "second": 5316530000,
+        "third": 5316530000
+      }
+    },
+    {
+      "id": "01564",
+      "date": "2026-09-18",
+      "balls": [
+        7,
+        12,
+        26,
+        27,
+        41,
+        43
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn",
+      "jackpot": 30000,
+      "counts": {
+        "first": 4850730000,
+        "jackpot": 4850730000,
+        "second": 4850730000,
+        "third": 4850730000
+      }
+    },
+    {
+      "id": "01563",
+      "date": "2026-09-16",
+      "balls": [
+        1,
+        3,
+        10,
+        11,
+        18,
+        23
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn",
+      "jackpot": 30000,
+      "counts": {
+        "first": 4619330000,
+        "jackpot": 4619330000,
+        "second": 4619330000,
+        "third": 4619330000
+      }
+    },
+    {
+      "id": "01562",
+      "date": "2026-09-13",
+      "balls": [
+        4,
+        12,
+        31,
+        34,
+        38,
+        41
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn",
+      "jackpot": 30000,
+      "counts": {
+        "first": 3685430000,
+        "jackpot": 3685430000,
+        "second": 3685430000,
+        "third": 3685430000
+      }
+    },
+    {
+      "id": "01561",
+      "date": "2026-09-11",
+      "balls": [
+        14,
+        18,
+        20,
+        21,
+        26,
+        27
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn",
+      "jackpot": 30000,
+      "counts": {
+        "first": 3232030000,
+        "jackpot": 3232030000,
+        "second": 3232030000,
+        "third": 3232030000
+      }
+    },
+    {
+      "id": "01560",
+      "date": "2026-09-09",
+      "balls": [
+        12,
+        17,
+        20,
+        21,
+        36,
+        43
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn",
+      "jackpot": 30000,
+      "counts": {
+        "first": 3534730000,
+        "jackpot": 3534730000,
+        "second": 3534730000,
+        "third": 3534730000
+      }
+    },
+    {
+      "id": "01559",
+      "date": "2026-09-06",
+      "balls": [
+        9,
+        14,
+        22,
+        26,
+        27,
+        40
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn",
+      "jackpot": 30000,
+      "counts": {
+        "first": 2969330000,
+        "jackpot": 2969330000,
+        "second": 2969330000,
+        "third": 2969330000
+      }
+    },
+    {
+      "id": "01558",
+      "date": "2026-09-04",
+      "balls": [
+        16,
+        21,
+        23,
+        29,
+        34,
+        45
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn",
+      "jackpot": 30000,
+      "counts": {
+        "first": 2757230000,
+        "jackpot": 2757230000,
+        "second": 2757230000,
+        "third": 2757230000
+      }
+    },
+    {
+      "id": "01557",
+      "date": "2026-09-02",
+      "balls": [
+        6,
+        9,
+        27,
+        29,
+        35,
+        44
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn",
+      "jackpot": 30000,
+      "counts": {
+        "first": 3203430000,
+        "jackpot": 3203430000,
+        "second": 3203430000,
+        "third": 3203430000
+      }
+    },
+    {
+      "id": "01556",
+      "date": "2026-08-30",
+      "balls": [
+        1,
+        3,
+        12,
+        15,
+        37,
+        45
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01555",
+      "date": "2026-08-28",
+      "balls": [
+        3,
+        13,
+        15,
+        22,
+        36,
+        39
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01554",
+      "date": "2026-08-26",
+      "balls": [
+        3,
+        10,
+        11,
+        16,
+        33,
+        40
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01553",
+      "date": "2026-08-23",
+      "balls": [
+        4,
+        16,
+        17,
+        22,
+        32,
+        39
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01552",
+      "date": "2026-08-21",
+      "balls": [
+        7,
+        26,
+        31,
+        38,
+        43,
+        45
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01551",
+      "date": "2026-08-19",
+      "balls": [
+        6,
+        15,
+        18,
+        33,
+        40,
+        43
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01550",
+      "date": "2026-08-16",
+      "balls": [
+        6,
+        7,
+        15,
+        19,
+        36,
+        41
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01549",
+      "date": "2026-08-14",
+      "balls": [
+        7,
+        9,
+        13,
+        31,
+        35,
+        44
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01548",
+      "date": "2026-08-12",
+      "balls": [
+        15,
+        17,
+        22,
+        29,
+        33,
+        40
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01547",
+      "date": "2026-08-09",
+      "balls": [
+        3,
+        17,
+        20,
+        27,
+        31,
+        35
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01546",
+      "date": "2026-08-07",
+      "balls": [
+        2,
+        8,
+        19,
+        30,
+        36,
+        43
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01545",
+      "date": "2026-08-05",
+      "balls": [
+        2,
+        6,
+        11,
+        16,
+        28,
+        39
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01544",
+      "date": "2026-08-02",
+      "balls": [
+        3,
+        12,
+        20,
+        25,
+        27,
+        37
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data"
     }
   ],
+  "power": {
+    "id": "01404",
+    "date": "2026-09-29",
+    "balls": [
+      2,
+      4,
+      13,
+      17,
+      35,
+      36
+    ],
+    "bonus": 11,
+    "jackpot": 50000,
+    "jackpot2": 50000,
+    "counts": {
+      "jackpot": 3333250000,
+      "jackpot2": 3333250000,
+      "first": 3333250000,
+      "second": 3333250000,
+      "third": 3333250000
+    },
+    "source": "seed",
+    "source_detail": "xoso.com.vn"
+  },
   "power_history": [
     {
-      "id": "01404", "date": "2026-09-29", "balls": [2, 4, 13, 17, 35, 36], "bonus": 11,
-      "jackpot": 99869494350, "jackpot2": 4454726850,
-      "counts": {"jackpot": 0, "jackpot2": 1, "first": 38, "second": 1654, "third": 33332}, "source": "seed"
+      "id": "01404",
+      "date": "2026-09-29",
+      "balls": [
+        2,
+        4,
+        13,
+        17,
+        35,
+        36
+      ],
+      "bonus": 11,
+      "jackpot": 50000,
+      "jackpot2": 50000,
+      "counts": {
+        "jackpot": 3333250000,
+        "jackpot2": 3333250000,
+        "first": 3333250000,
+        "second": 3333250000,
+        "third": 3333250000
+      },
+      "source": "seed",
+      "source_detail": "xoso.com.vn"
     },
     {
-      "id": "01403", "date": "2026-09-26", "balls": [14, 18, 21, 38, 48, 52], "bonus": 49,
-      "jackpot": 91387533000, "jackpot2": 3512286700,
-      "counts": {"jackpot": 0, "jackpot2": 0, "first": 26, "second": 1211, "third": 25149}, "source": "seed"
+      "id": "01403",
+      "date": "2026-09-26",
+      "balls": [
+        14,
+        18,
+        21,
+        38,
+        48,
+        52
+      ],
+      "bonus": 49,
+      "jackpot": 50000,
+      "jackpot2": 50000,
+      "counts": {
+        "jackpot": 2514950000,
+        "jackpot2": 2514950000,
+        "first": 2514950000,
+        "second": 2514950000,
+        "third": 2514950000
+      },
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn"
     },
     {
-      "id": "01402", "date": "2026-09-24", "balls": [1, 13, 23, 25, 26, 28], "bonus": 27,
-      "jackpot": 86776952700, "jackpot2": 5462262200,
-      "counts": {"jackpot": 0, "jackpot2": 1, "first": 11, "second": 1152, "third": 24349}, "source": "seed"
+      "id": "01402",
+      "date": "2026-09-24",
+      "balls": [
+        1,
+        13,
+        23,
+        25,
+        26,
+        28
+      ],
+      "bonus": 27,
+      "jackpot": 50000,
+      "jackpot2": 50000,
+      "counts": {
+        "jackpot": 2434950000,
+        "jackpot2": 2434950000,
+        "first": 2434950000,
+        "second": 2434950000,
+        "third": 2434950000
+      },
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn"
+    },
+    {
+      "id": "01401",
+      "date": "2026-09-22",
+      "balls": [
+        1,
+        3,
+        9,
+        11,
+        41,
+        46
+      ],
+      "bonus": 10,
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn",
+      "jackpot": 50000,
+      "jackpot2": 50000,
+      "counts": {
+        "jackpot": 2608050000,
+        "jackpot2": 2608050000,
+        "first": 2608050000,
+        "second": 2608050000,
+        "third": 2608050000
+      }
+    },
+    {
+      "id": "01400",
+      "date": "2026-09-19",
+      "balls": [
+        4,
+        7,
+        11,
+        18,
+        22,
+        25
+      ],
+      "bonus": 50,
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn",
+      "jackpot": 50000,
+      "jackpot2": 50000,
+      "counts": {
+        "jackpot": 2771950000,
+        "jackpot2": 2771950000,
+        "first": 2771950000,
+        "second": 2771950000,
+        "third": 2771950000
+      }
+    },
+    {
+      "id": "01399",
+      "date": "2026-09-17",
+      "balls": [
+        6,
+        11,
+        25,
+        27,
+        37,
+        45
+      ],
+      "bonus": 15,
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn",
+      "jackpot": 50000,
+      "jackpot2": 50000,
+      "counts": {
+        "jackpot": 2325250000,
+        "jackpot2": 2325250000,
+        "first": 2325250000,
+        "second": 2325250000,
+        "third": 2325250000
+      }
+    },
+    {
+      "id": "01398",
+      "date": "2026-09-15",
+      "balls": [
+        24,
+        27,
+        32,
+        36,
+        38,
+        47
+      ],
+      "bonus": 52,
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn",
+      "jackpot": 50000,
+      "jackpot2": 50000,
+      "counts": {
+        "jackpot": 2051950000,
+        "jackpot2": 2051950000,
+        "first": 2051950000,
+        "second": 2051950000,
+        "third": 2051950000
+      }
+    },
+    {
+      "id": "01397",
+      "date": "2026-09-12",
+      "balls": [
+        7,
+        24,
+        31,
+        43,
+        47,
+        54
+      ],
+      "bonus": 22,
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn",
+      "jackpot": 50000,
+      "jackpot2": 50000,
+      "counts": {
+        "jackpot": 1882850000,
+        "jackpot2": 1882850000,
+        "first": 1882850000,
+        "second": 1882850000,
+        "third": 1882850000
+      }
+    },
+    {
+      "id": "01396",
+      "date": "2026-09-10",
+      "balls": [
+        2,
+        5,
+        28,
+        32,
+        51,
+        53
+      ],
+      "bonus": 50,
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn",
+      "jackpot": 50000,
+      "jackpot2": 50000,
+      "counts": {
+        "jackpot": 1799050000,
+        "jackpot2": 1799050000,
+        "first": 1799050000,
+        "second": 1799050000,
+        "third": 1799050000
+      }
+    },
+    {
+      "id": "01395",
+      "date": "2026-09-08",
+      "balls": [
+        8,
+        11,
+        14,
+        23,
+        25,
+        54
+      ],
+      "bonus": 17,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01394",
+      "date": "2026-09-05",
+      "balls": [
+        9,
+        11,
+        24,
+        31,
+        33,
+        47
+      ],
+      "bonus": 21,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01393",
+      "date": "2026-09-03",
+      "balls": [
+        8,
+        9,
+        16,
+        42,
+        46,
+        47
+      ],
+      "bonus": 11,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01392",
+      "date": "2026-09-01",
+      "balls": [
+        1,
+        17,
+        41,
+        44,
+        49,
+        55
+      ],
+      "bonus": 45,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01391",
+      "date": "2026-08-29",
+      "balls": [
+        5,
+        10,
+        15,
+        29,
+        34,
+        45
+      ],
+      "bonus": 24,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01390",
+      "date": "2026-08-27",
+      "balls": [
+        1,
+        3,
+        11,
+        21,
+        26,
+        44
+      ],
+      "bonus": 10,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01389",
+      "date": "2026-08-25",
+      "balls": [
+        5,
+        7,
+        13,
+        18,
+        31,
+        40
+      ],
+      "bonus": 14,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01388",
+      "date": "2026-08-22",
+      "balls": [
+        9,
+        18,
+        19,
+        21,
+        25,
+        36
+      ],
+      "bonus": 8,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01387",
+      "date": "2026-08-20",
+      "balls": [
+        2,
+        8,
+        29,
+        38,
+        39,
+        51
+      ],
+      "bonus": 47,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01386",
+      "date": "2026-08-18",
+      "balls": [
+        3,
+        15,
+        18,
+        38,
+        41,
+        48
+      ],
+      "bonus": 30,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01385",
+      "date": "2026-08-15",
+      "balls": [
+        16,
+        20,
+        25,
+        27,
+        30,
+        50
+      ],
+      "bonus": 2,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01384",
+      "date": "2026-08-13",
+      "balls": [
+        5,
+        9,
+        27,
+        29,
+        45,
+        46
+      ],
+      "bonus": 42,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01383",
+      "date": "2026-08-11",
+      "balls": [
+        2,
+        7,
+        19,
+        20,
+        39,
+        50
+      ],
+      "bonus": 31,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01382",
+      "date": "2026-08-08",
+      "balls": [
+        5,
+        29,
+        33,
+        38,
+        40,
+        45
+      ],
+      "bonus": 37,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01381",
+      "date": "2026-08-06",
+      "balls": [
+        14,
+        18,
+        23,
+        35,
+        51,
+        55
+      ],
+      "bonus": 1,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01380",
+      "date": "2026-08-04",
+      "balls": [
+        14,
+        39,
+        40,
+        42,
+        47,
+        54
+      ],
+      "bonus": 31,
+      "source": "github-vietlott-data"
+    },
+    {
+      "id": "01379",
+      "date": "2026-08-01",
+      "balls": [
+        11,
+        14,
+        16,
+        44,
+        49,
+        55
+      ],
+      "bonus": 39,
+      "source": "github-vietlott-data"
     }
   ]
 }
