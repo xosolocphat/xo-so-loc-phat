@@ -192,6 +192,102 @@ def crawl_xskt_today_full_results(session: Optional[requests.Session] = None) ->
         result["ngay"] = date_vn
     return dict(db)
 
+def crawl_kqxs_today_full_results(session: Optional[requests.Session] = None) -> Dict[str, Dict[str, Any]]:
+    """Lấy kết quả hôm nay từ kqxs.vn (dự phòng khi bị chặn)."""
+    session = session or new_session()
+    db: Dict[str, Dict[str, Any]] = defaultdict(dict)
+    today = dt.date.today()
+    
+    log("🔄 Đang cào dữ liệu từ kqxs.vn (nguồn dự phòng)...")
+    for mien in ("mien-bac", "mien-trung", "mien-nam"):
+        url = f"https://kqxs.vn/{mien}"
+        try:
+            r = session.get(url, timeout=TIMEOUT)
+            if r.status_code != 200:
+                continue
+            soup = BeautifulSoup(r.text, "html.parser")
+            table = soup.find("table")
+            if not table:
+                continue
+                
+            rows = table.find_all("tr")
+            if len(rows) < 10:
+                continue
+                
+            th_cells = rows[0].find_all(["th", "td"])
+            if len(th_cells) < 2:
+                continue
+                
+            header = th_cells[1].get_text(" ", strip=True).lower()
+            
+            found = []
+            for code, real_name in MAP_DAI.items():
+                idx = header.find(real_name.lower())
+                if idx != -1:
+                    found.append((idx, code))
+            for alias, code in ALIASES.items():
+                idx = header.find(alias)
+                if idx != -1:
+                    found.append((idx, code))
+            found.sort(key=lambda x: x[0])
+            
+            dais = []
+            seen = set()
+            for _, code in found:
+                if code not in seen:
+                    dais.append(code)
+                    seen.add(code)
+                    
+            if mien == "mien-bac" and "mb" not in dais:
+                dais = ["mb"]
+
+            if not dais:
+                continue
+                
+            for row in rows[1:10]:
+                cells = row.find_all(["th", "td"])
+                if len(cells) < 2:
+                    continue
+                giai_name = cells[0].get_text(" ", strip=True).lower()
+                if "tám" in giai_name: g = "G8"
+                elif "bảy" in giai_name: g = "G7"
+                elif "sáu" in giai_name: g = "G6"
+                elif "năm" in giai_name: g = "G5"
+                elif "tư" in giai_name: g = "G4"
+                elif "ba" in giai_name: g = "G3"
+                elif "nhì" in giai_name: g = "G2"
+                elif "nhất" in giai_name: g = "G1"
+                elif "đặc" in giai_name: g = "DB"
+                else: continue
+                
+                nums_str = cells[1].get_text(" ", strip=True)
+                nums = [n.strip() for n in nums_str.split(".") if n.strip()]
+                
+                if len(nums) % len(dais) == 0:
+                    per_dai = len(nums) // len(dais)
+                    for i in range(per_dai):
+                        for j, d in enumerate(dais):
+                            val = nums[i * len(dais) + j]
+                            db[d].setdefault(g, []).append(val)
+                            
+        except Exception as e:
+            log(f"⚠️ Lỗi lấy kqxs.vn {mien}: {e}")
+            
+    date_vn = today.strftime("%d/%m/%Y")
+    for d in db:
+        for g in list(db[d].keys()):
+            if isinstance(db[d][g], list):
+                db[d][g] = " - ".join(db[d][g])
+        db[d]["ngay"] = date_vn
+        
+    return dict(db)
+
+def crawl_today_full_results(session: Optional[requests.Session] = None) -> Dict[str, Dict[str, Any]]:
+    xskt = crawl_xskt_today_full_results(session)
+    if xskt:
+        return xskt
+    return crawl_kqxs_today_full_results(session)
+
 
 def crawl_xskt_history(days: int = 95, session: Optional[requests.Session] = None) -> Tuple[Dict[str, List[List[str]]], Dict[str, List[Dict[str, Any]]]]:
     """
@@ -652,7 +748,7 @@ def run_quick() -> None:
         log("⚠️ Không đọc được dữ liệu cũ trong index.html; chuyển sang full.")
         run_full()
         return
-    today = crawl_xskt_today_full_results()
+    today = crawl_today_full_results()
     if today:
         db_kq = merge_today_into_history(db_kq, today)
         if write_index_databases(db_xs, db_kq):
@@ -665,7 +761,7 @@ def run_quick() -> None:
 def run_full() -> None:
     session = new_session()
     history_2d, db_kq = crawl_xskt_history(95, session)
-    today = crawl_xskt_today_full_results(session)
+    today = crawl_today_full_results(session)
     if today:
         db_kq = merge_today_into_history(db_kq, today)
 
