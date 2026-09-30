@@ -1600,6 +1600,26 @@ function vlRenderGame(game, kind) {
     return true;
 }
 
+
+function vlMergeHistory(preferred, fallback) {
+    const map = new Map();
+    // Nguồn dự phòng vào trước, nguồn preferred ghi đè sau để giữ Jackpot/counts chi tiết.
+    (fallback || []).forEach(g => {
+        if (!g) return;
+        const key = String(g.id || '') || vlDateKey(g.date);
+        if (key) map.set(key, {...g});
+    });
+    (preferred || []).forEach(g => {
+        if (!g) return;
+        const key = String(g.id || '') || vlDateKey(g.date);
+        if (!key) return;
+        map.set(key, {...(map.get(key) || {}), ...g});
+    });
+    return Array.from(map.values()).sort((a,b) =>
+        vlDateKey(b.date).localeCompare(vlDateKey(a.date)) || String(b.id||'').localeCompare(String(a.id||''))
+    );
+}
+
 async function fetchVietlottData() {
     const megaDate = document.getElementById('vl-mega-date');
     const powerDate = document.getElementById('vl-power-date');
@@ -1618,6 +1638,8 @@ async function fetchVietlottData() {
 
     let localMega = null;
     let localPower = null;
+    let localMegaHistory = [];
+    let localPowerHistory = [];
     let localLoaded = false;
 
     // Nguồn 1: file vietlott.json cùng thư mục (nếu bạn có robot/GitHub Action cập nhật file này).
@@ -1626,7 +1648,15 @@ async function fetchVietlottData() {
         const localData = JSON.parse(localText);
         localMega = vlNormalizeLocalGame(localData.mega, false);
         localPower = vlNormalizeLocalGame(localData.power, true);
-        localLoaded = !!(localMega || localPower);
+        localMegaHistory = Array.isArray(localData.mega_history)
+            ? localData.mega_history.map(g => vlNormalizeLocalGame(g, false)).filter(Boolean)
+            : [];
+        localPowerHistory = Array.isArray(localData.power_history)
+            ? localData.power_history.map(g => vlNormalizeLocalGame(g, true)).filter(Boolean)
+            : [];
+        if (localMega && !localMegaHistory.some(g => String(g.id) === String(localMega.id))) localMegaHistory.unshift(localMega);
+        if (localPower && !localPowerHistory.some(g => String(g.id) === String(localPower.id))) localPowerHistory.unshift(localPower);
+        localLoaded = !!(localMega || localPower || localMegaHistory.length || localPowerHistory.length);
     } catch (e) {
         console.warn('Không có vietlott.json hoặc file chưa hợp lệ, chuyển sang nguồn dự phòng.', e);
     }
@@ -1658,6 +1688,10 @@ async function fetchVietlottData() {
         console.warn('Lỗi nguồn Power dự phòng:', results[1].reason);
     }
 
+    // Ghép lịch sử local do robot tạo với nguồn cộng đồng. Local ưu tiên vì có thể có Jackpot/counts đầy đủ.
+    remoteMegaHistory = vlMergeHistory(localMegaHistory, remoteMegaHistory);
+    remotePowerHistory = vlMergeHistory(localPowerHistory, remotePowerHistory);
+
     // Ghép dữ liệu đã đối chiếu để có Jackpot + số lượng giải, đồng thời bù kỳ mới nếu dataset cộng đồng cập nhật chậm.
     remoteMegaHistory = remoteMegaHistory.map(g => vlAttachKnownDetails(g, 'mega'));
     remotePowerHistory = remotePowerHistory.map(g => vlAttachKnownDetails(g, 'power'));
@@ -1685,7 +1719,7 @@ async function fetchVietlottData() {
             const usingFallback = (mega && mega.source === 'community') || (power && power.source === 'community');
             statusEl.innerText = usingFallback
                 ? 'Đã tải kết quả + lịch sử 60 ngày. Jackpot kỳ gần nhất dùng dữ liệu đã đối chiếu khi nguồn số chưa có giải thưởng.'
-                : (localLoaded ? 'Đã tải dữ liệu Vietlott từ file cập nhật của website.' : 'Đã tải kết quả Vietlott.');
+                : (localLoaded ? 'Đã tải dữ liệu Vietlott + lịch sử còn hạn từ robot của website.' : 'Đã tải kết quả Vietlott.');
         } else {
             statusEl.innerText = 'Không lấy được dữ liệu. Vui lòng kiểm tra kết nối mạng hoặc file vietlott.json.';
         }

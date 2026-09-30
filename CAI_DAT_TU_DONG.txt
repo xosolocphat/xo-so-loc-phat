@@ -1,0 +1,35 @@
+HƯỚNG DẪN CÀI AUTO BOT V2 - XỔ SỐ PHÁT ĐẠT
+
+1) Trong repository GitHub Pages của bạn, thay/copy 5 mục sau vào đúng vị trí:
+   - index.html           (dùng file index_auto.html và đổi tên thành index.html)
+   - auto_bot.py
+   - vietlott.json
+   - requirements.txt
+   - .github/workflows/auto-update.yml
+
+2) Nếu bạn có API key PHA:
+   GitHub repository -> Settings -> Secrets and variables -> Actions -> New repository secret
+   Name: PHA_API_KEY
+   Value: API key của bạn
+   Không bắt buộc. Nếu không có, bot vẫn dùng nguồn Vietlott miễn phí dự phòng.
+
+3) Vào tab Actions -> Auto update lottery data -> Run workflow -> chọn quick để thử.
+
+4) Lịch tự động đã đặt:
+   - 07:15 giờ Việt Nam: FULL, làm mới lịch sử 95 ngày + thống kê.
+   - 16:00 đến 19:45: QUICK mỗi 15 phút, cập nhật kết quả hôm nay + Vietlott.
+
+5) QUICK không cào lại 95 ngày nên nhẹ hơn. FULL mới xây lại bảng thống kê.
+
+6) Vietlott:
+   - Bot tạo vietlott.json.
+   - index.html đọc file này trước.
+   - Giữ các kỳ còn hạn lĩnh thưởng 60 ngày.
+   - Nếu nguồn mới lỗi, bot giữ dữ liệu cũ, KHÔNG tự tạo số giả.
+
+7) Bảo mật:
+   auto_bot.py cũ có API key ghi trực tiếp trong file. Hãy thu hồi/đổi key cũ đó.
+   Bản V2 không chứa key; key được đọc qua biến môi trường/GitHub Secret.
+
+Lưu ý GitHub Actions dùng máy chủ nước ngoài nên một số website Việt Nam đôi khi chặn request.
+Vì vậy bot có nhiều nguồn dự phòng và không xóa dữ liệu tốt khi một nguồn tạm lỗi.

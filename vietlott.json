@@ -1,18 +1,50 @@
 {
-  "updated_at": "2026-09-27T21:23:00+07:00",
-  "source_note": "Snapshot gần nhất dùng làm nguồn chính của website; index có nguồn GitHub dự phòng nếu file này thiếu hoặc cũ.",
+  "updated_at": "2026-09-30T07:30:00+07:00",
+  "claim_period_days": 60,
   "mega": {
     "id": "01568",
     "date": "2026-09-27",
-    "balls": ["02", "04", "13", "25", "31", "39"],
-    "jackpot": 139776125000
+    "balls": [2, 4, 13, 25, 31, 39],
+    "bonus": null,
+    "jackpot": 139776125000,
+    "counts": {"jackpot": 0, "first": 84, "second": 4591, "third": 74955},
+    "source": "seed"
   },
   "power": {
-    "id": "01403",
-    "date": "2026-09-26",
-    "balls": ["14", "18", "21", "38", "48", "52"],
-    "bonus": "49",
-    "jackpot": 91387533000,
-    "jackpot2": 3512286700
-  }
+    "id": "01404",
+    "date": "2026-09-29",
+    "balls": [2, 4, 13, 17, 35, 36],
+    "bonus": 11,
+    "jackpot": 99869494350,
+    "jackpot2": 4454726850,
+    "counts": {"jackpot": 0, "jackpot2": 1, "first": 38, "second": 1654, "third": 33332},
+    "source": "seed"
+  },
+  "mega_history": [
+    {
+      "id": "01568", "date": "2026-09-27", "balls": [2, 4, 13, 25, 31, 39], "bonus": null,
+      "jackpot": 139776125000, "counts": {"jackpot": 0, "first": 84, "second": 4591, "third": 74955}, "source": "seed"
+    },
+    {
+      "id": "01567", "date": "2026-09-25", "balls": [3, 15, 18, 28, 33, 36], "bonus": null,
+      "jackpot": 124270821500, "counts": {"jackpot": 0, "first": 113, "second": 4952, "third": 79097}, "source": "seed"
+    }
+  ],
+  "power_history": [
+    {
+      "id": "01404", "date": "2026-09-29", "balls": [2, 4, 13, 17, 35, 36], "bonus": 11,
+      "jackpot": 99869494350, "jackpot2": 4454726850,
+      "counts": {"jackpot": 0, "jackpot2": 1, "first": 38, "second": 1654, "third": 33332}, "source": "seed"
+    },
+    {
+      "id": "01403", "date": "2026-09-26", "balls": [14, 18, 21, 38, 48, 52], "bonus": 49,
+      "jackpot": 91387533000, "jackpot2": 3512286700,
+      "counts": {"jackpot": 0, "jackpot2": 0, "first": 26, "second": 1211, "third": 25149}, "source": "seed"
+    },
+    {
+      "id": "01402", "date": "2026-09-24", "balls": [1, 13, 23, 25, 26, 28], "bonus": 27,
+      "jackpot": 86776952700, "jackpot2": 5462262200,
+      "counts": {"jackpot": 0, "jackpot2": 1, "first": 11, "second": 1152, "third": 24349}, "source": "seed"
+    }
+  ]
 }

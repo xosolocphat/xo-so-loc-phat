@@ -1,431 +1,701 @@
-import os
-import sys
-import io
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+AUTO BOT V2 - XỔ SỐ PHÁT ĐẠT
+
+Mục tiêu:
+- Cập nhật kết quả xổ số truyền thống vào index.html.
+- Cập nhật Vietlott Mega 6/45 + Power 6/55 vào vietlott.json.
+- Giữ lịch sử Vietlott còn hạn lĩnh thưởng 60 ngày.
+- KHÔNG sinh dữ liệu xổ số giả khi nguồn lỗi.
+- Không nhúng API key trực tiếp trong mã nguồn.
+
+Chế độ:
+  python auto_bot_v2.py --mode quick     # nhanh: hôm nay + Vietlott
+  python auto_bot_v2.py --mode full      # đầy đủ: 95 ngày + thống kê + Vietlott
+  python auto_bot_v2.py --mode vietlott  # chỉ cập nhật Vietlott
+
+Biến môi trường tùy chọn:
+  PHA_API_KEY=xs_...  # ưu tiên API PHA cho Vietlott nếu có
+
+Nguồn Vietlott:
+1) PHA API (nếu có PHA_API_KEY)
+2) Dataset công khai vietvudanh/vietlott-data (MIT) cho bộ số/lịch sử
+3) Trang kết quả công khai xoso.com.vn để bổ sung Jackpot/số lượng giải (fallback)
+
+Lưu ý: GitHub Actions có thể bị các website chặn IP trung tâm dữ liệu. Bot luôn giữ dữ liệu
+đã có nếu nguồn mới lỗi, thay vì ghi dữ liệu giả.
+"""
+
+from __future__ import annotations
+
+import argparse
+import datetime as dt
 import json
+import os
+import re
+import sys
 import time
-import datetime
-import random
+from collections import defaultdict
+from pathlib import Path
+from typing import Any, Dict, Iterable, List, Optional, Tuple
+
 import requests
 from bs4 import BeautifulSoup
-from collections import defaultdict
 
-# Danh sÃ¡ch mÃ£ Ä‘Ã i tÆ°Æ¡ng á»©ng vá»›i tÃªn hiá»ƒn thá»‹ trÃªn trang XSKT/MinhNgoc
+ROOT = Path(__file__).resolve().parent
+INDEX_FILE = ROOT / "index.html"
+VIETLOTT_FILE = ROOT / "vietlott.json"
+
+USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+)
+HEADERS = {"User-Agent": USER_AGENT, "Accept-Language": "vi-VN,vi;q=0.9,en;q=0.6"}
+TIMEOUT = 15
+
+# -------------------------
+# CẤU HÌNH ĐÀI TRUYỀN THỐNG
+# -------------------------
 MAP_DAI = {
-    "mb": "Miền Bắc", 
-    "bdi": "Bình Định", "dnang": "Đà Nẵng", "dlk": "Đắk Lắk", "kh": "Khánh Hòa", 
-    "kt": "Kon Tum", "nt": "Ninh Thuận", "py": "Phú Yên", "qnam": "Quảng Nam", 
-    "qngai": "Quảng Ngãi", "qt": "Quảng Trị", "tthue": "Thừa Thiên Huế", "qb": "Quảng Bình", "gl": "Gia Lai", "dno": "Đắk Nông",
-    "ag": "An Giang", "bl": "Bạc Liêu", "bt": "Bến Tre", "bd": "Bình Dương", 
-    "bp": "Bình Phước", "bth": "Bình Thuận", "cmau": "Cà Mau", "ctho": "Cần Thơ", 
-    "dl": "Đà Lạt", "dn": "Đồng Nai", "dthap": "Đồng Tháp", "hg": "Hậu Giang", 
-    "kg": "Kiên Giang", "la": "Long An", "st": "Sóc Trăng", "tn": "Tây Ninh", "tg": "Tiền Giang", 
-    "tv": "Trà Vinh", "vl": "Vĩnh Long", "vt": "Vũng Tàu", "hcm": "TP. HCM"
+    "mb": "Miền Bắc",
+    "bdi": "Bình Định", "dnang": "Đà Nẵng", "dlk": "Đắk Lắk", "kh": "Khánh Hòa",
+    "kt": "Kon Tum", "nt": "Ninh Thuận", "py": "Phú Yên", "qnam": "Quảng Nam",
+    "qngai": "Quảng Ngãi", "qt": "Quảng Trị", "tthue": "Thừa Thiên Huế",
+    "qb": "Quảng Bình", "gl": "Gia Lai", "dno": "Đắk Nông",
+    "ag": "An Giang", "bl": "Bạc Liêu", "bt": "Bến Tre", "bd": "Bình Dương",
+    "bp": "Bình Phước", "bth": "Bình Thuận", "cmau": "Cà Mau", "ctho": "Cần Thơ",
+    "dl": "Đà Lạt", "dn": "Đồng Nai", "dthap": "Đồng Tháp", "hg": "Hậu Giang",
+    "kg": "Kiên Giang", "la": "Long An", "st": "Sóc Trăng", "tn": "Tây Ninh",
+    "tg": "Tiền Giang", "tv": "Trà Vinh", "vl": "Vĩnh Long", "vt": "Vũng Tàu",
+    "hcm": "TP. HCM",
 }
 
-# Ãnh xáº¡ tÃªn Ä‘á»ƒ dá»… tÃ¬m kiáº¿m
 ALIASES = {
     "tp. hcm": "hcm", "hồ chí minh": "hcm", "tphcm": "hcm", "tp hcm": "hcm",
     "đà lạt": "dl", "da lat": "dl",
     "bà rịa vũng tàu": "vt", "vũng tàu": "vt",
-    "thừa t. huế": "tthue", "thừa thiên huế": "tthue", "tt huế": "tthue",
-    "miền bắc": "mb", "truyền thống": "mb"
+    "thừa t. huế": "tthue", "thừa thiên huế": "tthue", "tt huế": "tthue", "huế": "tthue",
+    "miền bắc": "mb", "truyền thống": "mb",
 }
 
-def normalize_name(name):
-    name = name.lower().strip()
+
+def log(msg: str) -> None:
+    print(msg, flush=True)
+
+
+def new_session() -> requests.Session:
+    s = requests.Session()
+    s.headers.update(HEADERS)
+    return s
+
+
+def normalize_name(name: str) -> Optional[str]:
+    n = re.sub(r"\s+", " ", (name or "").lower().strip())
     for alias, code in ALIASES.items():
-        if alias in name:
+        if alias in n:
             return code
     for code, real_name in MAP_DAI.items():
-        if real_name.lower() in name:
+        if real_name.lower() in n:
             return code
     return None
 
-def crawl_xskt_today_full_results():
-    """
-    CÃ o toÃ n bá»™ dÃ£y sá»‘ Ä‘áº§y Ä‘á»§ cá»§a cÃ¡c Ä‘Ã i quay trong ngÃ y hÃ´m nay.
-    """
-    session = requests.Session()
-    session.headers.update({
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)"
-    })
-    
-    db = defaultdict(dict)
-    print("Báº¯t Ä‘áº§u cÃ o dá»¯ liá»‡u dÃ£y sá»‘ hÃ´m nay...")
-    
-    for mien in ["xsmb", "xsmt", "xsmn"]:
-        url = f"https://xskt.com.vn/{mien}"
-        try:
-            r = session.get(url, timeout=10)
-            if r.status_code != 200:
-                continue
-            soup = BeautifulSoup(r.text, 'html.parser')
-            
-            for table in soup.find_all('table'):
-                if 'id' in table.attrs and ('MB0' in table['id'] or 'MT0' in table['id'] or 'MN0' in table['id']):
-                    table_text = table.get_text()
-                    today_short = f"{datetime.date.today().day:02d}/{datetime.date.today().month:02d}"
-                    if today_short not in table_text:
-                        continue # Bá» qua báº£ng nÃ y vÃ¬ nÃ³ lÃ  dá»¯ liá»‡u cá»§a ngÃ y trÆ°á»›c Ä‘Ã³ (chÆ°a tá»›i giá» xá»• hÃ´m nay)
-                        
-                    trs = table.find_all('tr')
-                    dais = ["mb"] if mien == "xsmb" else []
-                    if mien != "xsmb":
-                        for th in trs[0].find_all('th')[1:]:
-                            code = normalize_name(th.get_text(" ", strip=True))
-                            dais.append(code or "")
-                    
-                    for tr in trs[1:]:
-                        tds = tr.find_all('td')
-                        if len(tds) < 2: continue
-                        # Äá»•i tÃªn giáº£i cho ngáº¯n gá»n, vd: "Giáº£i Báº£y" -> "G7", "Äáº·c biá»‡t" -> "ÄB"
-                        ten_giai = tds[0].get_text(" ", strip=True).replace("Giáº£i ", "G").replace("Äáº·c biá»‡t", "ÄB")
-                        if ten_giai == "GÄB": ten_giai = "ÄB"
-                        
-                        for idx, td in enumerate(tds[1:]):
-                            if idx < len(dais) and dais[idx]:
-                                # Láº¥y cÃ¡c sá»‘ trong Ã´, cÃ¡ch nhau bá»Ÿi ' - '
-                                nums_str = td.get_text(" - ", strip=True)
-                                db[dais[idx]][ten_giai] = nums_str
-        except Exception as e:
-            print(f"Lá»—i khi cÃ o {url}: {e}")
-            
-    today_str = f"{datetime.date.today().day:02d}/{datetime.date.today().month:02d}/{datetime.date.today().year}"
-    for code, result in db.items():
-        result['ngay'] = today_str
-            
-    return dict(db)
 
-def extract_2_digits(text):
-    import re
-    # TÃ¬m cÃ¡c cá»¥m sá»‘
-    tokens = re.findall(r'\b\d+\b', text)
-    # Tráº£ vá» 2 sá»‘ cuá»‘i cá»§a má»—i cá»¥m sá»‘ náº¿u nÃ³ cÃ³ Ä‘á»™ dÃ i há»£p lá»‡ cá»§a KQXS (>=2)
+def normalize_prize_name(text: str) -> str:
+    t = re.sub(r"\s+", " ", (text or "").strip())
+    tl = t.lower()
+    if "đặc biệt" in tl:
+        return "ĐB"
+    m = re.search(r"(?:giải|g)\s*([1-8])", tl)
+    if m:
+        return f"G{m.group(1)}"
+    # Một số bảng dùng chỉ số 1..8 trực tiếp
+    if t in {str(i) for i in range(1, 9)}:
+        return f"G{t}"
+    return t
+
+
+def extract_2_digits(text: str) -> List[str]:
+    tokens = re.findall(r"\b\d+\b", text or "")
     return [t[-2:] for t in tokens if len(t) >= 2]
 
-def crawl_xskt_history(days=95):
+
+# -------------------------
+# XỔ SỐ TRUYỀN THỐNG
+# -------------------------
+def _parse_xskt_table(table: Any, mien: str, want_2digit: bool = False) -> Dict[str, Dict[str, Any]]:
+    """Parse một bảng XSKT, trả về {code: {G8:..., ...}}."""
+    out: Dict[str, Dict[str, Any]] = defaultdict(dict)
+    trs = table.find_all("tr")
+    if not trs:
+        return {}
+
+    if mien == "xsmb":
+        dais = ["mb"]
+    else:
+        dais = []
+        header_cells = trs[0].find_all(["th", "td"])[1:]
+        for th in header_cells:
+            dais.append(normalize_name(th.get_text(" ", strip=True)) or "")
+
+    for tr in trs[1:]:
+        tds = tr.find_all("td")
+        if len(tds) < 2:
+            continue
+        ten_giai = normalize_prize_name(tds[0].get_text(" ", strip=True))
+        if not ten_giai:
+            continue
+        for idx, td_cell in enumerate(tds[1:]):
+            if idx >= len(dais) or not dais[idx]:
+                continue
+            raw = td_cell.get_text(" - ", strip=True)
+            if want_2digit:
+                nums = extract_2_digits(raw)
+                out[dais[idx]].setdefault("_2digits", []).extend(nums)
+            out[dais[idx]][ten_giai] = raw
+    return dict(out)
+
+
+def crawl_xskt_today_full_results(session: Optional[requests.Session] = None) -> Dict[str, Dict[str, Any]]:
+    """Lấy kết quả hôm nay của 3 miền từ xskt.com.vn."""
+    session = session or new_session()
+    db: Dict[str, Dict[str, Any]] = defaultdict(dict)
+    today = dt.date.today()
+    today_short = today.strftime("%d/%m")
+
+    log("🔄 Đang lấy kết quả xổ số hôm nay...")
+    for mien in ("xsmb", "xsmt", "xsmn"):
+        url = f"https://xskt.com.vn/{mien}"
+        try:
+            r = session.get(url, timeout=TIMEOUT)
+            r.raise_for_status()
+            soup = BeautifulSoup(r.text, "html.parser")
+            found = False
+            for table in soup.find_all("table"):
+                tid = str(table.get("id", ""))
+                if not any(x in tid for x in ("MB0", "MT0", "MN0")):
+                    continue
+                text = table.get_text(" ", strip=True)
+                if today_short not in text:
+                    continue
+                parsed = _parse_xskt_table(table, mien, want_2digit=False)
+                for code, result in parsed.items():
+                    db[code].update(result)
+                found = True
+            if not found:
+                log(f"⚠️ Chưa thấy bảng hôm nay ở {url}")
+        except Exception as e:
+            log(f"⚠️ Lỗi lấy {url}: {e}")
+
+    date_vn = today.strftime("%d/%m/%Y")
+    for result in db.values():
+        result["ngay"] = date_vn
+    return dict(db)
+
+
+def crawl_xskt_history(days: int = 95, session: Optional[requests.Session] = None) -> Tuple[Dict[str, List[List[str]]], Dict[str, List[Dict[str, Any]]]]:
     """
-    CÃ o dá»¯ liá»‡u 95 ngÃ y gáº§n nháº¥t tá»« xskt.com.vn cho cáº£ 3 miá»n
+    Lấy lịch sử thật. Nếu nguồn thiếu dữ liệu thì để thiếu, KHÔNG sinh số giả.
+    Trả về:
+      - final_db[code] = list các kỳ, mỗi kỳ là list 2 số cuối
+      - db_ket_qua[code] = danh sách kết quả đầy đủ (30 ngày gần nhất)
     """
-    session = requests.Session()
-    session.headers.update({
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-    })
-    
-    # Cáº¥u trÃºc lÆ°u trá»¯: db[code_dai][ngay] = [danh_sach_2_so_cuoi]
-    db = defaultdict(lambda: defaultdict(list))
-    db_ket_qua = defaultdict(list)
-    
-    today = datetime.date.today()
-    
-    print(f"Báº¯t Ä‘áº§u cÃ o dá»¯ liá»‡u {days} ngÃ y...")
-    
+    session = session or new_session()
+    db_2d: Dict[str, Dict[str, List[str]]] = defaultdict(lambda: defaultdict(list))
+    db_ket_qua: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+    today = dt.date.today()
+
+    log(f"🔄 Đang lấy lịch sử {days} ngày (không dùng dữ liệu giả)...")
     for i in range(days):
-        d = today - datetime.timedelta(days=i)
-        date_str = f"{d.day}-{d.month}-{d.year}"
-        
-        # CÃ o 3 miá»n
-        for mien in ["xsmb", "xsmt", "xsmn"]:
-            url = f"https://xskt.com.vn/{mien}/ngay-{date_str}"
+        d = today - dt.timedelta(days=i)
+        date_slug = f"{d.day}-{d.month}-{d.year}"
+        date_vn = d.strftime("%d/%m/%Y")
+
+        for mien in ("xsmb", "xsmt", "xsmn"):
+            url = f"https://xskt.com.vn/{mien}/ngay-{date_slug}"
             try:
-                r = session.get(url, timeout=10)
+                r = session.get(url, timeout=TIMEOUT)
                 if r.status_code != 200:
                     continue
-                soup = BeautifulSoup(r.text, 'html.parser')
-                
-                tables = soup.find_all('table')
-                for table in tables:
-                    if 'id' in table.attrs and ('MB0' in table['id'] or 'MT0' in table['id'] or 'MN0' in table['id']):
-                        # ÄÃ¢y lÃ  báº£ng káº¿t quáº£ chÃ­nh
-                        trs = table.find_all('tr')
-                        # Láº¥y danh sÃ¡ch Ä‘Ã i trong ngÃ y tá»« tháº» th
-                        dais_in_table = []
-                        if mien == "xsmb":
-                            dais_in_table = ["mb"] # Miá»n báº¯c máº·c Ä‘á»‹nh
-                        else:
-                            ths = trs[0].find_all('th')
-                            for th in ths[1:]:
-                                txt = th.get_text(" ", strip=True)
-                                code = normalize_name(txt)
-                                dais_in_table.append(code)
-                        
-                        # Duyá»‡t cÃ¡c hÃ ng giáº£i thÆ°á»Ÿng
-                        for tr in trs[1:]:
-                            tds = tr.find_all('td')
-                            if len(tds) < 2:
-                                continue
-                            
-                            ten_giai = tds[0].get_text(" ", strip=True).replace("Giáº£i ", "G").replace("Äáº·c biá»‡t", "ÄB")
-                            if ten_giai == "GÄB": ten_giai = "ÄB"
-                            
-                            # Cá»™t 0 lÃ  tÃªn giáº£i, cÃ¡c cá»™t tiáº¿p theo lÃ  sá»‘ trÃºng cá»§a cÃ¡c Ä‘Ã i
-                            for idx, td in enumerate(tds[1:]):
-                                if idx < len(dais_in_table) and dais_in_table[idx]:
-                                    code = dais_in_table[idx]
-                                    nums = extract_2_digits(td.get_text(" ", strip=True))
-                                    db[code][date_str].extend(nums)
-                                    
-                                    if i < 30:
-                                        ngay_format = f"{d.day:02d}/{d.month:02d}/{d.year}"
-                                        if not db_ket_qua[code] or db_ket_qua[code][-1].get('ngay') != ngay_format:
-                                            db_ket_qua[code].append({'ngay': ngay_format})
-                                        db_ket_qua[code][-1][ten_giai] = td.get_text(" - ", strip=True)
+                soup = BeautifulSoup(r.text, "html.parser")
+                for table in soup.find_all("table"):
+                    tid = str(table.get("id", ""))
+                    if not any(x in tid for x in ("MB0", "MT0", "MN0")):
+                        continue
+                    parsed = _parse_xskt_table(table, mien, want_2digit=True)
+                    for code, result in parsed.items():
+                        nums = result.pop("_2digits", [])
+                        if nums:
+                            db_2d[code][date_slug].extend(nums)
+                        if i < 30 and result:
+                            entry = {"ngay": date_vn, **result}
+                            # tránh trùng cùng ngày nếu page có nhiều bảng lặp
+                            existing = next((x for x in db_ket_qua[code] if x.get("ngay") == date_vn), None)
+                            if existing:
+                                existing.update(entry)
+                            else:
+                                db_ket_qua[code].append(entry)
             except Exception as e:
-                print(f"Lá»—i khi cÃ o {url}: {e}")
-        
-        time.sleep(0.2) # TrÃ¡nh bá»‹ cháº·n
-        
-        if (i+1) % 10 == 0:
-            print(f"ÄÃ£ cÃ o {i+1}/{days} ngÃ y...")
+                log(f"⚠️ {url}: {e}")
 
-    # Chuyá»ƒn Ä‘á»•i cáº¥u trÃºc db thÃ nh list theo tá»«ng Ä‘Ã i
-    final_db = {}
-    for code in MAP_DAI.keys():
-        # Sáº¯p xáº¿p ngÃ y giáº£m dáº§n
-        daily_lists = []
+        if (i + 1) % 10 == 0:
+            log(f"   Đã xử lý {i + 1}/{days} ngày")
+        time.sleep(0.10)
+
+    final_db: Dict[str, List[List[str]]] = {}
+    for code in MAP_DAI:
+        daily_lists: List[List[str]] = []
         for i in range(days):
-            d = today - datetime.timedelta(days=i)
-            date_str = f"{d.day}-{d.month}-{d.year}"
-            if date_str in db[code] and len(db[code][date_str]) >= 16: # Ãt nháº¥t 16 giáº£i
-                daily_lists.append(db[code][date_str])
-        
-        # Náº¿u Ä‘Ã i khÃ´ng cÃ³ dá»¯ liá»‡u thá»±c táº¿ (do xskt khÃ´ng Ä‘á»§ hoáº·c lá»—i), sinh giáº£ láº­p Ä‘á»ƒ fallback
-        if len(daily_lists) < 7:
-            daily_lists = fallback_gia_lap(95)
-            
+            d = today - dt.timedelta(days=i)
+            slug = f"{d.day}-{d.month}-{d.year}"
+            nums = db_2d[code].get(slug, [])
+            # Chỉ nhận kỳ có lượng số hợp lý; không fallback ngẫu nhiên.
+            if len(nums) >= 16:
+                daily_lists.append(nums)
         final_db[code] = daily_lists
-        
+        db_ket_qua[code].sort(key=lambda x: dt.datetime.strptime(x["ngay"], "%d/%m/%Y"), reverse=True)
+
     return final_db, dict(db_ket_qua)
 
-def fallback_gia_lap(moc_ky=95):
-    lich_su_ky = []
-    for _ in range(moc_ky):
-        so_trong_ngay = [f"{random.randint(0, 99):02d}" for _ in range(18)]
-        lich_su_ky.append(so_trong_ngay)
-    return lich_su_ky
 
-def tinh_toan_xac_suat_thong_ke(lich_su_giai, so_ky):
-    # Lá»c láº¥y chÃ­nh xÃ¡c sá»‘ lÆ°á»£ng ká»³ quay cáº§n phÃ¢n tÃ­ch
-    du_lieu_loc = lich_su_giai[:so_ky]
-    
-    # 1. THUáº¬T TOÃN Äáº¾M BIÃŠN Äá»˜ XUáº¤T HIá»†N
-    tat_ca_so = [so for ky in du_lieu_loc for so in ky]
+def tinh_toan_xac_suat_thong_ke(lich_su_giai: List[List[str]], so_ky: int) -> Dict[str, List[Dict[str, Any]]]:
+    du_lieu = lich_su_giai[:so_ky]
+    if not du_lieu:
+        return {"ve_nhieu": [], "chua_ve": []}
+
+    tat_ca = [so for ky in du_lieu for so in ky]
     dem_so = {f"{i:02d}": 0 for i in range(100)}
-    for so in tat_ca_so:
+    for so in tat_ca:
         if so in dem_so:
             dem_so[so] += 1
-            
-    danh_sach_ve = sorted(dem_so.items(), key=lambda x: x[1], reverse=True)
+
+    danh_sach_ve = sorted(dem_so.items(), key=lambda x: (-x[1], x[0]))
     top_7_ve = [{"s": so, "l": lan} for so, lan in danh_sach_ve[:7]]
-    
-    # 2. THUáº¬T TOÃN Äáº¾M CHU Ká»² KHAN (Sá» NGÃ€Y Váº®NG Máº¶T)
-    dem_gan = {}
+
+    dem_gan: Dict[str, int] = {}
     for i in range(100):
         so_tim = f"{i:02d}"
         ngay_vang = 0
-        for ky in du_lieu_loc:
+        for ky in du_lieu:
             if so_tim in ky:
                 break
-            else:
-                ngay_vang += 1
+            ngay_vang += 1
         dem_gan[so_tim] = ngay_vang
-        
-    danh_sach_gan = sorted(dem_gan.items(), key=lambda x: x[1], reverse=True)
+
+    danh_sach_gan = sorted(dem_gan.items(), key=lambda x: (-x[1], x[0]))
     top_7_gan = [{"s": so, "l": ngay} for so, ngay in danh_sach_gan[:7]]
-    
     return {"ve_nhieu": top_7_ve, "chua_ve": top_7_gan}
 
-def lay_thong_tin_kinh_te():
-    # GiÃ¡ máº·c Ä‘á»‹nh phÃ²ng khi rá»›t máº¡ng (GiÃ¡ má»›i nháº¥t ngÃ y 26/09/2026)
-    kq = {
-        "sjc_mua": "85.50", "sjc_ban": "87.50",
-        "nhan_mua": "84.10", "nhan_ban": "85.10",
-        "vang24k_mua": "83.20", "vang24k_ban": "84.00",
-        "usd_mua": "25,160", "usd_ban": "25,520",
-        "ron95": "20,510", "e5ron92": "19,620", "do005s": "17,500"
-    }
-    
-    headers = {"User-Agent": "Mozilla/5.0"}
-    # Sá»­ dá»¥ng Gemini API (User Provided Key) Ä‘á»ƒ láº¥y giÃ¡ vÃ ng, xÄƒng dáº§u vÃ  USD
-    api_key = "AQ.Ab8RN6KuB3efkMcUeIGlvnB-SOM56bLRKP8r28Ph6AW4rKoF2A"
-    
-    gemini_success = False
-    try:
-        import urllib.request
-        import json
-        url = f'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}'
-        prompt = """Báº¡n lÃ  chuyÃªn gia tÃ i chÃ­nh. HÃ£y tÃ¬m giÃ¡ vÃ ng, USD vÃ  xÄƒng dáº§u Petrolimex má»›i nháº¥t hÃ´m nay táº¡i Viá»‡t Nam.
-Tráº£ vá» DUY NHáº¤T má»™t chuá»—i JSON chuáº©n (khÃ´ng cÃ³ markdown code block, khÃ´ng cÃ³ text dÆ° thá»«a), Ä‘á»‹nh dáº¡ng:
-{"sjc_mua": "141.40", "sjc_ban": "144.40", "nhan_mua": "140.90", "nhan_ban": "143.90", "vang24k_mua": "140.40", "vang24k_ban": "143.40", "usd_mua": "25,160", "usd_ban": "25,520", "ron95": "20,510", "e5ron92": "19,620", "do005s": "17,500"}
-LÆ°u Ã½: SJC pháº£i cao nháº¥t > 9999 > 24K."""
-        
-        data = {"contents": [{"parts": [{"text": prompt}]}]}
-        req = urllib.request.Request(url, data=json.dumps(data).encode('utf-8'), headers={'Content-Type': 'application/json'})
-        with urllib.request.urlopen(req, timeout=8) as f:
-            res = json.loads(f.read().decode('utf-8'))
-            text_response = res['candidates'][0]['content']['parts'][0]['text']
-            
-            # Xá»­ lÃ½ text tráº£ vá» (cÃ³ thá»ƒ cÃ³ chá»©a markdown)
-            text_response = text_response.strip().replace('```json', '').replace('```', '')
-            gemini_data = json.loads(text_response)
-            
-            kq["sjc_mua"] = gemini_data.get("sjc_mua", kq["sjc_mua"])
-            kq["sjc_ban"] = gemini_data.get("sjc_ban", kq["sjc_ban"])
-            kq["nhan_mua"] = gemini_data.get("nhan_mua", kq["nhan_mua"])
-            kq["nhan_ban"] = gemini_data.get("nhan_ban", kq["nhan_ban"])
-            kq["vang24k_mua"] = gemini_data.get("vang24k_mua", kq["vang24k_mua"])
-            kq["vang24k_ban"] = gemini_data.get("vang24k_ban", kq["vang24k_ban"])
-            kq["usd_mua"] = gemini_data.get("usd_mua", kq["usd_mua"])
-            kq["usd_ban"] = gemini_data.get("usd_ban", kq["usd_ban"])
-            kq["ron95"] = gemini_data.get("ron95", kq["ron95"])
-            kq["e5ron92"] = gemini_data.get("e5ron92", kq["e5ron92"])
-            kq["do005s"] = gemini_data.get("do005s", kq["do005s"])
-            
-            gemini_success = True
-            print("âœ… ÄÃ£ láº¥y dá»¯ liá»‡u giÃ¡ vÃ ng, USD vÃ  xÄƒng dáº§u thÃ nh cÃ´ng tá»« Gemini API!")
-    except Exception as e:
-        print(f"âš ï¸ Lá»—i káº¿t ná»‘i Gemini API ({e}). Äang chuyá»ƒn sang há»‡ thá»‘ng AI mÃ´ phá»ng ná»™i bá»™ dá»± phÃ²ng...")
-        
-    if not gemini_success:
-        # Há»† THá»NG MÃ” PHá»ŽNG Dá»° PHÃ’NG Náº¾U API Lá»–I/Háº¾T Háº N
-        import datetime, random
-        now = datetime.datetime.now()
-        random.seed(now.year * 10000 + now.month * 100 + now.day + now.hour) 
-        
-        # VÃ ng
-        base_sjc_mua = 141.40
-        base_sjc_ban = 144.40
-        bien_do = round(random.uniform(-0.3, 0.3), 2)
-        sjc_mua = base_sjc_mua + bien_do
-        sjc_ban = base_sjc_ban + bien_do
-        nhan_mua = sjc_mua - round(random.uniform(1.4, 1.6), 2)
-        nhan_ban = sjc_ban - round(random.uniform(1.8, 2.2), 2)
-        vang24k_mua = nhan_mua - round(random.uniform(0.5, 0.8), 2)
-        vang24k_ban = nhan_ban - round(random.uniform(0.7, 1.0), 2)
-        
-        kq["sjc_mua"] = f"{sjc_mua:.2f}"
-        kq["sjc_ban"] = f"{sjc_ban:.2f}"
-        kq["nhan_mua"] = f"{nhan_mua:.2f}"
-        kq["nhan_ban"] = f"{nhan_ban:.2f}"
-        kq["vang24k_mua"] = f"{vang24k_mua:.2f}"
-        kq["vang24k_ban"] = f"{vang24k_ban:.2f}"
-        
-        # USD
-        base_usd_mua = 25160
-        base_usd_ban = 25520
-        usd_bien_do = random.randint(-15, 15) * 10
-        kq["usd_mua"] = f"{(base_usd_mua + usd_bien_do):,}"
-        kq["usd_ban"] = f"{(base_usd_ban + usd_bien_do):,}"
-        
-        # XÄƒng dáº§u
-        base_ron95 = 20510
-        base_e5 = 19620
-        base_do = 17500
-        xang_bien_do = random.randint(-5, 5) * 10
-        kq["ron95"] = f"{(base_ron95 + xang_bien_do):,}"
-        kq["e5ron92"] = f"{(base_e5 + xang_bien_do):,}"
-        kq["do005s"] = f"{(base_do + xang_bien_do):,}"
-                    
-    try:
-        # Láº¥y tá»· giÃ¡ USD tá»« Vietcombank XML
-        r_usd = requests.get("https://portal.vietcombank.com.vn/Usercontrols/TVPortal.TyGia/pXML.aspx", headers=headers, timeout=10)
-        if r_usd.status_code == 200:
-            import xml.etree.ElementTree as ET
-            root = ET.fromstring(r_usd.text)
-            for exrate in root.findall('Exrate'):
-                if exrate.get('CurrencyCode') == 'USD':
-                    kq["usd_mua"] = "{:,}".format(int(float(exrate.get('Buy', kq["usd_mua"].replace(',', '')))))
-                    kq["usd_ban"] = "{:,}".format(int(float(exrate.get('Sell', kq["usd_ban"].replace(',', '')))))
-                    break
-    except: pass
-    
-    try:
-        # CÃ o giÃ¡ XÄƒng dáº§u (Tá»« nguá»“n api tÄ©nh hoáº·c web náº¿u cÃ³) - á»ž Ä‘Ã¢y dÃ¹ng web scraping cÆ¡ báº£n
-        r_xang = requests.get("https://giaxang.com/", headers=headers, timeout=5)
-        if r_xang.status_code == 200:
-            soup = BeautifulSoup(r_xang.text, "html.parser")
-            # TrÃ­ch xuáº¥t giÃ¡ RON 95, E5, DO (náº¿u tÃ¬m tháº¥y, sáº½ cáº­p nháº­t vÃ o biáº¿n kq)
-            # MÃ£ cÃ o tÃ¹y thuá»™c cáº¥u trÃºc trang, dÃ¹ng try-catch Ä‘á»ƒ an toÃ n
-    except: pass
-        
-    return kq
 
-def van_hanh_cap_nhat_he_thong():
-    print("ðŸ¤– Robot Python Ä‘ang cÃ o dá»¯ liá»‡u tháº­t tá»« XSKT...")
-    
-    cac_moc_ky = [7, 15, 30, 60, 90]
-    db_ket_qua_tong_hop = {}
-    
-    # 1. CÃ o dá»¯ liá»‡u xÃ¡c suáº¥t vÃ  káº¿t quáº£ hÃ´m nay
-    lich_su_all_dai, db_ket_qua_history = crawl_xskt_history(95)
-    db_ket_qua_hom_nay = crawl_xskt_today_full_results()
-    
-    # Trá»™n káº¿t quáº£ hÃ´m nay vÃ o lá»‹ch sá»­ 30 ngÃ y
-    today_str = f"{datetime.date.today().day:02d}/{datetime.date.today().month:02d}/{datetime.date.today().year}"
-    for code, result in db_ket_qua_hom_nay.items():
-        if code not in db_ket_qua_history:
-            db_ket_qua_history[code] = [result]
-        else:
-            if len(db_ket_qua_history[code]) > 0 and db_ket_qua_history[code][0].get('ngay') == today_str:
-                db_ket_qua_history[code][0].update(result)
-            else:
-                db_ket_qua_history[code].insert(0, result)
-    
-    # 2. Xá»­ lÃ½ thuáº­t toÃ¡n xÃ¡c suáº¥t
-    for dai, lich_su_dai in lich_su_all_dai.items():
-        db_ket_qua_tong_hop[dai] = {}
-        for ky in cac_moc_ky:
-            db_ket_qua_tong_hop[dai][str(ky)] = tinh_toan_xac_suat_thong_ke(lich_su_dai, ky)
-            
-    # ÄÃ³ng gÃ³i ma tráº­n thÃ nh chuá»—i vÄƒn báº£n JSON
-    json_string_xs = json.dumps(db_ket_qua_tong_hop, ensure_ascii=False, separators=(',', ':'))
-    json_string_kq = json.dumps(db_ket_qua_history, ensure_ascii=False, separators=(',', ':'))
-    
-    data_js_inject = f"const dbXacSuat = {json_string_xs};\nconst dbKetQua = {json_string_kq};"
-    
-    # Thu tháº­p dá»¯ liá»‡u thÃ´ng tin kinh táº¿ thá»±c táº¿
-    kinh_te = lay_thong_tin_kinh_te()
-    
-    # TIáº¾N HÃ€NH DÃ’ TÃŒM VÃ€ GHI ÄÃˆ Äá»’NG Bá»˜ VÃ€O FILE FRONT-END HTML
-    file_path = "index.html"
-    if os.path.exists(file_path):
-        with open(file_path, "r", encoding="utf-8") as file:
-            content = file.read()
-            
-        start_tag = "// ---PYTHON_DATA_START---"
-        end_tag = "// ---PYTHON_DATA_END---"
-        
-        start_idx = content.find(start_tag)
-        end_idx = content.find(end_tag)
-        
-        if start_idx != -1 and end_idx != -1:
-            new_content = (
-                content[:start_idx + len(start_tag)] + "\n" +
-                data_js_inject + "\n" +
-                content[end_idx:]
-            )
-            
-            # Cáº­p nháº­t thÃ´ng tin kinh táº¿
-            import re
-            new_content = re.sub(r'id="sjc-gia"[^>]*>Mua: [\d.]+ - BÃ¡n: [\d.]+', f'id="sjc-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: {kinh_te["sjc_mua"]} - BÃ¡n: {kinh_te["sjc_ban"]}', new_content)
-            new_content = re.sub(r'id="nhan-gia"[^>]*>Mua: [\d.]+ - BÃ¡n: [\d.]+', f'id="nhan-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: {kinh_te["nhan_mua"]} - BÃ¡n: {kinh_te["nhan_ban"]}', new_content)
-            new_content = re.sub(r'id="vang24k-gia"[^>]*>Mua: [\d.]+ - BÃ¡n: [\d.]+', f'id="vang24k-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: {kinh_te["vang24k_mua"]} - BÃ¡n: {kinh_te["vang24k_ban"]}', new_content)
-            new_content = re.sub(r'id="usd-gia"[^>]*>Mua: [\d,]+ - BÃ¡n: [\d,]+', f'id="usd-gia" style="color: #424242; font-weight: bold; font-size: 0.8rem;">Mua: {kinh_te["usd_mua"]} - BÃ¡n: {kinh_te["usd_ban"]}', new_content)
-            
-            # Cáº­p nháº­t xÄƒng dáº§u
-            new_content = re.sub(r'RON 95-III:</b> [\d,]+Ä‘/l', f'RON 95-III:</b> {kinh_te["ron95"]}Ä‘/l', new_content)
-            new_content = re.sub(r'E5 RON 92:</b> [\d,]+Ä‘/l', f'E5 RON 92:</b> {kinh_te["e5ron92"]}Ä‘/l', new_content)
-            new_content = re.sub(r'DO 0,05S:</b> [\d,]+Ä‘/l', f'DO 0,05S:</b> {kinh_te["do005s"]}Ä‘/l', new_content)
-            
-            with open(file_path, "w", encoding="utf-8") as file:
-                file.write(new_content)
-            
-            print("âœ… ThÃ nh cÃ´ng: Há»‡ thá»‘ng ma tráº­n dá»¯ liá»‡u Ä‘Ã£ Ä‘Æ°á»£c Ä‘á»“ng bá»™ hÃ³a sáº¡ch sáº½!")
-        else:
-            print("âŒ Lá»—i: Tháº» cáº¥u trÃºc áº©n ngáº§m bá»‹ thay Ä‘á»•i hoáº·c khÃ´ng tÃ¬m tháº¥y.")
+# -------------------------
+# ĐỌC/GHI KHỐI DATA TRONG INDEX.HTML
+# -------------------------
+def read_index_databases() -> Tuple[Dict[str, Any], Dict[str, Any]]:
+    if not INDEX_FILE.exists():
+        return {}, {}
+    content = INDEX_FILE.read_text(encoding="utf-8")
+    if "// ---PYTHON_DATA_START---" not in content or "// ---PYTHON_DATA_END---" not in content:
+        return {}, {}
+    block = content.split("// ---PYTHON_DATA_START---", 1)[1].split("// ---PYTHON_DATA_END---", 1)[0]
+    m1 = re.search(r"const\s+dbXacSuat\s*=\s*(\{.*?\})\s*;\s*const\s+dbKetQua", block, re.S)
+    m2 = re.search(r"const\s+dbKetQua\s*=\s*(\{.*\})\s*;", block, re.S)
+    try:
+        db_xs = json.loads(m1.group(1)) if m1 else {}
+    except Exception:
+        db_xs = {}
+    try:
+        db_kq = json.loads(m2.group(1)) if m2 else {}
+    except Exception:
+        db_kq = {}
+    return db_xs, db_kq
+
+
+def write_index_databases(db_xs: Dict[str, Any], db_kq: Dict[str, Any]) -> bool:
+    if not INDEX_FILE.exists():
+        log(f"❌ Không tìm thấy {INDEX_FILE.name}")
+        return False
+
+    content = INDEX_FILE.read_text(encoding="utf-8")
+    start_tag = "// ---PYTHON_DATA_START---"
+    end_tag = "// ---PYTHON_DATA_END---"
+    start_idx = content.find(start_tag)
+    end_idx = content.find(end_tag)
+    if start_idx == -1 or end_idx == -1 or end_idx <= start_idx:
+        log("❌ Không tìm thấy cặp thẻ PYTHON_DATA trong index.html")
+        return False
+
+    payload = (
+        "\nconst dbXacSuat = " + json.dumps(db_xs, ensure_ascii=False, separators=(",", ":")) + ";\n"
+        "const dbKetQua = " + json.dumps(db_kq, ensure_ascii=False, separators=(",", ":")) + ";\n"
+    )
+    new_content = content[: start_idx + len(start_tag)] + payload + content[end_idx:]
+    INDEX_FILE.write_text(new_content, encoding="utf-8")
+    return True
+
+
+def merge_today_into_history(db_kq: Dict[str, Any], today_results: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
+    today_vn = dt.date.today().strftime("%d/%m/%Y")
+    out = dict(db_kq or {})
+    for code, result in today_results.items():
+        arr = list(out.get(code, []))
+        found = False
+        for item in arr:
+            if item.get("ngay") == today_vn:
+                item.update(result)
+                found = True
+                break
+        if not found:
+            arr.insert(0, result)
+        # giữ 30 kỳ/ngày gần nhất đã có
+        arr = arr[:30]
+        out[code] = arr
+    return out
+
+
+# -------------------------
+# VIETLOTT
+# -------------------------
+GITHUB_VIETLOTT = {
+    "mega": "https://raw.githubusercontent.com/vietvudanh/vietlott-data/main/data/power645.jsonl",
+    "power": "https://raw.githubusercontent.com/vietvudanh/vietlott-data/main/data/power655.jsonl",
+}
+
+XOSO_DETAIL_PAGES = {
+    # Một trang/tựa game là đủ cho các kỳ gần đây; giảm tải khi chạy 15 phút/lần.
+    "mega": ["https://xoso.com.vn/do-ket-qua-xo-so-mega.html"],
+    "power": ["https://xoso.com.vn/xo-so-power-655.html"],
+}
+
+
+
+def _date_iso(value: Any) -> Optional[str]:
+    s = str(value or "").strip().split("T")[0]
+    for fmt in ("%Y-%m-%d", "%d/%m/%Y", "%d-%m-%Y"):
+        try:
+            return dt.datetime.strptime(s, fmt).date().isoformat()
+        except ValueError:
+            pass
+    return None
+
+
+def _claimable(date_iso: str, days: int = 60) -> bool:
+    try:
+        d = dt.date.fromisoformat(date_iso)
+    except Exception:
+        return False
+    return d + dt.timedelta(days=days) >= dt.date.today()
+
+
+def _normalize_vietlott_draw(row: Dict[str, Any], kind: str, source: str) -> Optional[Dict[str, Any]]:
+    date_iso = _date_iso(row.get("date") or row.get("draw_date"))
+    draw_id = str(row.get("id") or row.get("drawId") or row.get("draw_id") or "").replace("#", "").strip()
+    nums = row.get("numbers") or row.get("result") or row.get("balls")
+    if not date_iso or not draw_id or not isinstance(nums, list) or len(nums) < 6:
+        return None
+
+    balls = []
+    for x in nums[:6]:
+        try:
+            balls.append(int(x))
+        except Exception:
+            return None
+    bonus = row.get("bonus")
+    if bonus is None and kind == "power" and len(nums) >= 7:
+        bonus = nums[6]
+    try:
+        bonus = int(bonus) if bonus is not None and str(bonus) != "" else None
+    except Exception:
+        bonus = None
+
+    out: Dict[str, Any] = {
+        "id": draw_id.zfill(5),
+        "date": date_iso,
+        "balls": balls,
+        "bonus": bonus if kind == "power" else None,
+        "source": source,
+    }
+
+    # Chỉ nhận các field nếu nguồn thực sự có; không suy diễn jackpot kỳ hiện tại từ "next jackpot".
+    for key in ("jackpot", "jackpot1", "jackpot2"):
+        if row.get(key) not in (None, ""):
+            out[key] = row.get(key)
+    counts = row.get("counts") or row.get("prizeCounts") or row.get("prize_counts")
+    if isinstance(counts, dict):
+        out["counts"] = counts
+    return out
+
+
+def fetch_jsonl_history(url: str, kind: str, session: requests.Session) -> List[Dict[str, Any]]:
+    r = session.get(url, timeout=TIMEOUT)
+    r.raise_for_status()
+    rows: List[Dict[str, Any]] = []
+    for line in r.text.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            raw = json.loads(line)
+        except Exception:
+            continue
+        d = _normalize_vietlott_draw(raw, kind, "github-vietlott-data")
+        if d:
+            rows.append(d)
+    rows.sort(key=lambda x: (x["date"], x["id"]), reverse=True)
+    return rows
+
+
+def fetch_pha_history(kind: str, api_key: str, session: requests.Session, limit: int = 100) -> List[Dict[str, Any]]:
+    game = "mega645" if kind == "mega" else "power655"
+    url = "https://pha.vn/api/v1/dientoan"
+    r = session.get(url, params={"game": game, "limit": limit}, headers={**HEADERS, "X-API-KEY": api_key}, timeout=TIMEOUT)
+    r.raise_for_status()
+    data = r.json()
+    if data.get("status") != "success":
+        raise RuntimeError(f"PHA trả trạng thái: {data.get('status')}")
+    rows: List[Dict[str, Any]] = []
+    for raw in data.get("draws", []):
+        d = _normalize_vietlott_draw(raw, kind, "pha.vn")
+        if d:
+            # Nếu API trả jackpot kỳ tiếp theo, giữ riêng để không nhầm với Jackpot của kỳ đã quay.
+            for k in ("next_jackpot", "jackpot_next", "nextJackpot"):
+                if raw.get(k) not in (None, ""):
+                    d["next_jackpot"] = raw.get(k)
+                    break
+            rows.append(d)
+    rows.sort(key=lambda x: (x["date"], x["id"]), reverse=True)
+    return rows
+
+
+def _int_from_cell(text: str) -> Optional[int]:
+    digits = re.sub(r"[^0-9]", "", text or "")
+    return int(digits) if digits else None
+
+
+def crawl_xoso_prize_details(kind: str, session: requests.Session) -> Dict[str, Dict[str, Any]]:
+    """Bổ sung Jackpot và số lượng giải từ các bảng công khai. Lỗi thì bỏ qua."""
+    details: Dict[str, Dict[str, Any]] = {}
+    for url in XOSO_DETAIL_PAGES[kind]:
+        try:
+            r = session.get(url, timeout=TIMEOUT)
+            if r.status_code != 200:
+                continue
+            soup = BeautifulSoup(r.text, "html.parser")
+            nodes = soup.find_all(string=re.compile(r"Kỳ\s+quay\s+thưởng", re.I))
+            for node in nodes:
+                text = str(node)
+                m = re.search(r"#\s*(\d{4,6})", text)
+                if not m:
+                    # đôi khi ID nằm ở parent text
+                    parent_text = node.parent.get_text(" ", strip=True) if node.parent else text
+                    m = re.search(r"#\s*(\d{4,6})", parent_text)
+                if not m:
+                    continue
+                draw_id = m.group(1).zfill(5)
+                table = node.parent.find_next("table") if node.parent else None
+                if table is None:
+                    continue
+
+                item: Dict[str, Any] = {"source_detail": "xoso.com.vn"}
+                counts: Dict[str, int] = {}
+                good_rows = 0
+                for tr in table.find_all("tr"):
+                    cells = [c.get_text(" ", strip=True) for c in tr.find_all(["td", "th"])]
+                    if len(cells) < 3:
+                        continue
+                    label = cells[0].lower().strip()
+                    count = _int_from_cell(cells[-2])
+                    value = _int_from_cell(cells[-1])
+                    if "jackpot 1" in label:
+                        if value is not None:
+                            item["jackpot"] = value
+                        if count is not None:
+                            counts["jackpot"] = count
+                        good_rows += 1
+                    elif "jackpot 2" in label:
+                        if value is not None:
+                            item["jackpot2"] = value
+                        if count is not None:
+                            counts["jackpot2"] = count
+                        good_rows += 1
+                    elif label == "jackpot" or label.startswith("jackpot "):
+                        if value is not None:
+                            item["jackpot"] = value
+                        if count is not None:
+                            counts["jackpot"] = count
+                        good_rows += 1
+                    elif "giải nhất" in label or label == "giải 1":
+                        if count is not None:
+                            counts["first"] = count
+                        good_rows += 1
+                    elif "giải nhì" in label or label == "giải 2":
+                        if count is not None:
+                            counts["second"] = count
+                        good_rows += 1
+                    elif "giải ba" in label or label == "giải 3":
+                        if count is not None:
+                            counts["third"] = count
+                        good_rows += 1
+                if good_rows >= 3:
+                    item["counts"] = counts
+                    # ưu tiên bản đầy đủ hơn nếu cùng ID xuất hiện nhiều trang
+                    old = details.get(draw_id, {})
+                    details[draw_id] = {**old, **item}
+        except Exception as e:
+            log(f"⚠️ Không lấy được chi tiết Vietlott từ {url}: {e}")
+    return details
+
+
+def merge_histories(*histories: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Merge theo ID; history đứng trước có độ ưu tiên cao hơn cho field đã có."""
+    merged: Dict[str, Dict[str, Any]] = {}
+    # đi ngược để danh sách đứng trước ghi đè sau cùng
+    hs = list(histories)
+    for hist in reversed(hs):
+        for row in hist or []:
+            key = str(row.get("id") or "").zfill(5)
+            if not key.strip("0"):
+                continue
+            merged[key] = {**merged.get(key, {}), **row}
+    out = list(merged.values())
+    out.sort(key=lambda x: (x.get("date", ""), x.get("id", "")), reverse=True)
+    return out
+
+
+def load_previous_vietlott() -> Dict[str, Any]:
+    if not VIETLOTT_FILE.exists():
+        return {}
+    try:
+        return json.loads(VIETLOTT_FILE.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def previous_history(data: Dict[str, Any], kind: str) -> List[Dict[str, Any]]:
+    arr = data.get(f"{kind}_history")
+    if not isinstance(arr, list):
+        arr = []
+    latest = data.get(kind)
+    if isinstance(latest, dict):
+        arr = [latest, *arr]
+    return [x for x in arr if isinstance(x, dict)]
+
+
+def update_vietlott() -> bool:
+    session = new_session()
+    previous = load_previous_vietlott()
+    pha_key = os.getenv("PHA_API_KEY", "").strip()
+    output: Dict[str, Any] = {
+        "updated_at": dt.datetime.now(dt.timezone(dt.timedelta(hours=7))).isoformat(timespec="seconds"),
+        "claim_period_days": 60,
+    }
+    all_ok = False
+
+    for kind in ("mega", "power"):
+        gh: List[Dict[str, Any]] = []
+        pha: List[Dict[str, Any]] = []
+        try:
+            gh = fetch_jsonl_history(GITHUB_VIETLOTT[kind], kind, session)
+            log(f"✅ Vietlott {kind}: lấy {len(gh)} kỳ từ GitHub dataset")
+        except Exception as e:
+            log(f"⚠️ Vietlott {kind} GitHub lỗi: {e}")
+
+        if pha_key:
+            try:
+                pha = fetch_pha_history(kind, pha_key, session, 100)
+                log(f"✅ Vietlott {kind}: lấy {len(pha)} kỳ từ PHA")
+            except Exception as e:
+                log(f"⚠️ PHA {kind} lỗi, dùng nguồn dự phòng: {e}")
+
+        prev = previous_history(previous, kind)
+        history = merge_histories(pha, gh, prev)
+
+        # Bổ sung Jackpot + số lượng giải. Nếu web phụ bị lỗi, dữ liệu cũ vẫn được giữ.
+        try:
+            details = crawl_xoso_prize_details(kind, session)
+        except Exception:
+            details = {}
+        if details:
+            for row in history:
+                detail = details.get(str(row.get("id", "")).zfill(5))
+                if detail:
+                    row.update(detail)
+
+        # Chỉ giữ các kỳ còn hạn lĩnh thưởng 60 ngày cho phần lịch sử hiển thị.
+        claimable = [x for x in history if x.get("date") and _claimable(x["date"], 60)]
+        claimable.sort(key=lambda x: (x.get("date", ""), x.get("id", "")), reverse=True)
+
+        # Latest có thể là kỳ mới hơn 60 ngày hiển nhiên; nếu không có nguồn mới thì giữ bản cũ.
+        latest = history[0] if history else (previous.get(kind) if isinstance(previous.get(kind), dict) else None)
+        output[kind] = latest
+        output[f"{kind}_history"] = claimable
+        if latest:
+            all_ok = True
+
+    if not all_ok and previous:
+        log("⚠️ Không lấy được Vietlott mới; giữ nguyên file vietlott.json cũ.")
+        return False
+
+    tmp = VIETLOTT_FILE.with_suffix(".json.tmp")
+    tmp.write_text(json.dumps(output, ensure_ascii=False, indent=2), encoding="utf-8")
+    tmp.replace(VIETLOTT_FILE)
+    log(f"✅ Đã ghi {VIETLOTT_FILE.name}")
+    return True
+
+
+# -------------------------
+# ĐIỀU PHỐI
+# -------------------------
+def run_quick() -> None:
+    """Cập nhật nhanh: kết quả hôm nay + Vietlott; giữ nguyên bảng thống kê lịch sử."""
+    db_xs, db_kq = read_index_databases()
+    if not db_xs and not db_kq:
+        log("⚠️ Không đọc được dữ liệu cũ trong index.html; chuyển sang full.")
+        run_full()
+        return
+    today = crawl_xskt_today_full_results()
+    if today:
+        db_kq = merge_today_into_history(db_kq, today)
+        if write_index_databases(db_xs, db_kq):
+            log("✅ Đã cập nhật nhanh kết quả hôm nay vào index.html")
     else:
-        print("âŒ Lá»—i: KhÃ´ng tÃ¬m tháº¥y file index.html náº±m chung trong thÆ° má»¥c.")
+        log("ℹ️ Chưa có kết quả hôm nay; giữ index.html hiện tại.")
+    update_vietlott()
+
+
+def run_full() -> None:
+    session = new_session()
+    history_2d, db_kq = crawl_xskt_history(95, session)
+    today = crawl_xskt_today_full_results(session)
+    if today:
+        db_kq = merge_today_into_history(db_kq, today)
+
+    moc_ky = [7, 15, 30, 60, 90]
+    db_xs: Dict[str, Any] = {}
+    for code in MAP_DAI:
+        lich_su = history_2d.get(code, [])
+        db_xs[code] = {}
+        for ky in moc_ky:
+            db_xs[code][str(ky)] = tinh_toan_xac_suat_thong_ke(lich_su, ky)
+
+    if write_index_databases(db_xs, db_kq):
+        log("✅ Đã cập nhật lịch sử + thống kê thật vào index.html")
+    update_vietlott()
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Auto Bot V2 - Xổ Số Phát Đạt")
+    parser.add_argument("--mode", choices=["quick", "full", "vietlott"], default="quick")
+    args = parser.parse_args()
+
+    log(f"🤖 AUTO BOT V2 - mode={args.mode}")
+    if args.mode == "full":
+        run_full()
+    elif args.mode == "vietlott":
+        update_vietlott()
+    else:
+        run_quick()
+    return 0
+
 
 if __name__ == "__main__":
-    van_hanh_cap_nhat_he_thong()
+    raise SystemExit(main())
