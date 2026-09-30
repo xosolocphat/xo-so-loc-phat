@@ -1,0 +1,76 @@
+name: Auto update lottery data
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Chế độ cập nhật"
+        required: false
+        default: "quick"
+        type: choice
+        options:
+          - quick
+          - full
+          - vietlott
+  schedule:
+    # 07:15 giờ Việt Nam: làm mới lịch sử/thống kê đầy đủ 1 lần/ngày.
+    - cron: "15 0 * * *"
+    # 16:00-19:45 giờ Việt Nam: cập nhật nhanh mỗi 15 phút trong giờ xổ.
+    - cron: "*/15 9-12 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: lottery-auto-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Choose mode
+        id: mode
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "value=${{ inputs.mode }}" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event.schedule }}" = "15 0 * * *" ]; then
+            echo "value=full" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=quick" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run bot
+        env:
+          # Tùy chọn. Nếu chưa tạo secret này, bot tự dùng nguồn miễn phí dự phòng.
+          PHA_API_KEY: ${{ secrets.PHA_API_KEY }}
+        run: python auto_bot.py --mode "${{ steps.mode.outputs.value }}"
+
+      - name: Commit updated data
+        shell: bash
+        run: |
+          if git diff --quiet -- index.html vietlott.json; then
+            echo "Không có thay đổi mới."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html vietlott.json
+          git commit -m "Auto update lottery data"
+          git push
