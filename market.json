@@ -1,13 +1,13 @@
 {
-  "updated_at": "01/10/2026 21:18",
+  "updated_at": "01/10/2026 21:25",
   "gold": {
     "source": "SJC",
     "source_url": "https://sjc.com.vn/",
-    "source_time": "08:34 26/09/2026",
+    "source_time": "01/10/2026 15:30",
     "unit": "triệu đồng/lượng",
     "sjc": {
-      "buy": 141.4,
-      "sell": 144.4
+      "buy": 141.3,
+      "sell": 144.3
     },
     "ring_9999": {
       "buy": 140.9,
@@ -21,20 +21,20 @@
   "usd": {
     "source": "Vietcombank",
     "source_url": "https://portal.vietcombank.com.vn/Usercontrols/TVPortal.TyGia/pXML.aspx",
-    "source_time": "01/10/2026 21:18",
+    "source_time": "25/09/2026",
     "unit": "VND/USD",
-    "buy": 25770,
-    "transfer": 25800,
-    "sell": 26180
+    "buy": 25760,
+    "transfer": 25790,
+    "sell": 26170
   },
   "fuel": {
     "source": "PVOIL",
-    "source_url": "https://www.pvoil.com.vn/tin-gia-xang-dau",
-    "source_time": "15:00 24/09/2026",
+    "source_url": "https://www.pvoil.com.vn/",
+    "source_time": "01/10/2026 15:00",
     "unit": "đồng/lít",
-    "e10_ron95_iii": 27080,
-    "e5_ron92_ii": 26390,
-    "do_005s_ii": 30490
+    "e10_ron95_iii": 27189,
+    "e5_ron92_ii": 26569,
+    "do_005s_ii": 29717
   },
   "status": {
     "gold": true,
