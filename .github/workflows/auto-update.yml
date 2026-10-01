@@ -1,76 +1,44 @@
-name: Auto update lottery data
+name: Auto Update Bot
 
 on:
-  workflow_dispatch:
-    inputs:
-      mode:
-        description: "Chế độ cập nhật"
-        required: false
-        default: "quick"
-        type: choice
-        options:
-          - quick
-          - full
-          - vietlott
   schedule:
-    # 07:15 giờ Việt Nam: làm mới lịch sử/thống kê đầy đủ 1 lần/ngày.
-    - cron: "15 0 * * *"
-    # 16:00-19:45 giờ Việt Nam: cập nhật nhanh mỗi 15 phút trong giờ xổ.
-    - cron: "*/15 9-12 * * *"
-
-permissions:
-  contents: write
-
-concurrency:
-  group: lottery-auto-update
-  cancel-in-progress: false
+    # 1. Cập nhật dữ liệu Kinh tế (Vàng, USD, Xăng) mỗi giờ (phút thứ 0)
+    - cron: '0 * * * *'
+    # 2. Cập nhật Xổ số ngay sau khi quay xong (Giờ UTC, +7 = Giờ Việt Nam)
+    # 09:45 UTC = 16:45 VN (Chốt Miền Nam)
+    # 10:45 UTC = 17:45 VN (Chốt Miền Trung)
+    # 11:45 UTC = 18:45 VN (Chốt Miền Bắc & Vietlott)
+    - cron: '45 9,10,11 * * *'
+  workflow_dispatch: # Cho phép bấm chạy thủ công trên web
 
 jobs:
-  update:
+  update-data:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+    - name: Kiểm tra mã nguồn
+      uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-          cache: "pip"
+    - name: Cài đặt Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+    - name: Cài đặt thư viện
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests beautifulsoup4
 
-      - name: Choose mode
-        id: mode
-        shell: bash
-        run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "value=${{ inputs.mode }}" >> "$GITHUB_OUTPUT"
-          elif [ "${{ github.event.schedule }}" = "15 0 * * *" ]; then
-            echo "value=full" >> "$GITHUB_OUTPUT"
-          else
-            echo "value=quick" >> "$GITHUB_OUTPUT"
-          fi
+    - name: Cập nhật dữ liệu Thị trường (Vàng, USD, Xăng dầu)
+      run: python update_market.py || echo "Lỗi khi lấy dữ liệu thị trường, bỏ qua"
 
-      - name: Run bot
-        env:
-          # Tùy chọn. Nếu chưa tạo secret này, bot tự dùng nguồn miễn phí dự phòng.
-          PHA_API_KEY: ${{ secrets.PHA_API_KEY }}
-        run: python auto_bot.py --mode "${{ steps.mode.outputs.value }}"
+    - name: Chạy Bot cào dữ liệu Xổ số
+      run: python auto_bot.py || echo "Lỗi khi lấy dữ liệu xổ số, bỏ qua"
 
-      - name: Commit updated data
-        shell: bash
-        run: |
-          if git diff --quiet -- index.html vietlott.json; then
-            echo "Không có thay đổi mới."
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html vietlott.json
-          git commit -m "Auto update lottery data"
-          git push
+    - name: Commit và Đẩy dữ liệu mới lên Github
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add index.html market.json market-data.js vietlott.json || true
+        git commit -m "Auto update dữ liệu xổ số và kinh tế" || echo "Không có thay đổi mới"
+        git push
