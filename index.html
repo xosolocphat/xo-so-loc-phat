@@ -473,9 +473,21 @@ let cacNgayCoKetQua = [];
 let trangNgayHienTai = 0;
 
 function initThanhChonNgay() {
-    if (cacNgayCoKetQua.length === 0 && typeof dbKetQua !== 'undefined' && dbKetQua['mb']) {
-        cacNgayCoKetQua = dbKetQua['mb'].map(item => item.ngay).slice(0, 30);
-        ngayHienTai = cacNgayCoKetQua[0];
+    if (cacNgayCoKetQua.length === 0 && typeof dbKetQua !== 'undefined') {
+        let tapHopNgay = new Set();
+        for (let dai in dbKetQua) {
+            dbKetQua[dai].forEach(item => {
+                if (item.ngay) tapHopNgay.add(item.ngay);
+            });
+        }
+        cacNgayCoKetQua = Array.from(tapHopNgay).sort((a, b) => {
+            let [d1, m1, y1] = a.split('/');
+            let [d2, m2, y2] = b.split('/');
+            return new Date(y2, m2 - 1, d2) - new Date(y1, m1 - 1, d1);
+        }).slice(0, 30);
+        if (cacNgayCoKetQua.length > 0) {
+            ngayHienTai = cacNgayCoKetQua[0];
+        }
     }
 }
 
