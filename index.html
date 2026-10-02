@@ -227,14 +227,24 @@ body:not(.is-vietlott) #khung-vietlott-native {
   <div class="khung-chuyen-muc-dai" id="vung-chon-dai-goc">
     <!-- Phân vùng khối HTML sẽ được JavaScript tự động hoán đổi dựa trên dữ liệu định vị IP -->
     <div class="vung-mien-block mien-bac-style" id="block-bac">
-      <div class="tieu-de-mien-meta"><p class="ten-mien-header">📍 MIỀN BẮC</p></div>
+      <div class="tieu-de-mien-meta">
+        <p class="ten-mien-header">📍 MIỀN BẮC</p>
+        <div class="khung-do-so" style="display: flex; align-items: center; justify-content: center; flex: 1; margin: 0 10px; position: relative; max-width: 180px;" onclick="event.stopPropagation()">
+            <input type="text" id="input-doso-bac" placeholder="Nhập vé số..." maxlength="6" inputmode="numeric" style="width: 100%; border: 1px solid #ccc; border-radius: 12px; padding: 4px 50px 4px 10px; font-size: 13px; outline: none; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); font-weight: bold; color: #d32f2f;" onkeyup="if(event.key==='Enter') document.getElementById('btn-doso-bac').click()">
+            <button id="btn-doso-bac" style="position: absolute; right: 2px; background: linear-gradient(to bottom, #ffeb3b, #fbc02d); border: none; border-radius: 10px; padding: 3px 8px; font-weight: bold; font-size: 11px; cursor: pointer; color: #b71c1c; box-shadow: 0 1px 2px rgba(0,0,0,0.2);" onclick="doVeSoNhanh('input-doso-bac')">Dò số</button>
+        </div>
+      </div>
       <div style="display:grid; grid-template-columns: repeat(3, 1fr);" id="ds-mien-bac"></div>
     </div>
 
     <div class="vung-mien-block mien-trung-style" id="block-trung">
       <div class="tieu-de-mien-meta" onclick="bamMoTabHanhChinh('trung')">
         <p class="ten-mien-header">📍 MIỀN TRUNG</p>
-        <span class="id-huong-dan-luot" id="nhan-luot-trung">➡️ VUỐT TRƯỢT NGANG</span>
+        <div class="khung-do-so" style="display: flex; align-items: center; justify-content: center; flex: 1; margin: 0 10px; position: relative; max-width: 180px;" onclick="event.stopPropagation()">
+            <input type="text" id="input-doso-trung" placeholder="Nhập vé số..." maxlength="6" inputmode="numeric" style="width: 100%; border: 1px solid #ccc; border-radius: 12px; padding: 4px 50px 4px 10px; font-size: 13px; outline: none; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); font-weight: bold; color: #1565c0;" onkeyup="if(event.key==='Enter') document.getElementById('btn-doso-trung').click()">
+            <button id="btn-doso-trung" style="position: absolute; right: 2px; background: linear-gradient(to bottom, #ffeb3b, #fbc02d); border: none; border-radius: 10px; padding: 3px 8px; font-weight: bold; font-size: 11px; cursor: pointer; color: #0d47a1; box-shadow: 0 1px 2px rgba(0,0,0,0.2);" onclick="doVeSoNhanh('input-doso-trung')">Dò số</button>
+        </div>
+        <span class="id-huong-dan-luot" id="nhan-luot-trung">➡️ VUỐT</span>
       </div>
       <div class="danh-sach-dai-scroll" id="ds-mien-trung"></div>
     </div>
@@ -242,14 +252,26 @@ body:not(.is-vietlott) #khung-vietlott-native {
     <div class="vung-mien-block mien-nam-style" id="block-nam">
       <div class="tieu-de-mien-meta" onclick="bamMoTabHanhChinh('nam')">
         <p class="ten-mien-header">📍 MIỀN NAM</p>
-        <span class="id-huong-dan-luot" id="nhan-luot-nam">➡️ VUỐT TRƯỢT NGANG</span>
+        <div class="khung-do-so" style="display: flex; align-items: center; justify-content: center; flex: 1; margin: 0 10px; position: relative; max-width: 180px;" onclick="event.stopPropagation()">
+            <input type="text" id="input-doso-nam" placeholder="Nhập vé số..." maxlength="6" inputmode="numeric" style="width: 100%; border: 1px solid #ccc; border-radius: 12px; padding: 4px 50px 4px 10px; font-size: 13px; outline: none; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); font-weight: bold; color: #1b5e20;" onkeyup="if(event.key==='Enter') document.getElementById('btn-doso-nam').click()">
+            <button id="btn-doso-nam" style="position: absolute; right: 2px; background: linear-gradient(to bottom, #ffeb3b, #fbc02d); border: none; border-radius: 10px; padding: 3px 8px; font-weight: bold; font-size: 11px; cursor: pointer; color: #1b5e20; box-shadow: 0 1px 2px rgba(0,0,0,0.2);" onclick="doVeSoNhanh('input-doso-nam')">Dò số</button>
+        </div>
+        <span class="id-huong-dan-luot" id="nhan-luot-nam">➡️ VUỐT</span>
       </div>
       <div class="danh-sach-dai-scroll" id="ds-mien-nam"></div>
     </div>
   </div>
   <!-- THANH CHỌN NGÀY -->
-  <div id="khung-chon-ngay" style="text-align: center; margin-top: 10px; padding: 5px; border-radius: 10px 10px 0 0; background: linear-gradient(135deg, #e3f2fd, #bbdefb); box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 2px solid #90caf9; border-bottom: none; display: none;">
-    <span id="tieu-de-chon-ngay" style="color: #0d47a1; font-weight: bold; font-size: 0.95rem; margin-right: 4px; text-shadow: 1px 1px 2px rgba(255,255,255,0.5);">📅 KẾT QUẢ NGÀY:</span> <span id="ds-ngay" style="display: inline-flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px;"></span>
+  <div id="khung-chon-ngay" style="text-align: center; margin-top: 10px; padding: 8px 5px; border-radius: 10px 10px 0 0; background: linear-gradient(135deg, #e3f2fd, #bbdefb); box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 2px solid #90caf9; border-bottom: none; display: none;">
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%;">
+        <div>
+            <span id="tieu-de-chon-ngay" style="color: #0d47a1; font-weight: bold; font-size: 0.95rem; margin-right: 4px; text-shadow: 1px 1px 2px rgba(255,255,255,0.5);">📅 KẾT QUẢ NGÀY:</span> <span id="ds-ngay" style="display: inline-flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px;"></span>
+        </div>
+        <div id="khung-doso-chung-container" class="khung-do-so" style="display: none; align-items: center; justify-content: center; position: relative; max-width: 250px; width: 100%;">
+            <input type="text" id="input-doso-chung" placeholder="Nhập vé số để dò..." maxlength="6" inputmode="numeric" style="width: 100%; border: 1px solid #90caf9; border-radius: 12px; padding: 6px 60px 6px 12px; font-size: 14px; outline: none; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); font-weight: bold; color: #0d47a1;" onkeyup="if(event.key==='Enter') document.getElementById('btn-doso-chung').click()">
+            <button id="btn-doso-chung" style="position: absolute; right: 3px; background: linear-gradient(to bottom, #ffeb3b, #fbc02d); border: none; border-radius: 10px; padding: 4px 12px; font-weight: bold; font-size: 12px; cursor: pointer; color: #b71c1c; box-shadow: 0 1px 2px rgba(0,0,0,0.2);" onclick="doVeSoNhanh('input-doso-chung')">Dò số</button>
+        </div>
+    </div>
   </div>
   
   <div id="khung-truc-tiep" style="display: none; margin-top: 15px; position: relative; width: 100%; border: 2px solid #d32f2f; border-radius: 8px; background: #fff; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
@@ -523,6 +545,7 @@ function renderThanhChonNgay() {
     if (!thanhNgay || cacNgayCoKetQua.length === 0) return;
     
     khungChon.style.display = "block";
+    if(document.getElementById("khung-doso-chung-container")) document.getElementById("khung-doso-chung-container").style.display = "none";
     let html = '';
     
     let itemsPerPage = 8;
@@ -735,6 +758,145 @@ function highlightNumber(so) {
     }
 }
 
+function doVeSoNhanh(inputId) {
+    let so = document.getElementById(inputId).value.trim();
+    if (!so || so.length < 2) {
+        alert("Vui lòng nhập ít nhất 2 số cuối của vé số để dò!");
+        return;
+    }
+    
+    highlightNumber(so);
+    
+    if (!hienThiBangChungData || hienThiBangChungData.length === 0) {
+        alert("Chưa có dữ liệu kết quả xổ số để dò!");
+        return;
+    }
+    
+    const tienThuongNamTrung = {
+        "Giải 8": "100K",
+        "Giải 7": "200K",
+        "Giải 6": "400K",
+        "Giải 5": "1 Triệu",
+        "Giải 4": "3 Triệu",
+        "Giải 3": "10 Triệu",
+        "Giải 2": "15 Triệu",
+        "Giải 1": "30 Triệu",
+        "Giải Đặc Biệt": "2 TỶ VNĐ"
+    };
+    const tienThuongBac = {
+        "Giải 7": "40K",
+        "Giải 6": "100K",
+        "Giải 5": "200K",
+        "Giải 4": "400K",
+        "Giải 3": "1 Triệu",
+        "Giải 2": "5 Triệu",
+        "Giải 1": "10 Triệu",
+        "Giải Đặc Biệt": "500 Triệu VNĐ"
+    };
+
+    let ketQuaTrung = [];
+    let ketQuaTrungDuoi = [];
+    let ketQuaAnUi = [];
+    hienThiBangChungData.forEach(cot => {
+        let tenDaiText = cot.codeDai.toUpperCase();
+        for(let k in configCacDai) {
+            let found = configCacDai[k].find(d => d.code === cot.codeDai);
+            if (found) { tenDaiText = found.ten.toUpperCase(); break; }
+        }
+        
+        let isMB = (cot.codeDai === "mb");
+        let mapTien = isMB ? tienThuongBac : tienThuongNamTrung;
+        let kq = cot.ketQua;
+        let c = ["G8", "G7", "G6", "G5", "G4", "G3", "G2", "G1", "ĐB"].map(g => kq[g] || kq["G." + g.replace("G","")] || kq[g.replace("G.","G")]);
+        let tenGiai = ["Giải 8", "Giải 7", "Giải 6", "Giải 5", "Giải 4", "Giải 3", "Giải 2", "Giải 1", "Giải Đặc Biệt"];
+        let trungs = [];
+        let trungDuois = [];
+        let anUis = [];
+        
+        c.forEach((giai, idx) => {
+            if(!giai) return;
+            let tenG = tenGiai[idx];
+            // Dữ liệu có thể là mảng ["12", "34"] hoặc chuỗi "12 - 34"
+            let mangSo = Array.isArray(giai) ? giai : String(giai).split(/[-,\s]+/);
+            mangSo.forEach(s => {
+                let textSo = String(s).trim();
+                if(!textSo) return;
+                
+                if (textSo.endsWith(so)) {
+                    if (textSo.length === so.length) {
+                        let tien = mapTien[tenG] ? ` ➔ ${mapTien[tenG]}` : "";
+                        trungs.push(`${tenG} (${textSo})${tien}`);
+                    } else {
+                        let extraMsg = "";
+                        if (tenG === "Giải Đặc Biệt") {
+                            let lenDB = isMB ? 5 : 6;
+                            if (so.length === lenDB - 1) {
+                                let tienAnUi = isMB ? "20 Triệu" : "50 Triệu";
+                                extraMsg = ` ➔ Nếu vé đủ ${lenDB} số và sai chữ số đầu, Trúng Giải Phụ ĐB ${tienAnUi}!`;
+                            }
+                        }
+                        trungDuois.push(`${tenG} (${textSo})${extraMsg}`);
+                    }
+                }
+                
+                if (tenG === "Giải Đặc Biệt" && so.length === textSo.length) {
+                    if (so !== textSo) {
+                        let saiViTri = 0;
+                        for (let i = 0; i < so.length; i++) {
+                            if (so[i] !== textSo[i]) saiViTri++;
+                        }
+                        
+                        let lenDB = isMB ? 5 : 6;
+                        if (so.length === lenDB) {
+                            let isAnUi = (so.substring(1) === textSo.substring(1));
+                            let isKhuyenKhich = isMB ? (saiViTri === 1) : (saiViTri === 1 && so[0] === textSo[0]);
+                            
+                            if (isAnUi) {
+                                let tienAnUi = isMB ? "20 Triệu" : "50 Triệu";
+                                anUis.push(`Giải Phụ ĐB (${textSo}) ➔ ${tienAnUi}`);
+                            } else if (isKhuyenKhich) {
+                                let tienKK = isMB ? "40 Triệu" : "6 Triệu";
+                                anUis.push(`Giải Khuyến Khích (${textSo}) ➔ ${tienKK}`);
+                            }
+                        }
+                    }
+                }
+            });
+        });
+        
+        if (trungs.length > 0) {
+            ketQuaTrung.push(`Đài ${tenDaiText}: ${trungs.join(', ')}`);
+        }
+        if (trungDuois.length > 0) {
+            ketQuaTrungDuoi.push(`Đài ${tenDaiText}: ${trungDuois.join(', ')}`);
+        }
+        if (anUis.length > 0) {
+            ketQuaAnUi.push(`Đài ${tenDaiText}: ${anUis.join(', ')}`);
+        }
+    });
+    
+    setTimeout(() => {
+        let msg = "";
+        if (ketQuaTrung.length > 0) {
+            msg += "🎉 CHÚC MỪNG!\nVé số của bạn đã TRÚNG THƯỞNG:\n" + ketQuaTrung.join('\n') + "\n\n";
+        }
+        
+        if (ketQuaAnUi.length > 0) {
+            msg += "🎁 XUẤT SẮC! BẠN ĐÃ TRÚNG GIẢI ĐẶC BIỆT MỞ RỘNG:\n" + ketQuaAnUi.join('\n') + "\n\n";
+        }
+        
+        if (ketQuaTrungDuoi.length > 0) {
+            msg += "⚠️ BẠN ĐANG TRÚNG " + so.length + " SỐ CUỐI:\n" + ketQuaTrungDuoi.join('\n') + "\n(Vui lòng xác nhận thêm các con số phía trước xem có khớp hoàn toàn không nhé!)\n\n";
+        }
+        
+        if (msg === "") {
+            alert("😔 RẤT TIẾC!\nVé số đuôi " + so + " của bạn chưa trúng giải nào.\nChúc bạn may mắn lần sau!");
+        } else {
+            alert(msg.trim());
+        }
+    }, 100);
+}
+
 function getBallColorClass(so) {
     let dau = so.charAt(0);
     const colors = ['red', 'cyan', 'blue', 'orange', 'yellow', 'green', 'teal', 'purple', 'pink', 'silver'];
@@ -814,16 +976,28 @@ function renderBangChung(danhSachCot, highlightSo = null) {
                     let cacSoRaw = cot.ketQua[keyToUse].split('-');
                     let cacSoFormatted = cacSoRaw.map(s => {
                         s = s.trim();
-                        if (highlightSo !== null && s.length >= 2) {
-                            let haiSoCuoi = s.substring(s.length - 2);
-                            if (haiSoCuoi.includes(highlightSo)) {
-                                let phanDau = s.substring(0, s.length - 2);
-                                let colorClass = getBallColorClass(haiSoCuoi); 
-                                let htmlHaiSoCuoi = "";
+                        if (highlightSo !== null && highlightSo.length > 0) {
+                            if (s.length >= highlightSo.length && s.endsWith(highlightSo)) {
+                                let phanDau = s.substring(0, s.length - highlightSo.length);
+                                let colorClass = getBallColorClass(highlightSo); 
                                 let outerGlow = "0 0 10px rgba(255,0,0,0.6)";
                                 let ballShadows = `inset -3px -3px 6px rgba(0,0,0,0.4), inset 3px 3px 6px rgba(255,255,255,0.9), ${outerGlow}`;
-                                htmlHaiSoCuoi = `<span class="ball ${colorClass}" style="box-shadow: ${ballShadows}; border: 1px solid rgba(255,255,255,0.5);">${haiSoCuoi}</span>`;
-                                return `${phanDau}${htmlHaiSoCuoi}`;
+                                let ballStyle = `box-shadow: ${ballShadows}; border: 1px solid rgba(255,255,255,0.5);`;
+                                if (highlightSo.length > 2) {
+                                    ballStyle += ` padding: 0 8px; border-radius: 12px; height: auto; display: inline-block; line-height: 1.2; width: auto !important; min-width: 26px;`;
+                                }
+                                let htmlHighlight = `<span class="ball ${colorClass}" style="${ballStyle}">${highlightSo}</span>`;
+                                return `${phanDau}${htmlHighlight}`;
+                            } else if (highlightSo.length <= 2 && s.length >= 2) {
+                                let haiSoCuoi = s.substring(s.length - 2);
+                                if (haiSoCuoi.includes(highlightSo)) {
+                                    let phanDau = s.substring(0, s.length - 2);
+                                    let colorClass = getBallColorClass(haiSoCuoi); 
+                                    let outerGlow = "0 0 10px rgba(255,0,0,0.6)";
+                                    let ballShadows = `inset -3px -3px 6px rgba(0,0,0,0.4), inset 3px 3px 6px rgba(255,255,255,0.9), ${outerGlow}`;
+                                    let htmlHaiSoCuoi = `<span class="ball ${colorClass}" style="box-shadow: ${ballShadows}; border: 1px solid rgba(255,255,255,0.5);">${haiSoCuoi}</span>`;
+                                    return `${phanDau}${htmlHaiSoCuoi}`;
+                                }
                             }
                         }
                         return s;
@@ -1018,6 +1192,7 @@ function bamChonDai(linkIframe, codeDai, element) {
         });
         document.getElementById("tieu-de-chon-ngay").innerText = `KẾT QUẢ ${tenDai.toUpperCase()}:`;
         document.getElementById("ds-ngay").innerHTML = html;
+        if(document.getElementById("khung-doso-chung-container")) document.getElementById("khung-doso-chung-container").style.display = "flex";
         if (cacNgayCuaDai.length > 0) {
             setTimeout(() => highlightDayColumn(codeDai, cacNgayCuaDai[0]), 100);
         }
