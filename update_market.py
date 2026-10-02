@@ -222,15 +222,6 @@ def fetch_pvoil(session: requests.Session) -> dict[str, Any]:
             raise ValueError(f"Giá {name} ngoài biên an toàn: {val}")
 
     source_time = now_vn()
-    for row in rows:
-        for cell in row:
-            if "điều chỉnh lúc" in cell.lower() or "ngày" in cell.lower():
-                m = re.search(r"(\d{1,2}:\d{2})\s+ngày\s+(\d{1,2}/\d{1,2}/\d{4})", cell.lower())
-                if m:
-                    source_time = f"{m.group(2)} {m.group(1)}"
-                    break
-        if source_time != now_vn():
-            break
 
     return {
         "source": "VietnamBiz",
