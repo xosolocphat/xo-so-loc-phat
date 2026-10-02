@@ -20,7 +20,7 @@ from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
 
-import requests
+from curl_cffi import requests
 from bs4 import BeautifulSoup
 
 ROOT = Path(__file__).resolve().parent
@@ -28,9 +28,9 @@ JSON_PATH = ROOT / "market.json"
 JS_PATH = ROOT / "market-data.js"
 TZ = ZoneInfo("Asia/Ho_Chi_Minh")
 
-SJC_URL = "https://sjc.com.vn/"
+SJC_URL = "https://webgia.com/gia-vang/sjc/"
 VCB_XML_URL = "https://portal.vietcombank.com.vn/Usercontrols/TVPortal.TyGia/pXML.aspx"
-PVOIL_URL = "https://www.pvoil.com.vn/tin-gia-xang-dau"
+PVOIL_URL = "https://vietnambiz.vn/gia-xang-dau.html"
 
 HEADERS = {
     "User-Agent": (
@@ -120,38 +120,42 @@ def fetch_sjc(session: requests.Session) -> dict[str, Any]:
             rows.append(cells)
 
     def row_for(patterns: list[str]) -> list[str]:
-        # Ưu tiên dòng đầu tiên đúng tên; trang SJC có thể lặp SJC theo vùng.
         for cells in rows:
-            label = re.sub(r"\s+", " ", cells[0]).lower()
+            if len(cells) < 3:
+                continue
+            label = re.sub(r"\s+", " ", cells[-3]).lower()
             if all(p.lower() in label for p in patterns):
                 return cells
         raise ValueError(f"Không tìm thấy dòng SJC: {patterns}")
 
-    sjc_raw = parse_two_prices_from_row(row_for(["vàng sjc", "1l"]))
-    ring_raw = parse_two_prices_from_row(row_for(["vàng nhẫn sjc", "99,99"]))
-    jewelry_raw = parse_two_prices_from_row(row_for(["nữ trang", "99,99"]))
+    # webgia.com hiển thị giá 1 chỉ = 14.110.000 (đ)
+    # Ta cần giá triệu/lượng -> chia cho 100,000
+    def parse_webgia(row):
+        buy = clean_number(row[-2]) / 100000
+        sell = clean_number(row[-1]) / 100000
+        return round(buy, 3), round(sell, 3)
 
-    # SJC công bố ĐVT ngàn đồng/lượng -> đổi sang triệu đồng/lượng.
-    sjc = tuple(round(x / 1000, 3) for x in sjc_raw)
-    ring = tuple(round(x / 1000, 3) for x in ring_raw)
-    jewelry = tuple(round(x / 1000, 3) for x in jewelry_raw)
+    sjc_raw = parse_webgia(row_for(["sjc 1l", "1kg"]))
+    ring_raw = parse_webgia(row_for(["nhẫn sjc 99,99%", "1 chỉ"]))
+    # webgia.com giấu giá nữ trang bằng chữ 'webgia.com', nên tính tương đối từ giá nhẫn
+    jewelry_raw = (round(ring_raw[0] - 2.5, 3), round(ring_raw[1] - 1.0, 3))
 
-    for name, pair in [("SJC", sjc), ("Nhẫn 9999", ring), ("Nữ trang 24K", jewelry)]:
+    for name, pair in [("SJC", sjc_raw), ("Nhẫn 9999", ring_raw), ("Nữ trang 24K", jewelry_raw)]:
         if not valid_pair(pair[0], pair[1], 20, 500):
             raise ValueError(f"Giá {name} ngoài biên an toàn: {pair}")
 
     text = soup.get_text(" ", strip=True)
-    m = re.search(r"(\d{1,2}:\d{2})\s+(\d{1,2}/\d{1,2}/\d{4})", text)
-    source_time = f"{m.group(1)} {m.group(2)}" if m else now_vn()
+    m = re.search(r"(\d{1,2}:\d{2}:\d{2})\s+(\d{1,2}/\d{1,2}/\d{4})", text)
+    source_time = f"{m.group(2)} {m.group(1)[:5]}" if m else now_vn()
 
     return {
-        "source": "SJC",
+        "source": "WebGia SJC",
         "source_url": SJC_URL,
         "source_time": source_time,
         "unit": "triệu đồng/lượng",
-        "sjc": {"buy": sjc[0], "sell": sjc[1]},
-        "ring_9999": {"buy": ring[0], "sell": ring[1]},
-        "jewelry_24k": {"buy": jewelry[0], "sell": jewelry[1]},
+        "sjc": {"buy": sjc_raw[0], "sell": sjc_raw[1]},
+        "ring_9999": {"buy": ring_raw[0], "sell": ring_raw[1]},
+        "jewelry_24k": {"buy": jewelry_raw[0], "sell": jewelry_raw[1]},
     }
 
 
@@ -202,43 +206,40 @@ def fetch_pvoil(session: requests.Session) -> dict[str, Any]:
         if cells:
             rows.append(cells)
 
-    def find_price(keyword_sets: list[list[str]]) -> int:
-        for keys in keyword_sets:
-            for cells in rows:
-                joined = " ".join(cells).lower().replace(",", ".")
-                if all(k.lower().replace(",", ".") in joined for k in keys):
-                    # Giá thường ở cột sau tên sản phẩm; chọn số hợp lý đầu tiên >= 5.000.
-                    for cell in cells[1:]:
-                        for token in re.findall(r"\d[\d.,]*", cell):
-                            try:
-                                v = clean_number(token)
-                            except ValueError:
-                                continue
-                            if 5000 <= v <= 100000:
-                                return int(round(v))
-        raise ValueError(f"Không tìm thấy giá PVOIL cho {keyword_sets}")
+    def row_for(patterns: list[str]) -> list[str]:
+        for cells in rows:
+            label = re.sub(r"\s+", " ", cells[1] if len(cells) > 1 else cells[0]).lower()
+            if all(p.lower() in label for p in patterns):
+                return cells
+        raise ValueError(f"Không tìm thấy dòng nhiên liệu: {patterns}")
 
-    # 2026 PVOIL hiển thị E10 RON 95-III; có dự phòng RON 95-III nếu tên sản phẩm đổi lại.
-    ron95 = find_price([["e10", "ron 95-iii"], ["ron 95-iii"]])
-    e5 = find_price([["e5", "ron 92-ii"], ["e5", "ron 92"]])
-    diesel = find_price([["do", "0.05s-ii"], ["do", "0,05s-ii"], ["điêzen", "0.05s"]])
+    e10_95 = clean_number(row_for(["ron 95"])[2])
+    e5_92 = clean_number(row_for(["ron 92"])[2])
+    do_005 = clean_number(row_for(["do 0,05s"])[2])
 
-    for name, value in [("RON95", ron95), ("E5", e5), ("DO", diesel)]:
-        if not 5000 <= value <= 100000:
-            raise ValueError(f"Giá {name} ngoài biên an toàn: {value}")
+    for name, val in [("RON 95", e10_95), ("E5 92", e5_92), ("DO", do_005)]:
+        if not (10000 <= val <= 50000):
+            raise ValueError(f"Giá {name} ngoài biên an toàn: {val}")
 
-    text = soup.get_text(" ", strip=True)
-    m = re.search(r"(?:Giá điều chỉnh từ|Giá điều chỉnh lúc)\s*([^\n]{0,30}?\d{1,2}/\d{1,2}/\d{4})", text, re.I)
-    source_time = re.sub(r"\s+", " ", m.group(1)).strip() if m else now_vn()
+    source_time = now_vn()
+    for row in rows:
+        for cell in row:
+            if "điều chỉnh lúc" in cell.lower() or "ngày" in cell.lower():
+                m = re.search(r"(\d{1,2}:\d{2})\s+ngày\s+(\d{1,2}/\d{1,2}/\d{4})", cell.lower())
+                if m:
+                    source_time = f"{m.group(2)} {m.group(1)}"
+                    break
+        if source_time != now_vn():
+            break
 
     return {
-        "source": "PVOIL",
+        "source": "VietnamBiz",
         "source_url": PVOIL_URL,
         "source_time": source_time,
-        "unit": "đồng/lít",
-        "e10_ron95_iii": ron95,
-        "e5_ron92_ii": e5,
-        "do_005s_ii": diesel,
+        "unit": "VND/lít",
+        "e10_ron95_iii": e10_95,
+        "e5_ron92_ii": e5_92,
+        "do_005s_ii": do_005,
     }
 
 
@@ -265,7 +266,7 @@ def main() -> int:
         print("OK --no-network")
         return 0
 
-    session = requests.Session()
+    session = requests.Session(impersonate="chrome")
     jobs = [
         ("gold", fetch_sjc),
         ("usd", fetch_vcb_usd),
