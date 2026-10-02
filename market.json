@@ -1,5 +1,5 @@
 {
-  "updated_at": "01/10/2026 21:25",
+  "updated_at": "02/10/2026 07:39",
   "gold": {
     "source": "SJC",
     "source_url": "https://sjc.com.vn/",
@@ -21,11 +21,11 @@
   "usd": {
     "source": "Vietcombank",
     "source_url": "https://portal.vietcombank.com.vn/Usercontrols/TVPortal.TyGia/pXML.aspx",
-    "source_time": "25/09/2026",
+    "source_time": "02/10/2026 07:39",
     "unit": "VND/USD",
-    "buy": 25760,
-    "transfer": 25790,
-    "sell": 26170
+    "buy": 25770,
+    "transfer": 25800,
+    "sell": 26180
   },
   "fuel": {
     "source": "PVOIL",
