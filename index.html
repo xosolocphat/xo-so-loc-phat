@@ -1886,7 +1886,7 @@ window.onload = function() {
     setInterval(taiLaiDuLieuThiTruong, 5 * 60 * 1000);
 };
 </script>
-<script id="market-data-live" src="market-data.js"></script>
+<script>document.write('<script id="market-data-live" src="market-data.js?v=' + Date.now() + '"><\\/script>');</script>
 </body>
 </html>
 
