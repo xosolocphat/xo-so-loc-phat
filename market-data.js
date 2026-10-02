@@ -1,5 +1,5 @@
 window.MARKET_DATA = {
-  "updated_at": "02/10/2026 17:03",
+  "updated_at": "02/10/2026 17:25",
   "gold": {
     "source": "SJC",
     "source_url": "https://sjc.com.vn/",
@@ -21,11 +21,11 @@ window.MARKET_DATA = {
   "usd": {
     "source": "Vietcombank",
     "source_url": "https://portal.vietcombank.com.vn/Usercontrols/TVPortal.TyGia/pXML.aspx",
-    "source_time": "02/10/2026 17:03",
+    "source_time": "02/10/2026 17:25",
     "unit": "VND/USD",
-    "buy": 25780,
-    "transfer": 25810,
-    "sell": 26190
+    "buy": 25760,
+    "transfer": 25790,
+    "sell": 26170
   },
   "fuel": {
     "source": "PVOIL",
