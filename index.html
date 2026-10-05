@@ -2058,13 +2058,9 @@ window.onload = function() {
     apDungCauHinhVungMien(vungMienGoc || "bac");
     quetIpXacDinhVungMien();
 
-    hienThiDuLieuThiTruong();
+    taiLaiDuLieuThiTruong();
     setInterval(taiLaiDuLieuThiTruong, 5 * 60 * 1000);
 };
-</script>
-<script>
-    let cb = window.location.protocol === 'file:' ? '' : '?v=' + Date.now();
-    document.write('<script id="market-data-live" src="market-data.js' + cb + '"><\\/script>');
 </script>
 </body>
 </html>
