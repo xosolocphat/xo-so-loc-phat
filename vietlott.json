@@ -1,29 +1,95 @@
 {
-  "updated_at": "2026-10-05T07:42:27+07:00",
+  "updated_at": "2026-10-05T16:06:25+07:00",
   "claim_period_days": 60,
   "mega": {
-    "id": "01568",
-    "date": "2026-09-27",
+    "id": "01571",
+    "date": "2026-10-04",
     "balls": [
-      2,
-      4,
-      13,
-      25,
-      31,
-      39
+      15,
+      20,
+      29,
+      37,
+      40,
+      45
     ],
     "bonus": null,
+    "source": "github-vietlott-data",
+    "source_detail": "xoso.com.vn",
     "jackpot": 30000,
     "counts": {
-      "first": 7495530000,
-      "jackpot": 7495530000,
-      "second": 7495530000,
-      "third": 7495530000
-    },
-    "source": "github-vietlott-data",
-    "source_detail": "xoso.com.vn"
+      "first": 10860430000,
+      "jackpot": 10860430000,
+      "second": 10860430000,
+      "third": 10860430000
+    }
   },
   "mega_history": [
+    {
+      "id": "01571",
+      "date": "2026-10-04",
+      "balls": [
+        15,
+        20,
+        29,
+        37,
+        40,
+        45
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn",
+      "jackpot": 30000,
+      "counts": {
+        "first": 10860430000,
+        "jackpot": 10860430000,
+        "second": 10860430000,
+        "third": 10860430000
+      }
+    },
+    {
+      "id": "01570",
+      "date": "2026-10-02",
+      "balls": [
+        1,
+        6,
+        20,
+        27,
+        31,
+        41
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn",
+      "jackpot": 30000,
+      "counts": {
+        "first": 9561030000,
+        "jackpot": 9561030000,
+        "second": 9561030000,
+        "third": 9561030000
+      }
+    },
+    {
+      "id": "01569",
+      "date": "2026-09-30",
+      "balls": [
+        2,
+        9,
+        24,
+        27,
+        30,
+        33
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn",
+      "jackpot": 30000,
+      "counts": {
+        "first": 9216030000,
+        "jackpot": 9216030000,
+        "second": 9216030000,
+        "third": 9216030000
+      }
+    },
     {
       "id": "01568",
       "date": "2026-09-27",
@@ -444,30 +510,78 @@
     }
   ],
   "power": {
-    "id": "01404",
-    "date": "2026-09-29",
+    "id": "01406",
+    "date": "2026-10-03",
     "balls": [
-      2,
-      4,
+      7,
+      11,
       13,
-      17,
-      35,
-      36
+      16,
+      18,
+      54
     ],
-    "bonus": 11,
+    "bonus": 41,
+    "source": "github-vietlott-data",
+    "source_detail": "xoso.com.vn",
     "jackpot": 50000,
     "jackpot2": 50000,
     "counts": {
-      "jackpot": 3333250000,
-      "jackpot2": 3333250000,
-      "first": 3333250000,
-      "second": 3333250000,
-      "third": 3333250000
-    },
-    "source": "seed",
-    "source_detail": "xoso.com.vn"
+      "jackpot": 3318550000,
+      "jackpot2": 3318550000,
+      "first": 3318550000,
+      "second": 3318550000,
+      "third": 3318550000
+    }
   },
   "power_history": [
+    {
+      "id": "01406",
+      "date": "2026-10-03",
+      "balls": [
+        7,
+        11,
+        13,
+        16,
+        18,
+        54
+      ],
+      "bonus": 41,
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn",
+      "jackpot": 50000,
+      "jackpot2": 50000,
+      "counts": {
+        "jackpot": 3318550000,
+        "jackpot2": 3318550000,
+        "first": 3318550000,
+        "second": 3318550000,
+        "third": 3318550000
+      }
+    },
+    {
+      "id": "01405",
+      "date": "2026-10-01",
+      "balls": [
+        4,
+        5,
+        13,
+        34,
+        52,
+        55
+      ],
+      "bonus": 15,
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn",
+      "jackpot": 50000,
+      "jackpot2": 50000,
+      "counts": {
+        "jackpot": 2468650000,
+        "jackpot2": 2468650000,
+        "first": 2468650000,
+        "second": 2468650000,
+        "third": 2468650000
+      }
+    },
     {
       "id": "01404",
       "date": "2026-09-29",
@@ -489,7 +603,7 @@
         "second": 3333250000,
         "third": 3333250000
       },
-      "source": "seed",
+      "source": "github-vietlott-data",
       "source_detail": "xoso.com.vn"
     },
     {
