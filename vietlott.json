@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-05T20:00:37+07:00",
+  "updated_at": "2026-10-05T20:59:13+07:00",
   "claim_period_days": 60,
   "mega": {
     "id": "01571",
@@ -15,12 +15,12 @@
     "bonus": null,
     "source": "github-vietlott-data",
     "source_detail": "xoso.com.vn",
-    "jackpot": 30000,
+    "jackpot": 199576277000,
     "counts": {
-      "first": 10860430000,
-      "jackpot": 10860430000,
-      "second": 10860430000,
-      "third": 10860430000
+      "jackpot": 1,
+      "first": 153,
+      "second": 6971,
+      "third": 108604
     }
   },
   "mega_history": [
@@ -38,12 +38,12 @@
       "bonus": null,
       "source": "github-vietlott-data",
       "source_detail": "xoso.com.vn",
-      "jackpot": 30000,
+      "jackpot": 199576277000,
       "counts": {
-        "first": 10860430000,
-        "jackpot": 10860430000,
-        "second": 10860430000,
-        "third": 10860430000
+        "jackpot": 1,
+        "first": 153,
+        "second": 6971,
+        "third": 108604
       }
     },
     {
@@ -60,12 +60,12 @@
       "bonus": null,
       "source": "github-vietlott-data",
       "source_detail": "xoso.com.vn",
-      "jackpot": 30000,
+      "jackpot": 178900548500,
       "counts": {
-        "first": 9561030000,
-        "jackpot": 9561030000,
-        "second": 9561030000,
-        "third": 9561030000
+        "jackpot": 0,
+        "first": 95,
+        "second": 5723,
+        "third": 95610
       }
     },
     {
@@ -82,12 +82,12 @@
       "bonus": null,
       "source": "github-vietlott-data",
       "source_detail": "xoso.com.vn",
-      "jackpot": 30000,
+      "jackpot": 158758806000,
       "counts": {
-        "first": 9216030000,
-        "jackpot": 9216030000,
-        "second": 9216030000,
-        "third": 9216030000
+        "jackpot": 0,
+        "first": 109,
+        "second": 5340,
+        "third": 92160
       }
     },
     {
@@ -102,15 +102,15 @@
         39
       ],
       "bonus": null,
-      "jackpot": 30000,
-      "counts": {
-        "first": 7495530000,
-        "jackpot": 7495530000,
-        "second": 7495530000,
-        "third": 7495530000
-      },
       "source": "github-vietlott-data",
-      "source_detail": "xoso.com.vn"
+      "source_detail": "xoso.com.vn",
+      "jackpot": 139776125000,
+      "counts": {
+        "jackpot": 0,
+        "first": 84,
+        "second": 4591,
+        "third": 74955
+      }
     },
     {
       "id": "01567",
@@ -124,15 +124,15 @@
         36
       ],
       "bonus": null,
-      "jackpot": 30000,
-      "counts": {
-        "first": 7909730000,
-        "jackpot": 7909730000,
-        "second": 7909730000,
-        "third": 7909730000
-      },
       "source": "github-vietlott-data",
-      "source_detail": "xoso.com.vn"
+      "source_detail": "xoso.com.vn",
+      "jackpot": 124270821500,
+      "counts": {
+        "jackpot": 0,
+        "first": 113,
+        "second": 4952,
+        "third": 79097
+      }
     },
     {
       "id": "01566",
@@ -148,12 +148,12 @@
       "bonus": null,
       "source": "github-vietlott-data",
       "source_detail": "xoso.com.vn",
-      "jackpot": 30000,
+      "jackpot": 110492809000,
       "counts": {
-        "first": 7602930000,
-        "jackpot": 7602930000,
-        "second": 7602930000,
-        "third": 7602930000
+        "jackpot": 0,
+        "first": 68,
+        "second": 4211,
+        "third": 76029
       }
     },
     {
@@ -170,12 +170,12 @@
       "bonus": null,
       "source": "github-vietlott-data",
       "source_detail": "xoso.com.vn",
-      "jackpot": 30000,
+      "jackpot": 96163598000,
       "counts": {
-        "first": 5316530000,
-        "jackpot": 5316530000,
-        "second": 5316530000,
-        "third": 5316530000
+        "jackpot": 0,
+        "first": 68,
+        "second": 3255,
+        "third": 53165
       }
     },
     {
@@ -192,12 +192,12 @@
       "bonus": null,
       "source": "github-vietlott-data",
       "source_detail": "xoso.com.vn",
-      "jackpot": 30000,
+      "jackpot": 86148921500,
       "counts": {
-        "first": 4850730000,
-        "jackpot": 4850730000,
-        "second": 4850730000,
-        "third": 4850730000
+        "jackpot": 0,
+        "first": 58,
+        "second": 2924,
+        "third": 48507
       }
     },
     {
@@ -214,12 +214,12 @@
       "bonus": null,
       "source": "github-vietlott-data",
       "source_detail": "xoso.com.vn",
-      "jackpot": 30000,
+      "jackpot": 77330101000,
       "counts": {
-        "first": 4619330000,
-        "jackpot": 4619330000,
-        "second": 4619330000,
-        "third": 4619330000
+        "jackpot": 0,
+        "first": 68,
+        "second": 2775,
+        "third": 46193
       }
     },
     {
@@ -236,12 +236,12 @@
       "bonus": null,
       "source": "github-vietlott-data",
       "source_detail": "xoso.com.vn",
-      "jackpot": 30000,
+      "jackpot": 69161109500,
       "counts": {
-        "first": 3685430000,
-        "jackpot": 3685430000,
-        "second": 3685430000,
-        "third": 3685430000
+        "jackpot": 0,
+        "first": 39,
+        "second": 2245,
+        "third": 36854
       }
     },
     {
@@ -258,12 +258,12 @@
       "bonus": null,
       "source": "github-vietlott-data",
       "source_detail": "xoso.com.vn",
-      "jackpot": 30000,
+      "jackpot": 61850545000,
       "counts": {
-        "first": 3232030000,
-        "jackpot": 3232030000,
-        "second": 3232030000,
-        "third": 3232030000
+        "jackpot": 0,
+        "first": 23,
+        "second": 1786,
+        "third": 32320
       }
     },
     {
@@ -280,12 +280,12 @@
       "bonus": null,
       "source": "github-vietlott-data",
       "source_detail": "xoso.com.vn",
-      "jackpot": 30000,
+      "jackpot": 54850911000,
       "counts": {
-        "first": 3534730000,
-        "jackpot": 3534730000,
-        "second": 3534730000,
-        "third": 3534730000
+        "jackpot": 0,
+        "first": 52,
+        "second": 2130,
+        "third": 35347
       }
     },
     {
@@ -302,12 +302,12 @@
       "bonus": null,
       "source": "github-vietlott-data",
       "source_detail": "xoso.com.vn",
-      "jackpot": 30000,
+      "jackpot": 48610089000,
       "counts": {
-        "first": 2969330000,
-        "jackpot": 2969330000,
-        "second": 2969330000,
-        "third": 2969330000
+        "jackpot": 0,
+        "first": 26,
+        "second": 1729,
+        "third": 29693
       }
     },
     {
@@ -322,15 +322,7 @@
         45
       ],
       "bonus": null,
-      "source": "github-vietlott-data",
-      "source_detail": "xoso.com.vn",
-      "jackpot": 30000,
-      "counts": {
-        "first": 2757230000,
-        "jackpot": 2757230000,
-        "second": 2757230000,
-        "third": 2757230000
-      }
+      "source": "github-vietlott-data"
     },
     {
       "id": "01557",
@@ -344,15 +336,7 @@
         44
       ],
       "bonus": null,
-      "source": "github-vietlott-data",
-      "source_detail": "xoso.com.vn",
-      "jackpot": 30000,
-      "counts": {
-        "first": 3203430000,
-        "jackpot": 3203430000,
-        "second": 3203430000,
-        "third": 3203430000
-      }
+      "source": "github-vietlott-data"
     },
     {
       "id": "01556",
@@ -523,14 +507,14 @@
     "bonus": 41,
     "source": "github-vietlott-data",
     "source_detail": "xoso.com.vn",
-    "jackpot": 50000,
-    "jackpot2": 50000,
+    "jackpot": 112784140200,
+    "jackpot2": 3695872550,
     "counts": {
-      "jackpot": 3318550000,
-      "jackpot2": 3318550000,
-      "first": 3318550000,
-      "second": 3318550000,
-      "third": 3318550000
+      "jackpot": 0,
+      "jackpot2": 0,
+      "first": 24,
+      "second": 1448,
+      "third": 33185
     }
   },
   "power_history": [
@@ -548,14 +532,14 @@
       "bonus": 41,
       "source": "github-vietlott-data",
       "source_detail": "xoso.com.vn",
-      "jackpot": 50000,
-      "jackpot2": 50000,
+      "jackpot": 112784140200,
+      "jackpot2": 3695872550,
       "counts": {
-        "jackpot": 3318550000,
-        "jackpot2": 3318550000,
-        "first": 3318550000,
-        "second": 3318550000,
-        "third": 3318550000
+        "jackpot": 0,
+        "jackpot2": 0,
+        "first": 24,
+        "second": 1448,
+        "third": 33185
       }
     },
     {
@@ -572,14 +556,14 @@
       "bonus": 15,
       "source": "github-vietlott-data",
       "source_detail": "xoso.com.vn",
-      "jackpot": 50000,
-      "jackpot2": 50000,
+      "jackpot": 106521287250,
+      "jackpot2": 1869544050,
       "counts": {
-        "jackpot": 2468650000,
-        "jackpot2": 2468650000,
-        "first": 2468650000,
-        "second": 2468650000,
-        "third": 2468650000
+        "jackpot": 0,
+        "jackpot2": 2,
+        "first": 13,
+        "second": 1075,
+        "third": 24686
       }
     },
     {
@@ -594,17 +578,17 @@
         36
       ],
       "bonus": 11,
-      "jackpot": 50000,
-      "jackpot2": 50000,
-      "counts": {
-        "jackpot": 3333250000,
-        "jackpot2": 3333250000,
-        "first": 3333250000,
-        "second": 3333250000,
-        "third": 3333250000
-      },
       "source": "github-vietlott-data",
-      "source_detail": "xoso.com.vn"
+      "source_detail": "xoso.com.vn",
+      "jackpot": 99869494350,
+      "jackpot2": 4454726850,
+      "counts": {
+        "jackpot": 0,
+        "jackpot2": 1,
+        "first": 38,
+        "second": 1654,
+        "third": 33332
+      }
     },
     {
       "id": "01403",
@@ -618,17 +602,17 @@
         52
       ],
       "bonus": 49,
-      "jackpot": 50000,
-      "jackpot2": 50000,
-      "counts": {
-        "jackpot": 2514950000,
-        "jackpot2": 2514950000,
-        "first": 2514950000,
-        "second": 2514950000,
-        "third": 2514950000
-      },
       "source": "github-vietlott-data",
-      "source_detail": "xoso.com.vn"
+      "source_detail": "xoso.com.vn",
+      "jackpot": 91387533000,
+      "jackpot2": 3512286700,
+      "counts": {
+        "jackpot": 0,
+        "jackpot2": 0,
+        "first": 26,
+        "second": 1211,
+        "third": 25149
+      }
     },
     {
       "id": "01402",
@@ -642,17 +626,17 @@
         28
       ],
       "bonus": 27,
-      "jackpot": 50000,
-      "jackpot2": 50000,
-      "counts": {
-        "jackpot": 2434950000,
-        "jackpot2": 2434950000,
-        "first": 2434950000,
-        "second": 2434950000,
-        "third": 2434950000
-      },
       "source": "github-vietlott-data",
-      "source_detail": "xoso.com.vn"
+      "source_detail": "xoso.com.vn",
+      "jackpot": 86776952700,
+      "jackpot2": 5462262200,
+      "counts": {
+        "jackpot": 0,
+        "jackpot2": 1,
+        "first": 11,
+        "second": 1152,
+        "third": 24349
+      }
     },
     {
       "id": "01401",
@@ -668,14 +652,14 @@
       "bonus": 10,
       "source": "github-vietlott-data",
       "source_detail": "xoso.com.vn",
-      "jackpot": 50000,
-      "jackpot2": 50000,
+      "jackpot": 79393690200,
+      "jackpot2": 4641899700,
       "counts": {
-        "jackpot": 2608050000,
-        "jackpot2": 2608050000,
-        "first": 2608050000,
-        "second": 2608050000,
-        "third": 2608050000
+        "jackpot": 0,
+        "jackpot2": 0,
+        "first": 26,
+        "second": 1136,
+        "third": 26080
       }
     },
     {
@@ -692,14 +676,14 @@
       "bonus": 50,
       "source": "github-vietlott-data",
       "source_detail": "xoso.com.vn",
-      "jackpot": 50000,
-      "jackpot2": 50000,
+      "jackpot": 73333632900,
+      "jackpot2": 3968560000,
       "counts": {
-        "jackpot": 2771950000,
-        "jackpot2": 2771950000,
-        "first": 2771950000,
-        "second": 2771950000,
-        "third": 2771950000
+        "jackpot": 0,
+        "jackpot2": 0,
+        "first": 35,
+        "second": 1521,
+        "third": 27719
       }
     },
     {
@@ -716,14 +700,14 @@
       "bonus": 15,
       "source": "github-vietlott-data",
       "source_detail": "xoso.com.vn",
-      "jackpot": 50000,
-      "jackpot2": 50000,
+      "jackpot": 71030284950,
+      "jackpot2": 3712632450,
       "counts": {
-        "jackpot": 2325250000,
-        "jackpot2": 2325250000,
-        "first": 2325250000,
-        "second": 2325250000,
-        "third": 2325250000
+        "jackpot": 0,
+        "jackpot2": 0,
+        "first": 15,
+        "second": 1041,
+        "third": 23252
       }
     },
     {
@@ -740,14 +724,14 @@
       "bonus": 52,
       "source": "github-vietlott-data",
       "source_detail": "xoso.com.vn",
-      "jackpot": 50000,
-      "jackpot2": 50000,
+      "jackpot": 67984087800,
+      "jackpot2": 3374166100,
       "counts": {
-        "jackpot": 2051950000,
-        "jackpot2": 2051950000,
-        "first": 2051950000,
-        "second": 2051950000,
-        "third": 2051950000
+        "jackpot": 0,
+        "jackpot2": 0,
+        "first": 21,
+        "second": 956,
+        "third": 20519
       }
     },
     {
@@ -762,17 +746,7 @@
         54
       ],
       "bonus": 22,
-      "source": "github-vietlott-data",
-      "source_detail": "xoso.com.vn",
-      "jackpot": 50000,
-      "jackpot2": 50000,
-      "counts": {
-        "jackpot": 1882850000,
-        "jackpot2": 1882850000,
-        "first": 1882850000,
-        "second": 1882850000,
-        "third": 1882850000
-      }
+      "source": "github-vietlott-data"
     },
     {
       "id": "01396",
@@ -786,17 +760,7 @@
         53
       ],
       "bonus": 50,
-      "source": "github-vietlott-data",
-      "source_detail": "xoso.com.vn",
-      "jackpot": 50000,
-      "jackpot2": 50000,
-      "counts": {
-        "jackpot": 1799050000,
-        "jackpot2": 1799050000,
-        "first": 1799050000,
-        "second": 1799050000,
-        "third": 1799050000
-      }
+      "source": "github-vietlott-data"
     },
     {
       "id": "01395",
