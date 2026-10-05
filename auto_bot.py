@@ -206,7 +206,17 @@ def crawl_kqxs_today_full_results(session: Optional[requests.Session] = None) ->
             if r.status_code != 200:
                 continue
             soup = BeautifulSoup(r.text, "html.parser")
-            table = soup.find("table")
+            table = None
+            today_dashed = today.strftime("%d-%m-%Y")
+            today_slashed = today.strftime("%d/%m/%Y")
+            
+            for t in soup.find_all("table"):
+                parent_text = t.parent.get_text(" ", strip=True) if t.parent else ""
+                table_text = t.get_text(" ", strip=True)
+                if today_dashed in parent_text or today_slashed in parent_text or today_dashed in table_text or today_slashed in table_text:
+                    table = t
+                    break
+
             if not table:
                 continue
                 
@@ -592,48 +602,42 @@ def crawl_xoso_prize_details(kind: str, session: requests.Session) -> Dict[str, 
                     continue
 
                 item: Dict[str, Any] = {"source_detail": "xoso.com.vn"}
+                text = table.get_text(" ", strip=True)
                 counts: Dict[str, int] = {}
                 good_rows = 0
-                for tr in table.find_all("tr"):
-                    cells = [c.get_text(" ", strip=True) for c in tr.find_all(["td", "th"])]
-                    if len(cells) < 3:
-                        continue
-                    label = cells[0].lower().strip()
-                    count = _int_from_cell(cells[-2])
-                    value = _int_from_cell(cells[-1])
-                    if "jackpot 1" in label:
-                        if value is not None:
-                            item["jackpot"] = value
-                        if count is not None:
-                            counts["jackpot"] = count
-                        good_rows += 1
-                    elif "jackpot 2" in label:
-                        if value is not None:
-                            item["jackpot2"] = value
-                        if count is not None:
-                            counts["jackpot2"] = count
-                        good_rows += 1
-                    elif label == "jackpot" or label.startswith("jackpot "):
-                        if value is not None:
-                            item["jackpot"] = value
-                        if count is not None:
-                            counts["jackpot"] = count
-                        good_rows += 1
-                    elif "giải nhất" in label or label == "giải 1":
-                        if count is not None:
-                            counts["first"] = count
-                        good_rows += 1
-                    elif "giải nhì" in label or label == "giải 2":
-                        if count is not None:
-                            counts["second"] = count
-                        good_rows += 1
-                    elif "giải ba" in label or label == "giải 3":
-                        if count is not None:
-                            counts["third"] = count
-                        good_rows += 1
+                
+                def extract_prize(pattern: str, key_name: str) -> bool:
+                    m = re.search(pattern, text, re.I)
+                    if m:
+                        c = _int_from_cell(m.group(1))
+                        v = _int_from_cell(m.group(2))
+                        if c is not None and v is not None:
+                            # Swap if c is obviously the prize value (e.g., > 1,000,000) and v is small.
+                            if c > v and c > 1000000:
+                                c, v = v, c
+                            counts[key_name] = c
+                            if key_name == "jackpot": item["jackpot"] = v
+                            if key_name == "jackpot2": item["jackpot2"] = v
+                            return True
+                    return False
+                    
+                if extract_prize(r"Jackpot 1\s+.*?[\sO]+\s+(\d[.\d]*)\s+(\d[.\d]*)", "jackpot"):
+                    good_rows += 1
+                elif extract_prize(r"Jackpot\s+.*?[\sO]+\s+(\d[.\d]*)\s+(\d[.\d]*)", "jackpot"):
+                    good_rows += 1
+                    
+                if extract_prize(r"Jackpot 2\s+.*?[\sO]+\s+(\d[.\d]*)\s+(\d[.\d]*)", "jackpot2"):
+                    good_rows += 1
+                    
+                if extract_prize(r"Giải (?:nhất|1)\s+.*?[\sO]+\s+(\d[.\d]*)\s+(\d[.\d]*)", "first"):
+                    good_rows += 1
+                if extract_prize(r"Giải (?:nhì|2)\s+.*?[\sO]+\s+(\d[.\d]*)\s+(\d[.\d]*)", "second"):
+                    good_rows += 1
+                if extract_prize(r"Giải (?:ba|3)\s+.*?[\sO]+\s+(\d[.\d]*)\s+(\d[.\d]*)", "third"):
+                    good_rows += 1
+                    
                 if good_rows >= 3:
                     item["counts"] = counts
-                    # ưu tiên bản đầy đủ hơn nếu cùng ID xuất hiện nhiều trang
                     old = details.get(draw_id, {})
                     details[draw_id] = {**old, **item}
         except Exception as e:
