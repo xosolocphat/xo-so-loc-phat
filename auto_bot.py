@@ -176,7 +176,11 @@ def crawl_xskt_today_full_results(session: Optional[requests.Session] = None) ->
                 if not any(x in tid for x in ("MB0", "MT0", "MN0")):
                     continue
                 text = table.get_text(" ", strip=True)
-                if today_short not in text:
+                prev_h2 = table.find_previous("h2")
+                h2_text = prev_h2.get_text(" ", strip=True) if prev_h2 else ""
+                parent_text = table.parent.get_text(" ", strip=True) if table.parent else ""
+                
+                if today_short not in text and today_short not in h2_text and today_short not in parent_text:
                     continue
                 parsed = _parse_xskt_table(table, mien, want_2digit=False)
                 for code, result in parsed.items():
@@ -221,40 +225,43 @@ def crawl_kqxs_today_full_results(session: Optional[requests.Session] = None) ->
                 continue
                 
             rows = table.find_all("tr")
-            if len(rows) < 10:
+            if len(rows) < 8:
                 continue
                 
             th_cells = rows[0].find_all(["th", "td"])
-            if len(th_cells) < 2:
-                continue
-                
-            header = th_cells[1].get_text(" ", strip=True).lower()
             
-            found = []
-            for code, real_name in MAP_DAI.items():
-                idx = header.find(real_name.lower())
-                if idx != -1:
-                    found.append((idx, code))
-            for alias, code in ALIASES.items():
-                idx = header.find(alias)
-                if idx != -1:
-                    found.append((idx, code))
-            found.sort(key=lambda x: x[0])
-            
-            dais = []
-            seen = set()
-            for _, code in found:
-                if code not in seen:
-                    dais.append(code)
-                    seen.add(code)
-                    
-            if mien == "mien-bac" and "mb" not in dais:
+            if mien == "mien-bac":
                 dais = ["mb"]
+                start_row = 0
+            else:
+                start_row = 1
+                if len(th_cells) < 2:
+                    continue
+                    
+                header = th_cells[1].get_text(" ", strip=True).lower()
+                
+                found = []
+                for code, real_name in MAP_DAI.items():
+                    idx = header.find(real_name.lower())
+                    if idx != -1:
+                        found.append((idx, code))
+                for alias, code in ALIASES.items():
+                    idx = header.find(alias)
+                    if idx != -1:
+                        found.append((idx, code))
+                found.sort(key=lambda x: x[0])
+                
+                dais = []
+                seen = set()
+                for _, code in found:
+                    if code not in seen:
+                        dais.append(code)
+                        seen.add(code)
 
             if not dais:
                 continue
                 
-            for row in rows[1:10]:
+            for row in rows[start_row:10]:
                 cells = row.find_all(["th", "td"])
                 if len(cells) < 2:
                     continue
