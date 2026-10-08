@@ -316,8 +316,16 @@ body:not(.is-vietlott) #khung-vietlott-native {
     </div>
   </div>
 
-  <button class="btn-ai-random" onclick="kichHoatAiQuetSo()">🤖 XEM PHÂN TÍCH THỐNG KÊ HÔM NAY</button>
-  <div class="khu-vuc-ai-so" id="ket-qua-ai-quet">HỆ THỐNG ĐANG XỬ LÝ DỮ LIỆU THỐNG KÊ...</div>
+  <div style="display: flex; gap: 10px; margin-top: 15px;">
+    <div style="flex: 1;">
+      <button class="btn-ai-random" id="btn-ai-thuong" style="margin-top: 0; font-size: 0.8rem; padding: 10px;" onclick="kichHoatAiQuetSo()">🤖 PT BÌNH THƯỜNG</button>
+      <div class="khu-vuc-ai-so" id="ket-qua-ai-quet">ĐANG XỬ LÝ...</div>
+    </div>
+    <div style="flex: 1;">
+      <button class="btn-ai-random" id="btn-ai-vietlott" style="margin-top: 0; font-size: 0.8rem; padding: 10px; background: linear-gradient(to right, #d32f2f, #f57c00);" onclick="kichHoatAiQuetSoVietlott()">🤖 PT VIETLOTT</button>
+      <div class="khu-vuc-ai-so" id="ket-qua-ai-quet-vietlott">ĐANG XỬ LÝ...</div>
+    </div>
+  </div>
 
   <div class="khung-gia-vang" style="box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-radius: 10px; border: 1px solid #e0e0e0; background: linear-gradient(180deg, #ffffff, #f9f9f9); padding: 12px;">
     <div style="font-weight: 900; text-align: center; margin-bottom: 12px; font-size: 0.8rem; color: #2c3e50; text-transform: uppercase; border-bottom: 2px dashed #ddd; padding-bottom: 8px;">📊 BẢNG THÔNG TIN KINH TẾ TỔNG HỢP</div>
@@ -1234,7 +1242,8 @@ function veBangThongKe() {
 function kichHoatAiQuetSo() {
     let vungHienThi = document.getElementById("ket-qua-ai-quet");
     vungHienThi.style.display = "block";
-    let bieuTuongNut = document.querySelector(".btn-ai-random");
+    let bieuTuongNut = document.getElementById("btn-ai-thuong");
+    if(!bieuTuongNut) bieuTuongNut = document.querySelector(".btn-ai-random");
     bieuTuongNut.disabled = true;
     
     // LocalStorage to keep numbers consistent per device per day
@@ -1258,11 +1267,46 @@ function kichHoatAiQuetSo() {
     let hieuUngChopNhay = setInterval(() => {
         let soGiaLap1 = String(Math.floor(Math.random() * 100)).padStart(2, '0');
         let soGiaLap2 = String(Math.floor(Math.random() * 100)).padStart(2, '0');
-        vungHienThi.innerHTML = `🤖 ĐANG XỬ LÝ DỮ LIỆU THỐNG KÊ... <span style="opacity:0.5">[${soGiaLap1}] - [${soGiaLap2}]</span>`;
+        vungHienThi.innerHTML = `🤖 ĐANG XỬ LÝ... <span style="opacity:0.5">[${soGiaLap1}] - [${soGiaLap2}]</span>`;
         boDemGiay += 100;
         if (boDemGiay >= 1500) {
             clearInterval(hieuUngChopNhay);
-            vungHienThi.innerHTML = `🔮 DỮ LIỆU ĐƯỢC QUAN TÂM HÔM NAY: <span style="font-size:1.2rem; color:#d32f2f;">[${soChot1}]</span> - <span style="font-size:1.2rem; color:#0d47a1;">[${soChot2}]</span>`;
+            vungHienThi.innerHTML = `🔮 SỐ QUAN TÂM: <br><span style="font-size:1.2rem; color:#d32f2f;">[${soChot1}]</span> - <span style="font-size:1.2rem; color:#0d47a1;">[${soChot2}]</span>`;
+            bieuTuongNut.disabled = false;
+        }
+    }, 100);
+}
+
+function kichHoatAiQuetSoVietlott() {
+    let vungHienThi = document.getElementById("ket-qua-ai-quet-vietlott");
+    vungHienThi.style.display = "block";
+    let bieuTuongNut = document.getElementById("btn-ai-vietlott");
+    if(!bieuTuongNut) bieuTuongNut = document.querySelector(".btn-ai-random");
+    bieuTuongNut.disabled = true;
+
+    let dateStr = new Date().toDateString();
+    let soChot1, soChot2;
+
+    if (localStorage.getItem('ai_date_vl') === dateStr) {
+        soChot1 = localStorage.getItem('ai_so1_vl');
+        soChot2 = localStorage.getItem('ai_so2_vl');
+    } else {
+        soChot1 = String(Math.floor(Math.random() * 55) + 1).padStart(2, '0');
+        soChot2 = String(Math.floor(Math.random() * 55) + 1).padStart(2, '0');
+        localStorage.setItem('ai_date_vl', dateStr);
+        localStorage.setItem('ai_so1_vl', soChot1);
+        localStorage.setItem('ai_so2_vl', soChot2);
+    }
+
+    let boDemGiay = 0;
+    let hieuUngChopNhay = setInterval(() => {
+        let soGiaLap1 = String(Math.floor(Math.random() * 55) + 1).padStart(2, '0');
+        let soGiaLap2 = String(Math.floor(Math.random() * 55) + 1).padStart(2, '0');
+        vungHienThi.innerHTML = `🤖 ĐANG XỬ LÝ... <span style="opacity:0.5">[${soGiaLap1}] - [${soGiaLap2}]</span>`;
+        boDemGiay += 100;
+        if (boDemGiay >= 1500) {
+            clearInterval(hieuUngChopNhay);
+            vungHienThi.innerHTML = `🔮 SỐ QUAN TÂM: <br><span style="font-size:1.2rem; color:#d32f2f;">[${soChot1}]</span> - <span style="font-size:1.2rem; color:#0d47a1;">[${soChot2}]</span>`;
             bieuTuongNut.disabled = false;
         }
     }, 100);
