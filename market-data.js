@@ -1,9 +1,9 @@
 window.MARKET_DATA = {
-  "updated_at": "09/10/2026 16:59",
+  "updated_at": "09/10/2026 17:13",
   "gold": {
     "source": "WebGia SJC",
     "source_url": "https://webgia.com/gia-vang/sjc/",
-    "source_time": "09/10/2026 16:55",
+    "source_time": "09/10/2026 17:10",
     "unit": "triệu đồng/lượng",
     "sjc": {
       "buy": 141.8,
@@ -21,7 +21,7 @@ window.MARKET_DATA = {
   "usd": {
     "source": "Vietcombank",
     "source_url": "https://portal.vietcombank.com.vn/Usercontrols/TVPortal.TyGia/pXML.aspx",
-    "source_time": "09/10/2026 16:59",
+    "source_time": "09/10/2026 17:13",
     "unit": "VND/USD",
     "buy": 25660,
     "transfer": 25690,
@@ -30,7 +30,7 @@ window.MARKET_DATA = {
   "fuel": {
     "source": "VietnamBiz",
     "source_url": "https://vietnambiz.vn/gia-xang-dau.html",
-    "source_time": "09/10/2026 16:59",
+    "source_time": "09/10/2026 17:13",
     "unit": "VND/lít",
     "e10_ron95_iii": 28250.0,
     "e5_ron92_ii": 27700.0,
