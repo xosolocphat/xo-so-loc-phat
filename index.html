@@ -490,7 +490,7 @@ function quetIpXacDinhVungMien() {
             } else if (mienTrungKeywords.some(kw => tinhThanh.includes(kw))) {
                 vungMienGoc = "trung";
             }
-            localStorage.setItem("saved_region", vungMienGoc);
+            localStorage.setItem("vung_mien_goc_2", vungMienGoc);
             apDungCauHinhVungMien(vungMienGoc);
         })
         .catch(() => {
@@ -2097,7 +2097,7 @@ window.onload = function() {
 
     // Hiển thị dữ liệu ngay bằng cấu hình mặc định, không chờ dịch vụ định vị IP.
     // Nếu GeoJS phản hồi sau đó, giao diện sẽ tự chuyển sang vùng phù hợp.
-    let savedRegion = localStorage.getItem("saved_region");
+    let savedRegion = localStorage.getItem("vung_mien_goc_2");
     if (savedRegion) {
         vungMienGoc = savedRegion;
         apDungCauHinhVungMien(vungMienGoc);
