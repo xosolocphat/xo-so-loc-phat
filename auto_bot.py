@@ -173,7 +173,7 @@ def crawl_xskt_today_full_results(session: Optional[requests.Session] = None) ->
             found = False
             for table in soup.find_all("table"):
                 tid = str(table.get("id", ""))
-                if not any(x in tid for x in ("MB0", "MT0", "MN0")):
+                if tid not in ("MB0", "MT0", "MN0"):
                     continue
                 text = table.get_text(" ", strip=True)
                 prev_h2 = table.find_previous("h2")
@@ -333,7 +333,7 @@ def crawl_xskt_history(days: int = 95, session: Optional[requests.Session] = Non
                 soup = BeautifulSoup(r.text, "html.parser")
                 for table in soup.find_all("table"):
                     tid = str(table.get("id", ""))
-                    if not any(x in tid for x in ("MB0", "MT0", "MN0")):
+                    if tid not in ("MB0", "MT0", "MN0"):
                         continue
                     parsed = _parse_xskt_table(table, mien, want_2digit=True)
                     for code, result in parsed.items():
