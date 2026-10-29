@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-28T22:36:09+07:00",
+  "updated_at": "2026-10-29T12:52:25+07:00",
   "claim_period_days": 60,
   "mega": {
     "id": "01581",
@@ -1136,20 +1136,6 @@
         55
       ],
       "bonus": 45,
-      "source": "github-vietlott-data"
-    },
-    {
-      "id": "01391",
-      "date": "2026-08-29",
-      "balls": [
-        5,
-        10,
-        15,
-        29,
-        34,
-        45
-      ],
-      "bonus": 24,
       "source": "github-vietlott-data"
     }
   ]
