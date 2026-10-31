@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-31T12:45:41+07:00",
+  "updated_at": "2026-10-31T21:53:23+07:00",
   "claim_period_days": 60,
   "mega": {
     "id": "01582",
@@ -582,30 +582,54 @@
     }
   ],
   "power": {
-    "id": "01417",
-    "date": "2026-10-29",
+    "id": "01418",
+    "date": "2026-10-31",
     "balls": [
-      9,
-      29,
-      33,
-      38,
-      45,
-      46
+      12,
+      18,
+      22,
+      26,
+      28,
+      55
     ],
-    "bonus": 53,
+    "bonus": 11,
     "source": "github-vietlott-data",
     "source_detail": "xoso.com.vn",
-    "jackpot": 33944640150,
-    "jackpot2": 4675557550,
+    "jackpot": 36604726050,
+    "jackpot2": 4971122650,
     "counts": {
       "jackpot": 0,
       "jackpot2": 0,
-      "first": 18,
-      "second": 837,
-      "third": 16183
+      "first": 10,
+      "second": 822,
+      "third": 17591
     }
   },
   "power_history": [
+    {
+      "id": "01418",
+      "date": "2026-10-31",
+      "balls": [
+        12,
+        18,
+        22,
+        26,
+        28,
+        55
+      ],
+      "bonus": 11,
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn",
+      "jackpot": 36604726050,
+      "jackpot2": 4971122650,
+      "counts": {
+        "jackpot": 0,
+        "jackpot2": 0,
+        "first": 10,
+        "second": 822,
+        "third": 17591
+      }
+    },
     {
       "id": "01417",
       "date": "2026-10-29",
