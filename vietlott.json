@@ -1,29 +1,51 @@
 {
-  "updated_at": "2026-11-01T13:10:12+07:00",
+  "updated_at": "2026-11-01T22:33:35+07:00",
   "claim_period_days": 60,
   "mega": {
-    "id": "01582",
-    "date": "2026-10-30",
+    "id": "01583",
+    "date": "2026-11-01",
     "balls": [
-      7,
-      21,
-      22,
-      40,
-      41,
-      45
+      5,
+      9,
+      17,
+      18,
+      34,
+      36
     ],
     "bonus": null,
     "source": "github-vietlott-data",
     "source_detail": "xoso.com.vn",
-    "jackpot": 20852928000,
+    "jackpot": 23200118500,
     "counts": {
       "jackpot": 0,
-      "first": 25,
-      "second": 1160,
-      "third": 22278
+      "first": 35,
+      "second": 1481,
+      "third": 25743
     }
   },
   "mega_history": [
+    {
+      "id": "01583",
+      "date": "2026-11-01",
+      "balls": [
+        5,
+        9,
+        17,
+        18,
+        34,
+        36
+      ],
+      "bonus": null,
+      "source": "github-vietlott-data",
+      "source_detail": "xoso.com.vn",
+      "jackpot": 23200118500,
+      "counts": {
+        "jackpot": 0,
+        "first": 35,
+        "second": 1481,
+        "third": 25743
+      }
+    },
     {
       "id": "01582",
       "date": "2026-10-30",
