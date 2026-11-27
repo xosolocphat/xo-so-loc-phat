@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-27T01:42:24+07:00",
+  "updated_at": "2026-11-27T15:38:49+07:00",
   "claim_period_days": 60,
   "mega": {
     "id": "01593",
@@ -572,28 +572,6 @@
         "first": 109,
         "second": 5340,
         "third": 92160
-      }
-    },
-    {
-      "id": "01568",
-      "date": "2026-09-27",
-      "balls": [
-        2,
-        4,
-        13,
-        25,
-        31,
-        39
-      ],
-      "bonus": null,
-      "source": "github-vietlott-data",
-      "source_detail": "xoso.com.vn",
-      "jackpot": 139776125000,
-      "counts": {
-        "jackpot": 0,
-        "first": 84,
-        "second": 4591,
-        "third": 74955
       }
     }
   ],
